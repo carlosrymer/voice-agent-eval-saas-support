@@ -169,12 +169,18 @@
   </section>
 
   <section id="bargein">
-    <h2>Barge-in</h2>
-    <p class="note">Interruptions are scripted so the sample size is controlled, and detected
-      from the two audio tracks rather than from the provider's own signal. "Landed" counts
-      only the attempts that actually overlapped agent speech — an attempt that arrived after
-      the agent stopped tested nothing, and is reported as such.</p>
+    <h2>Interruptions and overlapping speech</h2>
+    <p class="note" id="bargein-note"></p>
     <div class="tiles" id="bargein-tiles"></div>
+  </section>
+
+  <section id="protocol">
+    <h2>Protocol turbulence</h2>
+    <p class="note">How much the transport got in the way. This is reported as a first-class
+      result because it bounds how much of the channel comparison above can be attributed to
+      the agent: a run in which the server cancelled and re-issued function calls dozens of
+      times is not a clean measurement of the model's competence.</p>
+    <div class="tiles" id="protocol-tiles"></div>
   </section>
 
   <section id="friction">
@@ -279,7 +285,9 @@ function renderChannel() {
      `<strong>${pct(gem.pass_hat_1)}</strong> — a change of ` +
      `<strong>${(100*delta).toFixed(1)} points</strong>. `) +
     `The text baseline ran ${base[0].trials} trials per task; this voice run ran ` +
-    `${DATA.config.trials}, so the comparison is against pass^1 on both sides.`;
+    `${DATA.config.trials}, so the comparison is against pass^1 on both sides. ` +
+    `<strong>This comparison is directional, not clean</strong> — see the protocol-turbulence ` +
+    `section below for how much the transport contributed to the gap.`;
 }
 
 function renderLatency() {
@@ -318,15 +326,42 @@ function renderLatency() {
 
 function renderBargeIn() {
   const b = DATA.summary.barge_in;
+  const scripted = b.attempted > 0;
+  document.getElementById('bargein-note').innerHTML = scripted
+    ? `Interruptions were scripted so the sample size is controlled, and are detected from the
+       two audio tracks rather than from the provider's own signal. "Landed" counts only the
+       attempts that actually overlapped agent speech.`
+    : `<strong>No interruptions were scripted in this arm</strong> — it was run without them so
+       it matches the text baseline, which had none. The overlaps below are therefore
+       <strong>unscripted</strong>: the caller talking over the agent because the agent's reply
+       arrived after the harness had handed the floor back. They are turbulence, not tests, and
+       the yield figures describe how the agent reacted to them rather than how it handles a
+       well-formed interruption.`;
   document.getElementById('bargein-tiles').innerHTML = [
-    tile('Attempted / landed', `${b.attempted} / ${b.landed}`,
-         'landed = actually overlapped agent speech'),
+    tile(scripted ? 'Attempted / landed' : 'Unscripted overlaps',
+         scripted ? `${b.attempted} / ${b.landed}` : b.landed,
+         scripted ? 'landed = actually overlapped agent speech'
+                  : 'caller speech beginning while the agent was talking'),
     tile('Agent yielded', b.landed ? `${b.yielded}/${b.landed}` : '—',
          'audio stopped within 800 ms of caller onset'),
     tile('State preserved', b.landed ? `${b.state_preserved}/${b.landed}` : '—',
          'no restart of the abandoned sentence, no dropped tool call'),
     tile('Yield latency P50', b.yield_latency_ms.n ? fmt(b.yield_latency_ms.p50)+' ms' : '—',
-         b.yield_latency_ms.n ? `P95 ${fmt(b.yield_latency_ms.p95)} ms · n=${b.yield_latency_ms.n}` : 'no barge-in landed'),
+         b.yield_latency_ms.n ? `P95 ${fmt(b.yield_latency_ms.p95)} ms · n=${b.yield_latency_ms.n}` : 'nothing landed'),
+  ].join('');
+}
+
+function renderProtocol() {
+  const p = DATA.summary.protocol || {};
+  document.getElementById('protocol-tiles').innerHTML = [
+    tile('Server tool-call cancellations', p.server_tool_retries ?? '—',
+         'provider issued a function call, then abandoned it'),
+    tile('Duplicate calls suppressed', p.duplicate_tool_calls_suppressed ?? '—',
+         'identical re-issued calls; executing both would double-apply the write'),
+    tile('Playout underruns', p.playout_underruns ?? '—',
+         'agent audio stalled past what was buffered'),
+    tile('Harness thinking time', p.harness_paused_s != null ? fmt(p.harness_paused_s)+' s' : '—',
+         'caller model + speech synthesis, excluded from the call timeline'),
   ].join('');
 }
 
@@ -518,7 +553,7 @@ Promise.all([
 ]).then(([summary, transcripts]) => {
   DATA = summary; TRANSCRIPTS = transcripts;
   renderHeadline(); renderChannel(); renderLatency(); renderBargeIn();
-  renderFriction(); renderJudges(); renderCalls(); renderLimits();
+  renderFriction(); renderProtocol(); renderJudges(); renderCalls(); renderLimits();
 }).catch(err => {
   document.getElementById('meta').textContent = 'Could not load results: ' + err;
 });
