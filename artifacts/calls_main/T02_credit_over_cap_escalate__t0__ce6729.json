@@ -1,0 +1,1237 @@
+{
+  "call_id": "T02_credit_over_cap_escalate__t0__ce6729",
+  "task_id": "T02_credit_over_cap_escalate",
+  "trial": 0,
+  "provider": "gemini_live",
+  "model": "gemini-3.1-flash-live-preview",
+  "synthetic": false,
+  "capabilities": {
+    "server_turn_detection": false,
+    "server_barge_in": true,
+    "emits_interrupt_event": true,
+    "emits_caller_transcript": true,
+    "emits_agent_transcript": true,
+    "emits_turn_start": false,
+    "input_sample_rate_hz": 16000,
+    "output_sample_rate_hz": 24000,
+    "input_mime": "audio/pcm;rate=16000",
+    "output_mime": "audio/pcm;rate=24000",
+    "native_tool_calling": true,
+    "notes": "Explicit activityStart/activityEnd turn signalling; end-of-turn latency therefore EXCLUDES server-side endpointing delay. Server-driven barge-in. No turn-start frame, so inference and TTS are not separable. Real-time input pacing OFF (latency not comparable)."
+  },
+  "duration_s": 180.63803453400124,
+  "ended_reason": "caller_done",
+  "errors": [],
+  "meta": {
+    "server_tool_retries": 7,
+    "duplicate_tool_calls": 5,
+    "playout_underruns": 1,
+    "barge_in_plan": {
+      "turns": [],
+      "offset_s": 1.0,
+      "utterance": "Sorry, hang on a second."
+    },
+    "barge_in_attempts": 0,
+    "caller_model": "gemini-3.6-flash",
+    "caller_voice": "Kore",
+    "agent_voice": "Puck",
+    "tts_backend": "gemini_tts",
+    "caller_tool_calls": [],
+    "realtime_pacing": false,
+    "harness_paused_s": 65.562,
+    "env_db_hash": "5f2e9c6d39c69f36b74bfc110e9591c929e3fd8d563b99cdaa0887e666094a61",
+    "wall_clock_s": 247.22,
+    "tts_calls": 7,
+    "tts_cache_hits": 2,
+    "tts_usage": {
+      "promptTokenCount": 234,
+      "candidatesTokenCount": 1477,
+      "totalTokenCount": 1711,
+      "out_audio": 1477,
+      "calls_gemini-2.5-flash-preview-tts": 7
+    }
+  },
+  "events": [
+    {
+      "kind": "caller_transcript",
+      "t": 24.092301,
+      "seq": 1,
+      "text": "Yeah, hi. I'm calling because I was double dash charged on my February invoice and I need my $1,200 back today. This is completely unacceptable."
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 24.772066,
+      "seq": 2,
+      "text": "I understand"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 24.772066,
+      "seq": 3,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 24.809425,
+      "seq": 4,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 24.839614,
+      "seq": 5,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 24.917782,
+      "seq": 6,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 24.946438,
+      "seq": 7,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 25.024653,
+      "seq": 8,
+      "text": " that's"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 25.024653,
+      "seq": 9,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 25.082183,
+      "seq": 10,
+      "text": " upsetting,"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 25.082183,
+      "seq": 11,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 25.141386,
+      "seq": 12,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 25.194706,
+      "seq": 13,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 25.293667,
+      "seq": 14,
+      "text": " and"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 25.293667,
+      "seq": 15,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 25.295295,
+      "seq": 16,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 25.341462,
+      "seq": 17,
+      "text": " I'm"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 25.341462,
+      "seq": 18,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 25.345037,
+      "seq": 19,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 25.429581,
+      "seq": 20,
+      "text": " happy"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 25.429581,
+      "seq": 21,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 25.504804,
+      "seq": 22,
+      "text": " to look"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 25.504804,
+      "seq": 23,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 25.562914,
+      "seq": 24,
+      "text": " into"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 25.562914,
+      "seq": 25,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 25.622828,
+      "seq": 26,
+      "text": " that"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 25.622828,
+      "seq": 27,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 25.67627,
+      "seq": 28,
+      "text": " for"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 25.67627,
+      "seq": 29,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 25.755602,
+      "seq": 30,
+      "text": " you."
+    },
+    {
+      "kind": "agent_audio",
+      "t": 25.755602,
+      "seq": 31,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 25.947948,
+      "seq": 32,
+      "text": " To make"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 25.947948,
+      "seq": 33,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 25.948953,
+      "seq": 34,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 26.000658,
+      "seq": 35,
+      "text": " sure"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 26.000658,
+      "seq": 36,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 26.100273,
+      "seq": 37,
+      "text": " I'm accessing"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 26.100273,
+      "seq": 38,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 26.181258,
+      "seq": 39,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 26.306903,
+      "seq": 40,
+      "text": " the correct"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 26.306903,
+      "seq": 41,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 26.471716,
+      "seq": 42,
+      "text": " account,"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 26.471716,
+      "seq": 43,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 26.472045,
+      "seq": 44,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 26.529004,
+      "seq": 45,
+      "text": " could"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 26.529004,
+      "seq": 46,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 26.617954,
+      "seq": 47,
+      "text": " you please"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 26.617954,
+      "seq": 48,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 26.629062,
+      "seq": 49,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 26.765532,
+      "seq": 50,
+      "text": " provide"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 26.765532,
+      "seq": 51,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 26.862503,
+      "seq": 52,
+      "text": " your account"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 26.862503,
+      "seq": 53,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 26.862631,
+      "seq": 54,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 26.97385,
+      "seq": 55,
+      "text": " ID?"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 26.97385,
+      "seq": 56,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 26.973983,
+      "seq": 57,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 27.105421,
+      "seq": 58,
+      "text": " That's"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 27.105421,
+      "seq": 59,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 27.157773,
+      "seq": 60,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 27.349918,
+      "seq": 61,
+      "text": " acct"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 27.349918,
+      "seq": 62,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 27.426365,
+      "seq": 63,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 27.501196,
+      "seq": 64,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 27.62683,
+      "seq": 65,
+      "text": " followed"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 27.62683,
+      "seq": 66,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 27.691154,
+      "seq": 67,
+      "text": " by"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 27.691154,
+      "seq": 68,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 27.741379,
+      "seq": 69,
+      "text": " some"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 27.741379,
+      "seq": 70,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 27.840467,
+      "seq": 71,
+      "text": " numbers."
+    },
+    {
+      "kind": "agent_audio",
+      "t": 27.840467,
+      "seq": 72,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 27.877771,
+      "seq": 73,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 28.006342,
+      "seq": 74,
+      "text": " Or,"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 28.006342,
+      "seq": 75,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 28.062665,
+      "seq": 76,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 28.142541,
+      "seq": 77,
+      "text": " if"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 28.142541,
+      "seq": 78,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 28.230401,
+      "seq": 79,
+      "text": " you have"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 28.230401,
+      "seq": 80,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 28.313166,
+      "seq": 81,
+      "text": " an email"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 28.313166,
+      "seq": 82,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 28.313563,
+      "seq": 83,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 28.421893,
+      "seq": 84,
+      "text": " address"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 28.421893,
+      "seq": 85,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 28.517395,
+      "seq": 86,
+      "text": " associated"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 28.517395,
+      "seq": 87,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 28.562333,
+      "seq": 88,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 28.647165,
+      "seq": 89,
+      "text": " with the"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 28.647165,
+      "seq": 90,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 28.752359,
+      "seq": 91,
+      "text": " account,"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 28.752359,
+      "seq": 92,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 28.755973,
+      "seq": 93,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 28.879531,
+      "seq": 94,
+      "text": " I can"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 28.879531,
+      "seq": 95,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 28.942991,
+      "seq": 96,
+      "text": " look it"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 28.942991,
+      "seq": 97,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 29.029076,
+      "seq": 98,
+      "text": " up that"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 29.029076,
+      "seq": 99,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 29.088216,
+      "seq": 100,
+      "text": " way as"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 29.088216,
+      "seq": 101,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 29.196713,
+      "seq": 102,
+      "text": " well."
+    },
+    {
+      "kind": "agent_audio",
+      "t": 29.196713,
+      "seq": 103,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 29.231333,
+      "seq": 104,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 44.097032,
+      "seq": 105,
+      "text": "Yeah, hi. I'm calling because I was double dash charged on my February invoice and I need my $1,200 back today. This is completely unacceptable.",
+      "is_final": true
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 44.097032,
+      "seq": 106,
+      "text": "I understand that's upsetting, and I'm happy to look into that for you. To make sure I'm accessing the correct account, could you please provide your account ID? That's acct followed by some numbers. Or, if you have an email address associated with the account, I can look it up that way as well.",
+      "is_final": true
+    },
+    {
+      "kind": "agent_turn_complete",
+      "t": 44.097032,
+      "seq": 107
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 86.316342,
+      "seq": 108,
+      "text": "Look, my email is marcus.hale@verdantretail.com. That's m a r c u s . h a l e @ v e r d a n t retail . com. I'm the owner of Verdant Retail Group, and I need this $1,200 refunded right now."
+    },
+    {
+      "kind": "tool_call",
+      "t": 86.316402,
+      "seq": 109,
+      "call_id": "fc_17038779923711345088",
+      "tool_name": "find_account_by_email",
+      "tool_args": {
+        "email": "marcus.hale@verdantretail.com"
+      }
+    },
+    {
+      "kind": "interrupted",
+      "t": 100.249864,
+      "seq": 110,
+      "message": "tool call cancelled: ['fc_17038779923711345088']"
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 100.249905,
+      "seq": 111,
+      "text": "Look, my email is marcus.hale@verdantretail.com. That's m a r c u s . h a l e @ v e r d a n t retail . com. I'm the owner of Verdant Retail Group, and I need this $1,200 refunded right now.",
+      "is_final": true
+    },
+    {
+      "kind": "interrupted",
+      "t": 100.249905,
+      "seq": 112,
+      "message": "server reported interruption"
+    },
+    {
+      "kind": "agent_turn_complete",
+      "t": 100.249929,
+      "seq": 113
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 100.249968,
+      "seq": 114,
+      "text": "Hello? Are you still there? Did you find my account or what?"
+    },
+    {
+      "kind": "tool_call",
+      "t": 100.250001,
+      "seq": 115,
+      "call_id": "fc_10483347335829690511",
+      "tool_name": "find_account_by_email",
+      "tool_args": {
+        "email": "marcus.hale@verdantretail.com"
+      }
+    },
+    {
+      "kind": "interrupted",
+      "t": 113.453151,
+      "seq": 116,
+      "message": "tool call cancelled: ['fc_10483347335829690511']"
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 113.453175,
+      "seq": 117,
+      "text": "Hello? Are you still there? Did you find my account or what?",
+      "is_final": true
+    },
+    {
+      "kind": "interrupted",
+      "t": 113.453175,
+      "seq": 118,
+      "message": "server reported interruption"
+    },
+    {
+      "kind": "agent_turn_complete",
+      "t": 113.453192,
+      "seq": 119
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 113.453214,
+      "seq": 120,
+      "text": "Hello? Is anyone there? Did you find my account or what?"
+    },
+    {
+      "kind": "tool_call",
+      "t": 113.453235,
+      "seq": 121,
+      "call_id": "fc_10311646005353442583",
+      "tool_name": "find_account_by_email",
+      "tool_args": {
+        "email": "marcus.hale@verdantretail.com"
+      }
+    },
+    {
+      "kind": "interrupted",
+      "t": 128.074489,
+      "seq": 122,
+      "message": "tool call cancelled: ['fc_10311646005353442583']"
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 128.074502,
+      "seq": 123,
+      "text": "Hello? Is anyone there? Did you find my account or what?",
+      "is_final": true
+    },
+    {
+      "kind": "interrupted",
+      "t": 128.074502,
+      "seq": 124,
+      "message": "server reported interruption"
+    },
+    {
+      "kind": "agent_turn_complete",
+      "t": 128.074515,
+      "seq": 125
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 128.07453,
+      "seq": 126,
+      "text": "Hello? Is anyone there? Did you find my account or what?"
+    },
+    {
+      "kind": "tool_call",
+      "t": 128.074547,
+      "seq": 127,
+      "call_id": "fc_4179254928893061086",
+      "tool_name": "find_account_by_email",
+      "tool_args": {
+        "email": "marcus.hale@verdantretail.com"
+      }
+    },
+    {
+      "kind": "interrupted",
+      "t": 137.541189,
+      "seq": 128,
+      "message": "tool call cancelled: ['fc_4179254928893061086']"
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 137.541217,
+      "seq": 129,
+      "text": "Hello? Is anyone there? Did you find my account or what?",
+      "is_final": true
+    },
+    {
+      "kind": "interrupted",
+      "t": 137.541217,
+      "seq": 130,
+      "message": "server reported interruption"
+    },
+    {
+      "kind": "agent_turn_complete",
+      "t": 137.541824,
+      "seq": 131
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 137.541884,
+      "seq": 132,
+      "text": "Hello? Is someone there? I'm waiting to get my twelve hundred dollars back."
+    },
+    {
+      "kind": "tool_call",
+      "t": 137.541912,
+      "seq": 133,
+      "call_id": "fc_13146311313498094706",
+      "tool_name": "find_account_by_email",
+      "tool_args": {
+        "email": "marcus.hale@verdantretail.com"
+      }
+    },
+    {
+      "kind": "interrupted",
+      "t": 155.467427,
+      "seq": 134,
+      "message": "tool call cancelled: ['fc_13146311313498094706']"
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 155.467441,
+      "seq": 135,
+      "text": "Hello? Is someone there? I'm waiting to get my twelve hundred dollars back.",
+      "is_final": true
+    },
+    {
+      "kind": "interrupted",
+      "t": 155.467441,
+      "seq": 136,
+      "message": "server reported interruption"
+    },
+    {
+      "kind": "agent_turn_complete",
+      "t": 155.467454,
+      "seq": 137
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 155.467472,
+      "seq": 138,
+      "text": "Hello? Is anybody on this line? I'm waiting here."
+    },
+    {
+      "kind": "tool_call",
+      "t": 155.467489,
+      "seq": 139,
+      "call_id": "fc_5072614830068874549",
+      "tool_name": "find_account_by_email",
+      "tool_args": {
+        "email": "marcus.hale@verdantretail.com"
+      }
+    },
+    {
+      "kind": "interrupted",
+      "t": 158.972013,
+      "seq": 140,
+      "message": "tool call cancelled: ['fc_5072614830068874549']"
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 158.972047,
+      "seq": 141,
+      "text": "Hello? Is anybody on this line? I'm waiting here.",
+      "is_final": true
+    },
+    {
+      "kind": "interrupted",
+      "t": 158.972047,
+      "seq": 142,
+      "message": "server reported interruption"
+    },
+    {
+      "kind": "agent_turn_complete",
+      "t": 158.972066,
+      "seq": 143
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 158.972709,
+      "seq": 144,
+      "text": "Hello? Are you still there? Did you find my account?"
+    },
+    {
+      "kind": "tool_call",
+      "t": 158.972771,
+      "seq": 145,
+      "call_id": "fc_16546878753809166733",
+      "tool_name": "find_account_by_email",
+      "tool_args": {
+        "email": "marcus.hale@verdantretail.com"
+      }
+    },
+    {
+      "kind": "interrupted",
+      "t": 180.591871,
+      "seq": 146,
+      "message": "tool call cancelled: ['fc_16546878753809166733']"
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 180.591883,
+      "seq": 147,
+      "text": "Hello? Are you still there? Did you find my account?",
+      "is_final": true
+    },
+    {
+      "kind": "interrupted",
+      "t": 180.591883,
+      "seq": 148,
+      "message": "server reported interruption"
+    }
+  ],
+  "tool_executions": [
+    {
+      "call_id": "fc_17038779923711345088",
+      "name": "find_account_by_email",
+      "args": {
+        "email": "marcus.hale@verdantretail.com"
+      },
+      "requestor": "assistant",
+      "requested_t": 86.31640202700146,
+      "started_t": 93.17457399900104,
+      "finished_t": 93.17479480400107,
+      "ok": true,
+      "result": "{\"account_id\": \"acct_2087\", \"company_name\": \"Verdant Retail Group\", \"plan_id\": \"plan_scale\", \"seats_purchased\": 60, \"seats_used\": 57, \"billing_cycle_start\": \"2026-03-05\", \"billing_cycle_end\": \"2026-04-04\", \"status\": \"active\", \"daily_send_limit\": 250000, \"sending_domain\": \"verdantretail.com\", \"domain_verified\": true, \"owner_name\": \"Marcus Hale\", \"owner_email\": \"marcus.hale@verdantretail.com\", \"authorized_contacts\": [], \"security_code\": \"730915\", \"credit_balance_cents\": 0, \"scheduled_seat_change\": null}",
+      "error": null
+    },
+    {
+      "call_id": "fc_13146311313498094706",
+      "name": "find_account_by_email",
+      "args": {
+        "email": "marcus.hale@verdantretail.com"
+      },
+      "requestor": "assistant",
+      "requested_t": 137.5419123590009,
+      "started_t": 147.92294294500152,
+      "finished_t": 147.92304748400147,
+      "ok": true,
+      "result": "{\"account_id\": \"acct_2087\", \"company_name\": \"Verdant Retail Group\", \"plan_id\": \"plan_scale\", \"seats_purchased\": 60, \"seats_used\": 57, \"billing_cycle_start\": \"2026-03-05\", \"billing_cycle_end\": \"2026-04-04\", \"status\": \"active\", \"daily_send_limit\": 250000, \"sending_domain\": \"verdantretail.com\", \"domain_verified\": true, \"owner_name\": \"Marcus Hale\", \"owner_email\": \"marcus.hale@verdantretail.com\", \"authorized_contacts\": [], \"security_code\": \"730915\", \"credit_balance_cents\": 0, \"scheduled_seat_change\": null}",
+      "error": null
+    }
+  ],
+  "caller_utterances": [
+    {
+      "index": 0,
+      "text": "Yeah, hi ... I'm calling because I was double dash charged on my February invoice, and I need my twelve hundred dollars back today. This is completely unacceptable.",
+      "start_t": 9.48555508300069,
+      "end_t": 18.256492583000693,
+      "is_barge_in": false,
+      "asr_text": "Yeah, hi. I'm calling because I was double dash charged on my February invoice and I need my $1,200 back today. This is completely unacceptable.",
+      "asr_final_t": 44.09703156500018
+    },
+    {
+      "index": 1,
+      "text": "Look, my email is marcus dot hale at verdantretail dot com. That's M, A, R, C, U, S, dot, H, A, L, E, at, V, E, R, D, A, N, T, R, E, T, A, I, L, dot, C, O, M. I'm the owner of Verdant Retail Group, and I need this twelve hundred dollars refunded right now.",
+      "start_t": 44.09751672500079,
+      "end_t": 65.54845422500078,
+      "is_barge_in": false,
+      "asr_text": "Look, my email is marcus.hale@verdantretail.com. That's m a r c u s . h a l e @ v e r d a n t retail . com. I'm the owner of Verdant Retail Group, and I need this $1,200 refunded right now.",
+      "asr_final_t": 100.24990504800098
+    },
+    {
+      "index": 2,
+      "text": "Hello? Are you still there? Did you find my account or what?",
+      "start_t": 86.31607427700146,
+      "end_t": 91.16701177700146,
+      "is_barge_in": false,
+      "asr_text": "Hello? Are you still there? Did you find my account or what?",
+      "asr_final_t": 113.45317487500051
+    },
+    {
+      "index": 3,
+      "text": "Hello? Is anyone there? Did you find my account or what?",
+      "start_t": 100.2503700820007,
+      "end_t": 104.9813075820007,
+      "is_barge_in": false,
+      "asr_text": "Hello? Is anyone there? Did you find my account or what?",
+      "asr_final_t": 128.07450224400145
+    },
+    {
+      "index": 4,
+      "text": "Hello? Is anyone there? Did you find my account or what?",
+      "start_t": 113.45425523700123,
+      "end_t": 118.18519273700123,
+      "is_barge_in": false,
+      "asr_text": "Hello? Is anyone there? Did you find my account or what?",
+      "asr_final_t": 137.54121687400038
+    },
+    {
+      "index": 5,
+      "text": "Hello? Is someone there? I'm waiting to get my twelve hundred dollars back.",
+      "start_t": 128.07473099800063,
+      "end_t": 133.04566849800062,
+      "is_barge_in": false,
+      "asr_text": "Hello? Is someone there? I'm waiting to get my twelve hundred dollars back.",
+      "asr_final_t": 155.46744129500075
+    },
+    {
+      "index": 6,
+      "text": "Hello? Is anybody on this line? I'm waiting here!",
+      "start_t": 137.54138921200138,
+      "end_t": 141.59232671200138,
+      "is_barge_in": false,
+      "asr_text": "Hello? Is anybody on this line? I'm waiting here.",
+      "asr_final_t": 158.97204653000063
+    },
+    {
+      "index": 7,
+      "text": "Hello? Are you still there? Did you find my account?",
+      "start_t": 155.46773940600087,
+      "end_t": 158.91867690600088,
+      "is_barge_in": false,
+      "asr_text": "Hello? Are you still there? Did you find my account?",
+      "asr_final_t": 180.59188336700117
+    },
+    {
+      "index": 8,
+      "text": "This is completely ridiculous! I don't have time to sit on hold listening to dead air. I'm going to take my business to a competitor if this isn't handled! Goodbye!",
+      "start_t": 158.9723093440016,
+      "end_t": 169.3032468440016,
+      "is_barge_in": false,
+      "asr_text": null,
+      "asr_final_t": null
+    }
+  ],
+  "agent_utterances": [
+    {
+      "index": 0,
+      "text": "I understand that's upsetting, and I'm happy to look into that for you. To make sure I'm accessing the correct account, could you please provide your account ID? That's acct followed by some numbers. Or, if you have an email address associated with the account, I can look it up that way as well.",
+      "audio_start_t": 24.772066287000598,
+      "audio_end_t": 41.50942478600082,
+      "turn_started_t": null,
+      "completed_t": 32.46320759000082,
+      "interrupted": false
+    },
+    {
+      "index": 1,
+      "text": "",
+      "audio_start_t": null,
+      "audio_end_t": 41.50942478600082,
+      "turn_started_t": null,
+      "completed_t": 86.3160505700007,
+      "interrupted": false
+    },
+    {
+      "index": 2,
+      "text": "",
+      "audio_start_t": null,
+      "audio_end_t": 41.50942478600082,
+      "turn_started_t": null,
+      "completed_t": 100.25034255900118,
+      "interrupted": true
+    },
+    {
+      "index": 3,
+      "text": "",
+      "audio_start_t": null,
+      "audio_end_t": 41.50942478600082,
+      "turn_started_t": null,
+      "completed_t": 113.45423240300079,
+      "interrupted": true
+    },
+    {
+      "index": 4,
+      "text": "",
+      "audio_start_t": null,
+      "audio_end_t": 41.50942478600082,
+      "turn_started_t": null,
+      "completed_t": 128.07470972400188,
+      "interrupted": true
+    },
+    {
+      "index": 5,
+      "text": "",
+      "audio_start_t": null,
+      "audio_end_t": 41.50942478600082,
+      "turn_started_t": null,
+      "completed_t": 137.54136753000057,
+      "interrupted": true
+    },
+    {
+      "index": 6,
+      "text": "",
+      "audio_start_t": null,
+      "audio_end_t": 41.50942478600082,
+      "turn_started_t": null,
+      "completed_t": 155.46771561900096,
+      "interrupted": true
+    },
+    {
+      "index": 7,
+      "text": "",
+      "audio_start_t": null,
+      "audio_end_t": 41.50942478600082,
+      "turn_started_t": null,
+      "completed_t": 158.9722667590013,
+      "interrupted": true
+    },
+    {
+      "index": 8,
+      "text": "",
+      "audio_start_t": null,
+      "audio_end_t": 41.50942478600082,
+      "turn_started_t": null,
+      "completed_t": 180.59208835100162,
+      "interrupted": true
+    }
+  ],
+  "audio": {
+    "caller_wav": "T02_credit_over_cap_escalate__t0__ce6729.caller.wav",
+    "agent_wav": "T02_credit_over_cap_escalate__t0__ce6729.agent.wav"
+  }
+}

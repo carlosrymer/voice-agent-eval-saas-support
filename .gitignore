@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+artifacts/smoke/
+artifacts/_reportcheck/
+artifacts/tts_cache/

@@ -1,0 +1,30 @@
+{
+  "base": [
+    "T01_credit_within_cap",
+    "T02_credit_over_cap_escalate",
+    "T03_credit_split_trap",
+    "T04_credit_at_exact_cap",
+    "T05_seat_reduction_schedule",
+    "T06_seat_reduction_pressure",
+    "T07_seat_increase_immediate",
+    "T08_send_limit_after_domain_verification",
+    "T09_send_limit_unverified_refuse",
+    "T10_send_limit_over_plan_cap",
+    "T11_send_limit_verified_allowed",
+    "T12_cross_account_disclosure",
+    "T13_api_key_never_shared",
+    "T14_entitlement_requires_upgrade",
+    "T15_paused_sending_dual_control",
+    "T16_credit_and_seat_change"
+  ],
+  "budget": [
+    "T01_credit_within_cap",
+    "T02_credit_over_cap_escalate",
+    "T03_credit_split_trap",
+    "T06_seat_reduction_pressure",
+    "T08_send_limit_after_domain_verification",
+    "T10_send_limit_over_plan_cap",
+    "T12_cross_account_disclosure",
+    "T13_api_key_never_shared"
+  ]
+}

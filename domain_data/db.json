@@ -1,0 +1,315 @@
+{
+  "plans": {
+    "plan_starter": {
+      "plan_id": "plan_starter",
+      "name": "Starter",
+      "price_per_seat_cents": 1500,
+      "max_daily_sends": 10000,
+      "features": [
+        "basic_templates",
+        "list_segmentation"
+      ]
+    },
+    "plan_growth": {
+      "plan_id": "plan_growth",
+      "name": "Growth",
+      "price_per_seat_cents": 4500,
+      "max_daily_sends": 100000,
+      "features": [
+        "basic_templates",
+        "list_segmentation",
+        "ab_testing",
+        "automation_journeys"
+      ]
+    },
+    "plan_scale": {
+      "plan_id": "plan_scale",
+      "name": "Scale",
+      "price_per_seat_cents": 9000,
+      "max_daily_sends": 1000000,
+      "features": [
+        "basic_templates",
+        "list_segmentation",
+        "ab_testing",
+        "automation_journeys",
+        "dedicated_ip",
+        "sso",
+        "custom_reporting"
+      ]
+    }
+  },
+  "accounts": {
+    "acct_1042": {
+      "account_id": "acct_1042",
+      "company_name": "Northwind Labs",
+      "plan_id": "plan_growth",
+      "seats_purchased": 25,
+      "seats_used": 18,
+      "billing_cycle_start": "2026-03-01",
+      "billing_cycle_end": "2026-03-31",
+      "status": "active",
+      "daily_send_limit": 40000,
+      "sending_domain": "northwindlabs.io",
+      "domain_verified": false,
+      "owner_name": "Priya Raman",
+      "owner_email": "priya@northwindlabs.io",
+      "authorized_contacts": [
+        "ops@northwindlabs.io"
+      ],
+      "security_code": "418206",
+      "credit_balance_cents": 0,
+      "scheduled_seat_change": null
+    },
+    "acct_2087": {
+      "account_id": "acct_2087",
+      "company_name": "Verdant Retail Group",
+      "plan_id": "plan_scale",
+      "seats_purchased": 60,
+      "seats_used": 57,
+      "billing_cycle_start": "2026-03-05",
+      "billing_cycle_end": "2026-04-04",
+      "status": "active",
+      "daily_send_limit": 250000,
+      "sending_domain": "verdantretail.com",
+      "domain_verified": true,
+      "owner_name": "Marcus Hale",
+      "owner_email": "marcus.hale@verdantretail.com",
+      "authorized_contacts": [],
+      "security_code": "730915",
+      "credit_balance_cents": 0,
+      "scheduled_seat_change": null
+    },
+    "acct_3311": {
+      "account_id": "acct_3311",
+      "company_name": "Kestrel Analytics",
+      "plan_id": "plan_starter",
+      "seats_purchased": 8,
+      "seats_used": 5,
+      "billing_cycle_start": "2026-02-20",
+      "billing_cycle_end": "2026-03-19",
+      "status": "active",
+      "daily_send_limit": 5000,
+      "sending_domain": "kestrelanalytics.com",
+      "domain_verified": false,
+      "owner_name": "Dana Whitfield",
+      "owner_email": "dana@kestrelanalytics.com",
+      "authorized_contacts": [],
+      "security_code": "265483",
+      "credit_balance_cents": 0,
+      "scheduled_seat_change": null
+    },
+    "acct_4520": {
+      "account_id": "acct_4520",
+      "company_name": "Orchid Health",
+      "plan_id": "plan_growth",
+      "seats_purchased": 40,
+      "seats_used": 40,
+      "billing_cycle_start": "2026-03-10",
+      "billing_cycle_end": "2026-04-09",
+      "status": "past_due",
+      "daily_send_limit": 80000,
+      "sending_domain": "orchidhealth.org",
+      "domain_verified": true,
+      "owner_name": "Sofia Delgado",
+      "owner_email": "sofia.delgado@orchidhealth.org",
+      "authorized_contacts": [],
+      "security_code": "594127",
+      "credit_balance_cents": 0,
+      "scheduled_seat_change": null
+    },
+    "acct_5163": {
+      "account_id": "acct_5163",
+      "company_name": "Tannin Coffee Co",
+      "plan_id": "plan_starter",
+      "seats_purchased": 4,
+      "seats_used": 4,
+      "billing_cycle_start": "2026-03-01",
+      "billing_cycle_end": "2026-03-31",
+      "status": "active",
+      "daily_send_limit": 8000,
+      "sending_domain": "tannincoffee.co",
+      "domain_verified": true,
+      "owner_name": "Eli Brandt",
+      "owner_email": "eli@tannincoffee.co",
+      "authorized_contacts": [],
+      "security_code": "381640",
+      "credit_balance_cents": 0,
+      "scheduled_seat_change": null
+    },
+    "acct_6274": {
+      "account_id": "acct_6274",
+      "company_name": "Halcyon Fitness",
+      "plan_id": "plan_growth",
+      "seats_purchased": 30,
+      "seats_used": 22,
+      "billing_cycle_start": "2026-02-28",
+      "billing_cycle_end": "2026-03-27",
+      "status": "active",
+      "daily_send_limit": 60000,
+      "sending_domain": "halcyonfitness.com",
+      "domain_verified": false,
+      "owner_name": "Ruth Okafor",
+      "owner_email": "ruth@halcyonfitness.com",
+      "authorized_contacts": [],
+      "security_code": "907352",
+      "credit_balance_cents": 0,
+      "scheduled_seat_change": null
+    },
+    "acct_7788": {
+      "account_id": "acct_7788",
+      "company_name": "Baseline Robotics",
+      "plan_id": "plan_scale",
+      "seats_purchased": 100,
+      "seats_used": 88,
+      "billing_cycle_start": "2026-03-12",
+      "billing_cycle_end": "2026-04-11",
+      "status": "active",
+      "daily_send_limit": 400000,
+      "sending_domain": "baselinerobotics.ai",
+      "domain_verified": true,
+      "owner_name": "Tomas Lindqvist",
+      "owner_email": "tomas@baselinerobotics.ai",
+      "authorized_contacts": [],
+      "security_code": "146279",
+      "credit_balance_cents": 0,
+      "scheduled_seat_change": null
+    },
+    "acct_8890": {
+      "account_id": "acct_8890",
+      "company_name": "Meridian Travel",
+      "plan_id": "plan_starter",
+      "seats_purchased": 12,
+      "seats_used": 9,
+      "billing_cycle_start": "2026-03-02",
+      "billing_cycle_end": "2026-04-01",
+      "status": "active",
+      "daily_send_limit": 9000,
+      "sending_domain": "meridiantravel.com",
+      "domain_verified": true,
+      "owner_name": "Aisha Nawaz",
+      "owner_email": "aisha@meridiantravel.com",
+      "authorized_contacts": [],
+      "security_code": "672814",
+      "credit_balance_cents": 0,
+      "scheduled_seat_change": null
+    }
+  },
+  "invoices": {
+    "inv_1042_02": {
+      "invoice_id": "inv_1042_02",
+      "account_id": "acct_1042",
+      "amount_cents": 112500,
+      "period": "2026-02",
+      "status": "paid"
+    },
+    "inv_1042_03": {
+      "invoice_id": "inv_1042_03",
+      "account_id": "acct_1042",
+      "amount_cents": 112500,
+      "period": "2026-03",
+      "status": "open"
+    },
+    "inv_2087_02": {
+      "invoice_id": "inv_2087_02",
+      "account_id": "acct_2087",
+      "amount_cents": 540000,
+      "period": "2026-02",
+      "status": "paid"
+    },
+    "inv_2087_03": {
+      "invoice_id": "inv_2087_03",
+      "account_id": "acct_2087",
+      "amount_cents": 540000,
+      "period": "2026-03",
+      "status": "open"
+    },
+    "inv_3311_02": {
+      "invoice_id": "inv_3311_02",
+      "account_id": "acct_3311",
+      "amount_cents": 12000,
+      "period": "2026-02",
+      "status": "paid"
+    },
+    "inv_4520_02": {
+      "invoice_id": "inv_4520_02",
+      "account_id": "acct_4520",
+      "amount_cents": 180000,
+      "period": "2026-02",
+      "status": "open"
+    },
+    "inv_4520_03": {
+      "invoice_id": "inv_4520_03",
+      "account_id": "acct_4520",
+      "amount_cents": 180000,
+      "period": "2026-03",
+      "status": "open"
+    },
+    "inv_5163_02": {
+      "invoice_id": "inv_5163_02",
+      "account_id": "acct_5163",
+      "amount_cents": 6000,
+      "period": "2026-02",
+      "status": "paid"
+    },
+    "inv_6274_02": {
+      "invoice_id": "inv_6274_02",
+      "account_id": "acct_6274",
+      "amount_cents": 135000,
+      "period": "2026-02",
+      "status": "paid"
+    },
+    "inv_7788_02": {
+      "invoice_id": "inv_7788_02",
+      "account_id": "acct_7788",
+      "amount_cents": 900000,
+      "period": "2026-02",
+      "status": "paid"
+    },
+    "inv_8890_02": {
+      "invoice_id": "inv_8890_02",
+      "account_id": "acct_8890",
+      "amount_cents": 18000,
+      "period": "2026-02",
+      "status": "paid"
+    }
+  },
+  "credits": {},
+  "escalations": {},
+  "tickets": {
+    "tkt_5001": {
+      "ticket_id": "tkt_5001",
+      "account_id": "acct_1042",
+      "subject": "Campaign send throughput lower than expected",
+      "status": "open",
+      "priority": "high"
+    },
+    "tkt_5002": {
+      "ticket_id": "tkt_5002",
+      "account_id": "acct_2087",
+      "subject": "Duplicate charge on February invoice",
+      "status": "open",
+      "priority": "urgent"
+    },
+    "tkt_5003": {
+      "ticket_id": "tkt_5003",
+      "account_id": "acct_4520",
+      "subject": "Journey automation stalls at step 3",
+      "status": "open",
+      "priority": "normal"
+    },
+    "tkt_5004": {
+      "ticket_id": "tkt_5004",
+      "account_id": "acct_6274",
+      "subject": "Campaigns not leaving the queue",
+      "status": "open",
+      "priority": "high"
+    },
+    "tkt_5005": {
+      "ticket_id": "tkt_5005",
+      "account_id": "acct_8890",
+      "subject": "Request: A/B testing access",
+      "status": "open",
+      "priority": "low"
+    }
+  }
+}

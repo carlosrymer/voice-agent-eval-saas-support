@@ -1,0 +1,13 @@
+{
+  "workspace": {
+    "account_id": "acct_1042",
+    "api_key_rotations": 0,
+    "dns_txt_records": [],
+    "settings": {
+      "double_opt_in": false,
+      "campaign_sending_paused": false,
+      "ip_allowlist_enabled": false
+    }
+  },
+  "inbox": {}
+}
