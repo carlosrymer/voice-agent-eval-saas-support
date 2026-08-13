@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-13T01:53:31Z",
-  "wall_clock_s": 479.4,
+  "generated_at": "2026-08-13T02:17:33Z",
+  "wall_clock_s": 4.6,
   "config": {
     "provider": "gemini_live",
     "provider_model": "gemini-3.1-flash-live-preview",
     "trials": 1,
     "tts": "gemini_tts",
     "judge_model": "gemini-3.6-flash",
-    "control_audio_model": "gemini-3.1-pro-preview",
-    "cross_vendor": true,
+    "control_audio_model": "gemini-omni-flash-preview",
+    "cross_vendor": false,
     "openai_judge_text_model": "gpt-4.1-mini",
     "openai_judge_audio_model": "gpt-audio",
     "barge_in_turns": "none",
@@ -103,7 +103,9 @@
       "playout_underruns": 6,
       "unscripted_overlaps": 28,
       "harness_paused_s": 424.2
-    }
+    },
+    "n_calls_crashed": 0,
+    "n_calls_launched": 6
   },
   "calls": [
     {

@@ -210,3 +210,61 @@ class TestAggregate:
         rep = aggregate([])
         assert rep.n_turns == 0 and rep.end_of_turn_ms.p50 is None
         assert rep.unattributed_share is None
+
+
+class TestBudgetInvariant:
+    """The named stages plus the residual must equal the measured total.
+
+    This is the claim the whole latency breakdown rests on, and it broke in a
+    real run: a provider turn-start frame that landed outside the caller-stop to
+    first-audio window was folded in anyway, producing a residual of -789.9 ms
+    across the run — a negative slice of a stacked bar.
+    """
+
+    def test_a_turn_start_marker_after_first_audio_is_not_attributed(self):
+        c = SyntheticCall()
+        c.caller_says(0.0, 1.0, "hello")
+        # turn_started_t deliberately *after* the audio begins.
+        c.agent_says(2.0, 1.0, "hi", turn_started_t=2.5)
+        tl = turn_latencies(c.build())[0]
+        assert tl.to_turn_start_ms is None
+        assert "outside" in tl.missing_reasons["to_turn_start_ms"]
+        assert tl.unattributed_ms >= 0.0
+        assert abs(tl.attributed_ms() + tl.unattributed_ms - tl.end_of_turn_ms) < 1e-6
+
+    def test_a_tool_finishing_after_first_audio_cannot_overshoot_the_budget(self):
+        c = SyntheticCall()
+        c.caller_says(0.0, 1.0, "look it up")
+        # Tool result lands well after the agent has already started speaking.
+        c.tool("get_account", {"account_id": "a"}, requested_t=1.4, duration=5.0)
+        c.agent_says(1.9, 1.0, "found it", turn_started_t=1.6)
+        tl = turn_latencies(c.build())[0]
+        assert tl.unattributed_ms >= 0.0
+        assert tl.attributed_ms() <= tl.end_of_turn_ms + 1e-6
+
+    def test_residual_is_never_negative_across_a_messy_call(self):
+        c = SyntheticCall()
+        c.caller_says(0.0, 1.2, "a")
+        c.tool("t1", {}, requested_t=1.5, duration=0.3)
+        c.tool("t2", {}, requested_t=2.9, duration=4.0)
+        c.agent_says(2.2, 1.5, "b", turn_started_t=3.9)
+        for tl in turn_latencies(c.build()):
+            assert tl.unattributed_ms is None or tl.unattributed_ms >= 0.0
+
+    def test_stage_means_still_sum_when_some_turns_lack_a_total(self):
+        """A turn with markers but no audio must not inflate the breakdown."""
+        c = SyntheticCall()
+        c.caller_says(0.0, 1.0, "a")
+        c.agent_says(1.8, 1.0, "b", turn_started_t=1.7)
+        c.caller_says(4.0, 1.0, "c")
+        rec = c.build()
+        # A turn the agent never actually voiced.
+        from voiceval.metrics.timeline import AgentUtterance
+        rec.agent_utterances.append(
+            AgentUtterance(index=9, text="", audio_start_t=None, audio_end_t=None,
+                           turn_started_t=5.5, completed_t=5.6)
+        )
+        rep = aggregate(turn_latencies(rec))
+        assert sum(rep.stage_mean_ms().values()) == pytest.approx(
+            rep.end_of_turn_ms.mean, abs=1e-6
+        )

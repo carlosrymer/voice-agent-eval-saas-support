@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-08-13T01:53:31Z",
+  "generated_at": "2026-08-13T02:17:33Z",
   "config": {
     "provider": "gemini_live",
     "provider_model": "gemini-3.1-flash-live-preview",
     "trials": 1,
     "tts": "gemini_tts",
     "judge_model": "gemini-3.6-flash",
-    "control_audio_model": "gemini-3.1-pro-preview",
-    "cross_vendor": true,
+    "control_audio_model": "gemini-omni-flash-preview",
+    "cross_vendor": false,
     "openai_judge_text_model": "gpt-4.1-mini",
     "openai_judge_audio_model": "gpt-audio",
     "barge_in_turns": "none",
@@ -102,7 +102,9 @@
       "playout_underruns": 6,
       "unscripted_overlaps": 28,
       "harness_paused_s": 424.2
-    }
+    },
+    "n_calls_crashed": 0,
+    "n_calls_launched": 6
   },
   "calls": [
     {
@@ -2922,6 +2924,88 @@
             "calls_gemini-2.5-flash-preview-tts": 42,
             "calls_gemini-2.5-pro-preview-tts": 3,
             "calls_gemini-3.1-flash-tts-preview": 1
+          }
+        },
+        "note": "Gemini exposes no balance endpoint, so spend is reported in tokens by modality rather than in dollars I cannot verify."
+      }
+    },
+    {
+      "provider": "openai_realtime",
+      "model": "gpt-realtime-mini",
+      "n_calls": 14,
+      "n_attempted": 14,
+      "excluded": 0,
+      "outcome_pass_rate": 0.5,
+      "outcome_passes": 7,
+      "n_scored": 14,
+      "action_reward_mean": 0.5,
+      "clean_rate": 0.35714285714285715,
+      "violations_by_rule": {
+        "P6": 3
+      },
+      "eot_p50_ms": 23515.224629000415,
+      "eot_p95_ms": 54580.62325500032,
+      "eot_n": 92,
+      "stage_mean_ms": {
+        "asr_ms": 5200.734728260869,
+        "to_turn_start_ms": 15311.61606668483,
+        "inference_pre_tool_ms": 53.59987614130175,
+        "tool_ms": 0.032481282603483756,
+        "inter_tool_inference_ms": 2828.703346086975,
+        "inference_post_tool_ms": 201.75164471740553,
+        "to_first_audio_ms": 1958.2164666087235,
+        "unattributed_ms": 0.0
+      },
+      "total_turns": 92,
+      "caller_wer": 0.16744690794853545,
+      "long_silences": 124,
+      "early_terminations": 0,
+      "protocol": {
+        "server_tool_retries": 0,
+        "duplicate_tool_calls_suppressed": 3,
+        "playout_underruns": 8,
+        "unscripted_overlaps": 119,
+        "harness_paused_s": 572.9
+      },
+      "ended_reasons": {
+        "max_call_seconds": 11,
+        "caller_done": 2,
+        "out_of_scope": 1
+      },
+      "capabilities": {
+        "server_turn_detection": true,
+        "server_barge_in": true,
+        "emits_interrupt_event": true,
+        "emits_caller_transcript": true,
+        "emits_agent_transcript": true,
+        "emits_turn_start": true,
+        "input_sample_rate_hz": 24000,
+        "output_sample_rate_hz": 24000,
+        "input_mime": "audio/pcm;rate=24000",
+        "output_mime": "audio/pcm;rate=24000",
+        "native_tool_calling": true,
+        "notes": "GA /v1/realtime, wire-verified. Explicit input_audio_buffer.commit + response.create turn boundaries, so end-of-turn latency excludes server-side endpointing, matching how Gemini Live is driven here. Emits an explicit response-start frame, so its latency decomposes one stage further than Gemini Live's."
+      },
+      "spend": {
+        "text_and_judge_tokens": {
+          "calls": 131,
+          "prompt_tokens": 369581,
+          "output_tokens": 3903,
+          "total_tokens": 396019,
+          "by_modality": {
+            "in_text": 369581
+          },
+          "by_model": {
+            "gemini-3.6-flash": 396019
+          }
+        },
+        "judge_by_vendor": {},
+        "tts": {
+          "synthesis_calls": 103,
+          "cache_hits": 3,
+          "tokens": {
+            "characters": 11649,
+            "calls": 103
           }
         },
         "note": "Gemini exposes no balance endpoint, so spend is reported in tokens by modality rather than in dollars I cannot verify."

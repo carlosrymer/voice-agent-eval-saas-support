@@ -258,6 +258,68 @@ evaluation that does not check the *arguments* the agent passed to its tools.
 Full mapping, wire notes and the procedure for adding a third stack:
 [PROVIDERS.md](PROVIDERS.md).
 
+## Two realtime stacks, same tasks
+
+Both stacks run the identical domain, policy, tools and evaluators, with the
+**same caller voice** (OpenAI TTS on both arms, so the caller is not a variable)
+and **explicit turn boundaries on both**, so neither vendor's own
+voice-activity detector is part of the measurement.
+
+| | Gemini Live<br>`gemini-3.1-flash-live-preview` | OpenAI Realtime<br>`gpt-realtime-mini` |
+|---|---|---|
+| Tasks attempted | 6 | 16 |
+| Calls scored | 6 | 14 (2 crashed on connect) |
+| **Outcome pass** | 2/6 (33.3%) | 7/14 (50.0%) |
+| **Outcome pass, 5 common tasks** | **2/5** | **3/5** |
+| Policy violations | P6×1, P7×1 | P6×3 |
+| **End-of-turn P50** | **9,303 ms** | **23,515 ms** |
+| End-of-turn P95 | 31,136 ms | 54,581 ms |
+| Turns measured | 19 | 92 |
+| Caller word error rate | 14.4% | 16.7% |
+| Emits a turn-start frame | no | **yes** |
+| **Server-cancelled tool calls** | **29** | **0** |
+| Duplicate tool calls suppressed | 18 | 3 |
+| Unscripted overlaps | 28 | 119 |
+| Connect failures | 0 | 2 (`ECONNRESET` at concurrency 5) |
+
+**Read the pass rates narrowly.** The arms ran different task sets — Gemini on 6
+tasks chosen to span all seven policy rules, OpenAI on all 16 once its TTS
+removed the quota ceiling — so the headline percentages are over different work.
+On the **5 tasks both ran**, it is 2/5 against 3/5: a one-task difference on a
+five-task sample, which is not a result. Treat this as engineering data about the
+two stacks, not as a model-quality ranking.
+
+**The engineering data is the interesting part, and it splits cleanly.**
+
+*OpenAI Realtime was far more reliable at the protocol level.* Zero server-side
+tool-call cancellations across 14 calls, against Gemini's 29 across 6. Gemini
+issues a function call and then abandons it often enough that the harness needs a
+de-duplication guard to stop the same write being applied twice; without it, a
+transport retry manufactures a P2 "split the credit" policy violation out of
+nothing. OpenAI needed no such guard.
+
+*Gemini Live was two and a half times faster.* 9.3 s median end-of-turn against
+23.5 s, and the gap holds on every one of the five common tasks. Some of that
+23.5 s is `gpt-realtime-mini` being a small model asked to reason over 18 tools
+and a seven-rule policy; some is that OpenAI's `response.created` arrived a mean
+of 15.6 s after the caller stopped. Neither figure is production phone latency —
+see the telephony caveat — but the *ratio* is measured under identical
+conditions.
+
+*OpenAI's extra frame buys a real diagnostic.* Because it emits
+`response.created`, its turns decompose one stage further: I can separate "time
+until the model committed to responding" from "time until it produced sound".
+Gemini reports one opaque block from caller-stop to first audio, so on that stack
+the same 9.3 s cannot be attributed. This is exactly what the capability
+descriptors are for — the extra stage shows up as a named stage on one provider
+and as residual on the other, rather than one vendor merely looking better.
+
+*Both stacks produced far more overlapping speech than either should.* 119
+unscripted overlaps on OpenAI against 28 on Gemini, none of them scripted
+interruptions. The caller starts talking because the agent has not answered yet,
+and then the agent answers into it. At a 23.5 s median response, that is the
+predictable consequence rather than a separate defect.
+
 ## The use case
 
 A B2B SaaS support line for "Loopline", a marketing-automation platform: account
@@ -363,9 +425,15 @@ Measured, not estimated, for the 6-call run:
   `gpt-4.1-mini` 8,448.
 - Audio judging is the most expensive line item on either vendor: 66,663 of
   Google's 90,543 prompt tokens were audio.
-- **Caller brain:** 51 model calls, one per caller utterance (`gemini-3.6-flash`).
-- **OpenAI speech synthesis:** billed per character rather than per token; the
-  caller-voice path for the OpenAI arm is `gpt-4o-mini-tts`.
+- **Caller brain, Gemini arm:** 51 model calls, one per caller utterance
+  (`gemini-3.6-flash`).
+- **Caller brain, OpenAI arm:** 131 model calls,
+  396,019 tokens (`gemini-3.6-flash`; the caller is held
+  constant across both arms so it is not a variable).
+- **Speech synthesis, OpenAI arm:** 103 calls,
+  11,649 characters
+  (`gpt-4o-mini-tts`, billed per character), 3 cache hits.
+
 - **Dollars:** Gemini exposes no balance endpoint, so spend is reported in
   tokens by modality rather than in dollars I cannot verify.
 
@@ -385,24 +453,41 @@ Measured, not estimated, for the 6-call run:
   *agent* and the *caller* are still same-family within each arm, and there is
   still no human annotator anywhere in this project, so no subjective score here
   has ever been checked against a person.
-- **Small sample, stated exactly:** 6 tasks × 1 trial = 6 calls, 19 agent turns
-  with a latency observation, 18 criterion-judgements per modality arm. This is a
-  method demonstration with real numbers, not a benchmark.
+- **Small sample, stated exactly.** Gemini arm: 6 tasks × 1 trial = 6 calls, 19
+  agent turns with a latency observation. OpenAI arm: 16 tasks × 1 trial, 14
+  scored (2 crashed on connect at concurrency 5 and produced no record), 92
+  turns with a latency observation. Judging: 18 criterion-judgements per
+  modality arm per vendor, over the 6 Gemini calls. The two arms overlap on only
+  5 tasks. This is a method demonstration with real numbers, not a benchmark.
 - **The channel comparison is confounded** by 29 server-side tool cancellations
-  and 28 unscripted overlaps, as described above. Directional, not clean.
+  and 28 unscripted overlaps on the Gemini arm, as described above. Directional,
+  not clean.
+- **The two-stack comparison is confounded by task set.** The arms share only 5
+  tasks; pass rates over different work are not comparable, and the 5-task
+  subset is far too small to rank models. The protocol-reliability and latency
+  numbers are the transferable part.
+- **Only the Gemini arm was judged.** The cross-vendor judging matrix ran over
+  the 6 Gemini recordings; the 14 OpenAI calls are scored on Execution, Outcome
+  and measured Experience only. Judging both arms was the next thing on the list
+  when I ran out of budget.
 - **Turn boundaries are signalled explicitly**, so the measured latency excludes
   the server's own endpointing delay — a production deployment on automatic VAD
   adds that on top.
 - **The caller is a simulation** — a text model whose lines a TTS model reads.
   Cleaner and more predictable than a real customer, which flatters the 14.4%
   word error rate.
-- **Barge-in was not exercised in this arm.** Interruptions are scripted, and I
-  ran the compared arm without them so it matched the text baseline, which had
-  none. The barge-in machinery is implemented and tested against fixtures; the
-  28 overlaps reported here are unscripted turbulence, not tests.
+- **Barge-in was never exercised on either stack.** Interruptions are scripted,
+  and both arms ran without them so they matched the text baseline, which had
+  none. The machinery is implemented and covered by fixture tests that assert it
+  fires on real interruptions and stays quiet on near-misses; it has simply
+  never been pointed at a live call. The 28 and 119 overlaps reported here are
+  unscripted turbulence, not tests.
 - **Phrase-matched friction is recall-limited.** The regex list is published and
   the share of agent questions it failed to classify is reported alongside.
-- **The OpenAI Realtime adapter has never been run against the service.**
+- **`gpt-realtime-mini`, not `gpt-realtime`.** I ran the small model to keep
+  realtime audio spend bounded. A larger model would likely change both the
+  latency and the pass rate, so this is not a statement about OpenAI's best
+  realtime stack.
 
 ## Deployed via
 

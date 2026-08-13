@@ -1,0 +1,2999 @@
+{
+  "call_id": "T04_credit_at_exact_cap__t0__f18ead",
+  "task_id": "T04_credit_at_exact_cap",
+  "trial": 0,
+  "provider": "openai_realtime",
+  "model": "gpt-realtime-mini",
+  "synthetic": false,
+  "capabilities": {
+    "server_turn_detection": true,
+    "server_barge_in": true,
+    "emits_interrupt_event": true,
+    "emits_caller_transcript": true,
+    "emits_agent_transcript": true,
+    "emits_turn_start": true,
+    "input_sample_rate_hz": 24000,
+    "output_sample_rate_hz": 24000,
+    "input_mime": "audio/pcm;rate=24000",
+    "output_mime": "audio/pcm;rate=24000",
+    "native_tool_calling": true,
+    "notes": "GA /v1/realtime, wire-verified. Explicit input_audio_buffer.commit + response.create turn boundaries, so end-of-turn latency excludes server-side endpointing, matching how Gemini Live is driven here. Emits an explicit response-start frame, so its latency decomposes one stage further than Gemini Live's."
+  },
+  "duration_s": 333.2631302690004,
+  "ended_reason": "max_call_seconds",
+  "errors": [],
+  "meta": {
+    "playout_underruns": 1,
+    "barge_in_plan": {
+      "turns": [],
+      "offset_s": 1.0,
+      "utterance": "Sorry, hang on a second."
+    },
+    "barge_in_attempts": 0,
+    "caller_model": "gemini-3.6-flash",
+    "caller_voice": "Kore",
+    "agent_voice": "Puck",
+    "tts_backend": "openai_tts",
+    "caller_tool_calls": [
+      {
+        "name": "check_inbox",
+        "args": {}
+      }
+    ],
+    "realtime_pacing": true,
+    "harness_paused_s": 33.767,
+    "env_db_hash": "5f2e9c6d39c69f36b74bfc110e9591c929e3fd8d563b99cdaa0887e666094a61",
+    "wall_clock_s": 377.13,
+    "tts_calls": 6,
+    "tts_cache_hits": 0,
+    "tts_usage": {
+      "characters": 892,
+      "calls": 6
+    }
+  },
+  "events": [
+    {
+      "kind": "agent_turn_started",
+      "t": 40.68932,
+      "seq": 4
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 40.991024,
+      "seq": 8,
+      "text": "Hi"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 40.995016,
+      "seq": 9,
+      "text": " there"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 40.996025,
+      "seq": 10,
+      "text": ","
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.078976,
+      "seq": 11,
+      "text": " no"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.081668,
+      "seq": 12,
+      "text": " trouble"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.084356,
+      "seq": 13,
+      "text": " at"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 41.140677,
+      "seq": 14,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.140909,
+      "seq": 15,
+      "text": " all"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.140933,
+      "seq": 16,
+      "text": ","
+    },
+    {
+      "kind": "agent_audio",
+      "t": 41.141655,
+      "seq": 17,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.163539,
+      "seq": 18,
+      "text": " I"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.170633,
+      "seq": 19,
+      "text": "\u2019m"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.175858,
+      "seq": 20,
+      "text": " here"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 41.200917,
+      "seq": 21,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.201084,
+      "seq": 22,
+      "text": " to"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.201102,
+      "seq": 23,
+      "text": " help"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.201275,
+      "seq": 24,
+      "text": "."
+    },
+    {
+      "kind": "agent_audio",
+      "t": 41.252282,
+      "seq": 25,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.258861,
+      "seq": 26,
+      "text": " Could"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.274638,
+      "seq": 27,
+      "text": " you"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.2761,
+      "seq": 28,
+      "text": " tell"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.292783,
+      "seq": 29,
+      "text": " me"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.292951,
+      "seq": 30,
+      "text": " a"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.295565,
+      "seq": 31,
+      "text": " bit"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.295882,
+      "seq": 32,
+      "text": " more"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.295981,
+      "seq": 33,
+      "text": " about"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 41.323549,
+      "seq": 34,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 41.352528,
+      "seq": 35,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 41.417326,
+      "seq": 36,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 41.427899,
+      "seq": 37,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.449029,
+      "seq": 38,
+      "text": " the"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.462794,
+      "seq": 39,
+      "text": " billing"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.462834,
+      "seq": 40,
+      "text": " issue"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.464033,
+      "seq": 41,
+      "text": " you're"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.466066,
+      "seq": 42,
+      "text": " seeing"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.470604,
+      "seq": 43,
+      "text": "?"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.47182,
+      "seq": 44,
+      "text": " That"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.475304,
+      "seq": 45,
+      "text": " way"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.481554,
+      "seq": 46,
+      "text": " we"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.481581,
+      "seq": 47,
+      "text": " can"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.485973,
+      "seq": 48,
+      "text": " figure"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 41.521951,
+      "seq": 49,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 41.567283,
+      "seq": 50,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 41.59307,
+      "seq": 51,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 41.594198,
+      "seq": 52,
+      "text": "Oh, hi. Um, thanks for taking my call. I'm, uh, sorry to trouble you, but I think I had a bit of a billing issue on my account recently."
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 41.596406,
+      "seq": 53,
+      "text": "Oh, hi. Um, thanks for taking my call. I'm, uh, sorry to trouble you, but I think I had a bit of a billing issue on my account recently.",
+      "is_final": true
+    },
+    {
+      "kind": "agent_audio",
+      "t": 41.629536,
+      "seq": 54,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 41.652651,
+      "seq": 55,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.683991,
+      "seq": 56,
+      "text": " out"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 41.691506,
+      "seq": 57,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.695873,
+      "seq": 58,
+      "text": " the"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.698717,
+      "seq": 59,
+      "text": " best"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.70185,
+      "seq": 60,
+      "text": " way"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.702555,
+      "seq": 61,
+      "text": " forward"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 41.703637,
+      "seq": 62,
+      "text": "."
+    },
+    {
+      "kind": "agent_audio",
+      "t": 41.836606,
+      "seq": 63,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 42.338164,
+      "seq": 64,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 42.36004,
+      "seq": 65,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 42.381449,
+      "seq": 66,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 42.392253,
+      "seq": 67,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 42.393094,
+      "seq": 68,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 42.415844,
+      "seq": 70,
+      "text": "Hi there, no trouble at all, I\u2019m here to help. Could you tell me a bit more about the billing issue you're seeing? That way we can figure out the best way forward.",
+      "is_final": true
+    },
+    {
+      "kind": "agent_turn_complete",
+      "t": 42.417381,
+      "seq": 74
+    },
+    {
+      "kind": "agent_turn_started",
+      "t": 85.71908,
+      "seq": 79
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 85.972362,
+      "seq": 83,
+      "text": "I"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 85.97702,
+      "seq": 84,
+      "text": "\u2019m"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 85.981421,
+      "seq": 85,
+      "text": " sorry"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 85.983772,
+      "seq": 86,
+      "text": " to"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 85.987645,
+      "seq": 87,
+      "text": " hear"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.080912,
+      "seq": 88,
+      "text": " that"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.082033,
+      "seq": 89,
+      "text": "."
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.085036,
+      "seq": 90,
+      "text": " It"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 86.202337,
+      "seq": 91,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 86.268837,
+      "seq": 92,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.274119,
+      "seq": 93,
+      "text": " does"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.27417,
+      "seq": 94,
+      "text": " sound"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.276569,
+      "seq": 95,
+      "text": " like"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 86.299398,
+      "seq": 96,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.299587,
+      "seq": 97,
+      "text": " something"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 86.321143,
+      "seq": 98,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.326193,
+      "seq": 99,
+      "text": " we"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.327443,
+      "seq": 100,
+      "text": "\u2019ll"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.329514,
+      "seq": 101,
+      "text": " need"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.330799,
+      "seq": 102,
+      "text": " to"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.331571,
+      "seq": 103,
+      "text": " look"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.334827,
+      "seq": 104,
+      "text": " into"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.33551,
+      "seq": 105,
+      "text": "."
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.337083,
+      "seq": 106,
+      "text": " Could"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 86.398241,
+      "seq": 107,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 86.408093,
+      "seq": 108,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 86.435485,
+      "seq": 109,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 86.451516,
+      "seq": 110,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.4523,
+      "seq": 111,
+      "text": " you"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.454948,
+      "seq": 112,
+      "text": " confirm"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.456981,
+      "seq": 113,
+      "text": " the"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.459399,
+      "seq": 114,
+      "text": " account"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.461333,
+      "seq": 115,
+      "text": " ID"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.463834,
+      "seq": 116,
+      "text": " or"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.466544,
+      "seq": 117,
+      "text": " the"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.468823,
+      "seq": 118,
+      "text": " email"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.471631,
+      "seq": 119,
+      "text": " associated"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 86.528814,
+      "seq": 120,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 86.529451,
+      "seq": 121,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 86.589319,
+      "seq": 122,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 86.61667,
+      "seq": 123,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 86.622991,
+      "seq": 124,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.646558,
+      "seq": 125,
+      "text": " with"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 86.651042,
+      "seq": 126,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.66154,
+      "seq": 127,
+      "text": " your"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.663441,
+      "seq": 128,
+      "text": " account"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.667919,
+      "seq": 129,
+      "text": "?"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.67575,
+      "seq": 130,
+      "text": " That"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.679625,
+      "seq": 131,
+      "text": " way"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.679975,
+      "seq": 132,
+      "text": ","
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.681907,
+      "seq": 133,
+      "text": " I"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 86.728983,
+      "seq": 134,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 86.762099,
+      "seq": 135,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 86.805739,
+      "seq": 136,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 86.8391,
+      "seq": 137,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 86.869641,
+      "seq": 138,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.895081,
+      "seq": 139,
+      "text": " can"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.899472,
+      "seq": 140,
+      "text": " find"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.905135,
+      "seq": 141,
+      "text": " the"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.910158,
+      "seq": 142,
+      "text": " right"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.912826,
+      "seq": 143,
+      "text": " details"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.917396,
+      "seq": 144,
+      "text": " for"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.918367,
+      "seq": 145,
+      "text": " you"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 86.925166,
+      "seq": 146,
+      "text": "."
+    },
+    {
+      "kind": "agent_audio",
+      "t": 86.950213,
+      "seq": 147,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 86.982813,
+      "seq": 148,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 87.016864,
+      "seq": 149,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 87.050196,
+      "seq": 150,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 87.080655,
+      "seq": 151,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 87.116808,
+      "seq": 152,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 87.143834,
+      "seq": 153,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 87.160964,
+      "seq": 154,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 87.1853,
+      "seq": 156,
+      "text": "I\u2019m sorry to hear that. It does sound like something we\u2019ll need to look into. Could you confirm the account ID or the email associated with your account? That way, I can find the right details for you.",
+      "is_final": true
+    },
+    {
+      "kind": "agent_turn_complete",
+      "t": 87.186275,
+      "seq": 160
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 87.385087,
+      "seq": 162,
+      "text": "Yeah, so, um, I noticed I was charged for 4 seats for 2 months, even though I had downgraded my account. So, uh, I think there was a billing error there."
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 87.387326,
+      "seq": 163,
+      "text": "Yeah, so, um, I noticed I was charged for 4 seats for 2 months, even though I had downgraded my account. So, uh, I think there was a billing error there.",
+      "is_final": true
+    },
+    {
+      "kind": "agent_turn_started",
+      "t": 139.519628,
+      "seq": 167
+    },
+    {
+      "kind": "tool_call",
+      "t": 140.011456,
+      "seq": 184,
+      "call_id": "call_zn0tY5S7OTtJdqsx",
+      "tool_name": "find_account_by_email",
+      "tool_args": {
+        "email": "eli@tann.co"
+      }
+    },
+    {
+      "kind": "agent_turn_complete",
+      "t": 140.01681,
+      "seq": 187
+    },
+    {
+      "kind": "agent_turn_started",
+      "t": 140.137992,
+      "seq": 191
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.36349,
+      "seq": 195,
+      "text": "Thanks"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.367421,
+      "seq": 196,
+      "text": " for"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.373518,
+      "seq": 197,
+      "text": " that"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.375316,
+      "seq": 198,
+      "text": "."
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.47188,
+      "seq": 199,
+      "text": " It"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.471953,
+      "seq": 200,
+      "text": " seems"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 140.577848,
+      "seq": 201,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 140.656774,
+      "seq": 202,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.666551,
+      "seq": 203,
+      "text": " like"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.668417,
+      "seq": 204,
+      "text": " there"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.67061,
+      "seq": 205,
+      "text": "\u2019s"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.672511,
+      "seq": 206,
+      "text": " no"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 140.677449,
+      "seq": 207,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.679473,
+      "seq": 208,
+      "text": " account"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 140.704988,
+      "seq": 209,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.706326,
+      "seq": 210,
+      "text": " found"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.707558,
+      "seq": 211,
+      "text": " for"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.708428,
+      "seq": 212,
+      "text": " that"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.711042,
+      "seq": 213,
+      "text": " email"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.711337,
+      "seq": 214,
+      "text": "."
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.715519,
+      "seq": 215,
+      "text": " Could"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.726206,
+      "seq": 216,
+      "text": " you"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 140.76801,
+      "seq": 217,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 140.795681,
+      "seq": 218,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 140.809731,
+      "seq": 219,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 140.827835,
+      "seq": 220,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.829442,
+      "seq": 221,
+      "text": " double"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.830574,
+      "seq": 222,
+      "text": "-check"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.832161,
+      "seq": 223,
+      "text": " the"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.834582,
+      "seq": 224,
+      "text": " email"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.840141,
+      "seq": 225,
+      "text": " address"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.840172,
+      "seq": 226,
+      "text": " or"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.840186,
+      "seq": 227,
+      "text": " possibly"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 140.842102,
+      "seq": 228,
+      "text": " provide"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 140.86403,
+      "seq": 229,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 140.893625,
+      "seq": 230,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 140.931384,
+      "seq": 231,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 140.963839,
+      "seq": 232,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 140.997682,
+      "seq": 233,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 141.029039,
+      "seq": 234,
+      "text": " another"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 141.036009,
+      "seq": 235,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 141.040136,
+      "seq": 236,
+      "text": " contact"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 141.04146,
+      "seq": 237,
+      "text": " email"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 141.04389,
+      "seq": 238,
+      "text": "?"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 141.055949,
+      "seq": 239,
+      "text": " That"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 141.059375,
+      "seq": 240,
+      "text": " way"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 141.060064,
+      "seq": 241,
+      "text": ","
+    },
+    {
+      "kind": "agent_audio",
+      "t": 141.102401,
+      "seq": 242,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 141.139464,
+      "seq": 243,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 141.173833,
+      "seq": 244,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 141.208782,
+      "seq": 245,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 141.241387,
+      "seq": 246,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 141.267247,
+      "seq": 247,
+      "text": " I"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 141.270692,
+      "seq": 248,
+      "text": " can"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 141.272834,
+      "seq": 249,
+      "text": " locate"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 141.277637,
+      "seq": 250,
+      "text": " the"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 141.281637,
+      "seq": 251,
+      "text": " right"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 141.285297,
+      "seq": 252,
+      "text": " account"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 141.287969,
+      "seq": 253,
+      "text": "."
+    },
+    {
+      "kind": "agent_audio",
+      "t": 141.310468,
+      "seq": 254,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 141.351183,
+      "seq": 255,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 141.382155,
+      "seq": 256,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 141.403145,
+      "seq": 257,
+      "text": "Sure. It's um, E-L-I at T-A-N-N-I-N-C-O-F-F-E-E dot C-O."
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 141.405553,
+      "seq": 258,
+      "text": "Sure. It's um, E-L-I at T-A-N-N-I-N-C-O-F-F-E-E dot C-O.",
+      "is_final": true
+    },
+    {
+      "kind": "agent_audio",
+      "t": 141.423424,
+      "seq": 259,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 141.452668,
+      "seq": 260,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 141.484556,
+      "seq": 261,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 141.498183,
+      "seq": 262,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 141.525143,
+      "seq": 264,
+      "text": "Thanks for that. It seems like there\u2019s no account found for that email. Could you double-check the email address or possibly provide another contact email? That way, I can locate the right account.",
+      "is_final": true
+    },
+    {
+      "kind": "agent_turn_complete",
+      "t": 141.527544,
+      "seq": 268
+    },
+    {
+      "kind": "agent_turn_started",
+      "t": 210.54284,
+      "seq": 273
+    },
+    {
+      "kind": "tool_call",
+      "t": 210.96977,
+      "seq": 292,
+      "call_id": "call_fnvpyo1fmviqsdHw",
+      "tool_name": "find_account_by_email",
+      "tool_args": {
+        "email": "eli@tannicoffee.co"
+      }
+    },
+    {
+      "kind": "agent_turn_complete",
+      "t": 210.972754,
+      "seq": 295
+    },
+    {
+      "kind": "agent_turn_started",
+      "t": 211.096485,
+      "seq": 299
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.318242,
+      "seq": 303,
+      "text": "It"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.328333,
+      "seq": 304,
+      "text": " looks"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.328381,
+      "seq": 305,
+      "text": " like"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.330583,
+      "seq": 306,
+      "text": " there"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.418231,
+      "seq": 307,
+      "text": "\u2019s"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.418964,
+      "seq": 308,
+      "text": " still"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.421501,
+      "seq": 309,
+      "text": " no"
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 211.498642,
+      "seq": 310,
+      "text": "Oh, um, let me check. It should be Eli at T-A-N-N-I-N-C-O-F-F-E-E dot C-O. The company name is Tannen Coffee Co. If that helps. My name is Eli Brandt."
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 211.501059,
+      "seq": 311,
+      "text": "Oh, um, let me check. It should be Eli at T-A-N-N-I-N-C-O-F-F-E-E dot C-O. The company name is Tannen Coffee Co. If that helps. My name is Eli Brandt.",
+      "is_final": true
+    },
+    {
+      "kind": "agent_audio",
+      "t": 211.524415,
+      "seq": 312,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.526054,
+      "seq": 313,
+      "text": " account"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 211.610607,
+      "seq": 314,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.613471,
+      "seq": 315,
+      "text": " found"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.614446,
+      "seq": 316,
+      "text": " with"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 211.6307,
+      "seq": 317,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 211.653599,
+      "seq": 318,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.661556,
+      "seq": 319,
+      "text": " that"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.662898,
+      "seq": 320,
+      "text": " email"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.666224,
+      "seq": 321,
+      "text": "."
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.666393,
+      "seq": 322,
+      "text": " Another"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.668261,
+      "seq": 323,
+      "text": " possibility"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 211.716732,
+      "seq": 324,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 211.732544,
+      "seq": 325,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 211.74936,
+      "seq": 326,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 211.764733,
+      "seq": 327,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.771842,
+      "seq": 328,
+      "text": " is"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.77294,
+      "seq": 329,
+      "text": " that"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.774609,
+      "seq": 330,
+      "text": " the"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.776019,
+      "seq": 331,
+      "text": " account"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.778255,
+      "seq": 332,
+      "text": " might"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.779289,
+      "seq": 333,
+      "text": " be"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.780727,
+      "seq": 334,
+      "text": " under"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.810654,
+      "seq": 335,
+      "text": " a"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.810721,
+      "seq": 336,
+      "text": " different"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.811045,
+      "seq": 337,
+      "text": " email"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.811081,
+      "seq": 338,
+      "text": " address"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 211.820031,
+      "seq": 339,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 211.851526,
+      "seq": 340,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 211.886349,
+      "seq": 341,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 211.918689,
+      "seq": 342,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 211.953839,
+      "seq": 343,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.98618,
+      "seq": 344,
+      "text": " or"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 211.990754,
+      "seq": 345,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 211.99787,
+      "seq": 346,
+      "text": " a"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.002632,
+      "seq": 347,
+      "text": " different"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.005454,
+      "seq": 348,
+      "text": " spelling"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.007692,
+      "seq": 349,
+      "text": "."
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.020086,
+      "seq": 350,
+      "text": " Could"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.022318,
+      "seq": 351,
+      "text": " you"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.023824,
+      "seq": 352,
+      "text": " check"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 212.073531,
+      "seq": 353,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 212.110324,
+      "seq": 354,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 212.141022,
+      "seq": 355,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 212.178407,
+      "seq": 356,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 212.21142,
+      "seq": 357,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.234379,
+      "seq": 358,
+      "text": " if"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.239196,
+      "seq": 359,
+      "text": " there"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.244829,
+      "seq": 360,
+      "text": "\u2019s"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.248298,
+      "seq": 361,
+      "text": " another"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.25349,
+      "seq": 362,
+      "text": " email"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.258291,
+      "seq": 363,
+      "text": " you"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.270684,
+      "seq": 364,
+      "text": " might"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.276013,
+      "seq": 365,
+      "text": " have"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.27867,
+      "seq": 366,
+      "text": " used"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.278704,
+      "seq": 367,
+      "text": "?"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.281423,
+      "seq": 368,
+      "text": " That"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 212.297764,
+      "seq": 369,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 212.333771,
+      "seq": 370,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 212.366595,
+      "seq": 371,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 212.402824,
+      "seq": 372,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 212.438184,
+      "seq": 373,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 212.469184,
+      "seq": 374,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.483214,
+      "seq": 375,
+      "text": " might"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.48786,
+      "seq": 376,
+      "text": " help"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.490249,
+      "seq": 377,
+      "text": " me"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.49714,
+      "seq": 378,
+      "text": " find"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.499672,
+      "seq": 379,
+      "text": " the"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.506394,
+      "seq": 380,
+      "text": " right"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.508541,
+      "seq": 381,
+      "text": " account"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.510405,
+      "seq": 382,
+      "text": "."
+    },
+    {
+      "kind": "agent_audio",
+      "t": 212.546357,
+      "seq": 383,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 212.583186,
+      "seq": 384,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 212.617002,
+      "seq": 385,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 212.653346,
+      "seq": 386,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 212.68468,
+      "seq": 387,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 212.72543,
+      "seq": 388,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 212.734297,
+      "seq": 389,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 212.762806,
+      "seq": 391,
+      "text": "It looks like there\u2019s still no account found with that email. Another possibility is that the account might be under a different email address or a different spelling. Could you check if there\u2019s another email you might have used? That might help me find the right account.",
+      "is_final": true
+    },
+    {
+      "kind": "agent_turn_complete",
+      "t": 212.764875,
+      "seq": 395
+    },
+    {
+      "kind": "agent_turn_started",
+      "t": 267.231527,
+      "seq": 400
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.528738,
+      "seq": 404,
+      "text": "I"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.533259,
+      "seq": 405,
+      "text": " understand"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.538393,
+      "seq": 406,
+      "text": "."
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.63707,
+      "seq": 407,
+      "text": " Right"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.63714,
+      "seq": 408,
+      "text": " now"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.637164,
+      "seq": 409,
+      "text": ","
+    },
+    {
+      "kind": "agent_audio",
+      "t": 267.79851,
+      "seq": 410,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 267.821152,
+      "seq": 411,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.822329,
+      "seq": 412,
+      "text": " the"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.82345,
+      "seq": 413,
+      "text": " system"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.823807,
+      "seq": 414,
+      "text": " primarily"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 267.853428,
+      "seq": 415,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 267.862873,
+      "seq": 416,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.864577,
+      "seq": 417,
+      "text": " uses"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.865199,
+      "seq": 418,
+      "text": " the"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.866631,
+      "seq": 419,
+      "text": " email"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.868383,
+      "seq": 420,
+      "text": " to"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.869252,
+      "seq": 421,
+      "text": " locate"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 267.929833,
+      "seq": 422,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 267.944396,
+      "seq": 423,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 267.954673,
+      "seq": 424,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 267.97206,
+      "seq": 425,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.972298,
+      "seq": 426,
+      "text": " the"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.979699,
+      "seq": 427,
+      "text": " account"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.980355,
+      "seq": 428,
+      "text": "."
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.981586,
+      "seq": 429,
+      "text": " It"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.98269,
+      "seq": 430,
+      "text": " might"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.987478,
+      "seq": 431,
+      "text": " be"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.994021,
+      "seq": 432,
+      "text": " helpful"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.995518,
+      "seq": 433,
+      "text": " to"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 267.995556,
+      "seq": 434,
+      "text": " double"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 268.03294,
+      "seq": 435,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 268.064273,
+      "seq": 436,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 268.098499,
+      "seq": 437,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 268.134899,
+      "seq": 438,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 268.175073,
+      "seq": 439,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 268.202228,
+      "seq": 440,
+      "text": "-check"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 268.203993,
+      "seq": 441,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 268.211947,
+      "seq": 442,
+      "text": " if"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 268.216479,
+      "seq": 443,
+      "text": " there"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 268.2216,
+      "seq": 444,
+      "text": "\u2019s"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 268.224387,
+      "seq": 445,
+      "text": " an"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 268.229182,
+      "seq": 446,
+      "text": " alternative"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 268.23219,
+      "seq": 447,
+      "text": " email"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 268.232225,
+      "seq": 448,
+      "text": " or"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 268.280071,
+      "seq": 449,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 273.793268,
+      "seq": 450,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 273.79348,
+      "seq": 451,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 273.793601,
+      "seq": 452,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 273.793716,
+      "seq": 453,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 273.793827,
+      "seq": 454,
+      "text": " if"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 273.793841,
+      "seq": 455,
+      "text": " you"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 273.793851,
+      "seq": 456,
+      "text": " might"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 273.793861,
+      "seq": 457,
+      "text": " have"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 273.79387,
+      "seq": 458,
+      "text": " used"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 273.79388,
+      "seq": 459,
+      "text": " a"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 273.793888,
+      "seq": 460,
+      "text": " different"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 273.793898,
+      "seq": 461,
+      "text": " spelling"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 273.793927,
+      "seq": 462,
+      "text": " or"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 273.793938,
+      "seq": 463,
+      "text": " a"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 273.793947,
+      "seq": 464,
+      "text": " different"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 273.793959,
+      "seq": 465,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 273.794073,
+      "seq": 466,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.079572,
+      "seq": 467,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.079786,
+      "seq": 468,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.079929,
+      "seq": 469,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.080068,
+      "seq": 470,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.08024,
+      "seq": 471,
+      "text": " domain"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.080271,
+      "seq": 472,
+      "text": "."
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.080287,
+      "seq": 473,
+      "text": " If"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.080299,
+      "seq": 474,
+      "text": " you're"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.080309,
+      "seq": 475,
+      "text": " sure"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.080319,
+      "seq": 476,
+      "text": " this"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.080328,
+      "seq": 477,
+      "text": " is"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.080338,
+      "seq": 478,
+      "text": " the"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.080347,
+      "seq": 479,
+      "text": " only"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.080373,
+      "seq": 480,
+      "text": " email"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.080383,
+      "seq": 481,
+      "text": ","
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.080399,
+      "seq": 482,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.080521,
+      "seq": 483,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.08066,
+      "seq": 484,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.094429,
+      "seq": 485,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.0947,
+      "seq": 486,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.094904,
+      "seq": 487,
+      "text": " it"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.094928,
+      "seq": 488,
+      "text": " could"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.094948,
+      "seq": 489,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.095125,
+      "seq": 490,
+      "text": " also"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.095141,
+      "seq": 491,
+      "text": " help"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.095155,
+      "seq": 492,
+      "text": " to"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.095206,
+      "seq": 493,
+      "text": " check"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.095232,
+      "seq": 494,
+      "text": " with"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.095249,
+      "seq": 495,
+      "text": " any"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.095263,
+      "seq": 496,
+      "text": " team"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.095277,
+      "seq": 497,
+      "text": " members"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.095296,
+      "seq": 498,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.095482,
+      "seq": 499,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.095673,
+      "seq": 500,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.095862,
+      "seq": 501,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.096064,
+      "seq": 502,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.096288,
+      "seq": 503,
+      "text": " who"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.096313,
+      "seq": 504,
+      "text": " might"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.09633,
+      "seq": 505,
+      "text": " have"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.096344,
+      "seq": 506,
+      "text": " set"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.096359,
+      "seq": 507,
+      "text": " up"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.096373,
+      "seq": 508,
+      "text": " the"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.096386,
+      "seq": 509,
+      "text": " account"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.0964,
+      "seq": 510,
+      "text": "."
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.096414,
+      "seq": 511,
+      "text": " That"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.096428,
+      "seq": 512,
+      "text": " way"
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.096447,
+      "seq": 513,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 279.09664,
+      "seq": 514,
+      "text": "I'm sorry, no. That's definitely the only email I use for it. Eli at T-A-N-N-I-N-C-O-F-F-E-E-DOT-C-O. Is there maybe another way to look it up, like by company name, Tannen Coffee Co.?"
+    },
+    {
+      "kind": "caller_transcript",
+      "t": 279.09666,
+      "seq": 515,
+      "text": "I'm sorry, no. That's definitely the only email I use for it. Eli at T-A-N-N-I-N-C-O-F-F-E-E-DOT-C-O. Is there maybe another way to look it up, like by company name, Tannen Coffee Co.?",
+      "is_final": true
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.096755,
+      "seq": 516,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.096951,
+      "seq": 517,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.097138,
+      "seq": 518,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.097379,
+      "seq": 519,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.097571,
+      "seq": 520,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.097763,
+      "seq": 521,
+      "text": " we"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.097799,
+      "seq": 522,
+      "text": " can"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.097827,
+      "seq": 523,
+      "text": " narrow"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.097841,
+      "seq": 524,
+      "text": " it"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.097854,
+      "seq": 525,
+      "text": " down"
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.097867,
+      "seq": 526,
+      "text": "."
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.099788,
+      "seq": 527,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.100068,
+      "seq": 528,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.100298,
+      "seq": 529,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.100504,
+      "seq": 530,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.10079,
+      "seq": 531,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_audio",
+      "t": 279.100989,
+      "seq": 532,
+      "audio_ms": 0.0,
+      "audio_rate_hz": 24000
+    },
+    {
+      "kind": "agent_transcript",
+      "t": 279.101047,
+      "seq": 534,
+      "text": "I understand. Right now, the system primarily uses the email to locate the account. It might be helpful to double-check if there\u2019s an alternative email or if you might have used a different spelling or a different domain. If you're sure this is the only email, it could also help to check with any team members who might have set up the account. That way we can narrow it down.",
+      "is_final": true
+    },
+    {
+      "kind": "agent_turn_complete",
+      "t": 279.10111,
+      "seq": 538
+    }
+  ],
+  "tool_executions": [
+    {
+      "call_id": "call_zn0tY5S7OTtJdqsx",
+      "name": "find_account_by_email",
+      "args": {
+        "email": "eli@tann.co"
+      },
+      "requestor": "assistant",
+      "requested_t": 140.01145636100023,
+      "started_t": 140.0115646300003,
+      "finished_t": 140.01164209300032,
+      "ok": false,
+      "result": "Error: No account found for eli@tann.co",
+      "error": "ValueError: No account found for eli@tann.co"
+    },
+    {
+      "call_id": "call_fnvpyo1fmviqsdHw",
+      "name": "find_account_by_email",
+      "args": {
+        "email": "eli@tannicoffee.co"
+      },
+      "requestor": "assistant",
+      "requested_t": 210.96976981900025,
+      "started_t": 210.96992952200026,
+      "finished_t": 210.9700143800003,
+      "ok": false,
+      "result": "Error: No account found for eli@tannicoffee.co",
+      "error": "ValueError: No account found for eli@tannicoffee.co"
+    }
+  ],
+  "caller_utterances": [
+    {
+      "index": 0,
+      "text": "Oh, hi! Um, thanks for taking my call. I'm, uh, sorry to trouble you, but I think I had a bit of a billing issue on my account recently?",
+      "start_t": 22.845090264999953,
+      "end_t": 31.045090264999953,
+      "is_barge_in": false,
+      "asr_text": "Oh, hi. Um, thanks for taking my call. I'm, uh, sorry to trouble you, but I think I had a bit of a billing issue on my account recently.",
+      "asr_final_t": 41.596406488999946
+    },
+    {
+      "index": 1,
+      "text": "Yeah, so, um, I noticed I was charged for four seats for two months, even though I had downgraded my account. So, uh, I think there was a billing error there.",
+      "start_t": 52.3750962470001,
+      "end_t": 61.4250962470001,
+      "is_barge_in": false,
+      "asr_text": "Yeah, so, um, I noticed I was charged for 4 seats for 2 months, even though I had downgraded my account. So, uh, I think there was a billing error there.",
+      "asr_final_t": 87.38732575800009
+    },
+    {
+      "index": 2,
+      "text": "Sure, it's, um, e, l, i at t, a, n, n, i, n, c, o, f, f, e, e dot c, o",
+      "start_t": 96.75347695600021,
+      "end_t": 106.25347695600021,
+      "is_barge_in": false,
+      "asr_text": "Sure. It's um, E-L-I at T-A-N-N-I-N-C-O-F-F-E-E dot C-O.",
+      "asr_final_t": 141.4055529120003
+    },
+    {
+      "index": 3,
+      "text": "Oh, um, let me check... It should be e, l, i at t, a, n, n, i, n, c, o, f, f, e, e dot c, o. The company name is Tannin Coffee Co, if that helps? My name is Eli Brandt.",
+      "start_t": 162.27236617100039,
+      "end_t": 174.9223661710004,
+      "is_barge_in": false,
+      "asr_text": "Oh, um, let me check. It should be Eli at T-A-N-N-I-N-C-O-F-F-E-E dot C-O. The company name is Tannen Coffee Co. If that helps. My name is Eli Brandt.",
+      "asr_final_t": 211.5010587720003
+    },
+    {
+      "index": 4,
+      "text": "Um, sorry, no, that's definitely the only email I use for it: e, l, i at t, a, n, n, i, n, c, o, f, f, e, e dot c, o. Is there maybe another way to look it up, like by company name Tannin Coffee Co?",
+      "start_t": 229.61782434700035,
+      "end_t": 244.41782434700036,
+      "is_barge_in": false,
+      "asr_text": "I'm sorry, no. That's definitely the only email I use for it. Eli at T-A-N-N-I-N-C-O-F-F-E-E-DOT-C-O. Is there maybe another way to look it up, like by company name, Tannen Coffee Co.?",
+      "asr_final_t": 279.09665975300027
+    },
+    {
+      "index": 5,
+      "text": "Oh, uh, sorry to interrupt, but I actually saw a verification email come in from Loopline just now! Do you need the one-time code from that to verify my identity?",
+      "start_t": 279.07941195000035,
+      "end_t": 288.62941195000036,
+      "is_barge_in": false,
+      "asr_text": null,
+      "asr_final_t": null
+    }
+  ],
+  "agent_utterances": [
+    {
+      "index": 0,
+      "text": "Hi there, no trouble at all, I\u2019m here to help. Could you tell me a bit more about the billing issue you're seeing? That way we can figure out the best way forward.",
+      "audio_start_t": 41.14067685199984,
+      "audio_end_t": 49.140676851999814,
+      "turn_started_t": 40.68932043699988,
+      "completed_t": 42.41761180100002,
+      "interrupted": false
+    },
+    {
+      "index": 1,
+      "text": "I\u2019m sorry to hear that. It does sound like something we\u2019ll need to look into. Could you confirm the account ID or the email associated with your account? That way, I can find the right details for you.",
+      "audio_start_t": 86.20233717400015,
+      "audio_end_t": 96.7523371740003,
+      "turn_started_t": 85.71908004300008,
+      "completed_t": 87.18662449200019,
+      "interrupted": false
+    },
+    {
+      "index": 2,
+      "text": "Thanks for that. It seems like there\u2019s no account found for that email. Could you double-check the email address or possibly provide another contact email? That way, I can locate the right account.",
+      "audio_start_t": 140.57784783200032,
+      "audio_end_t": 150.92784783200045,
+      "turn_started_t": 139.51962844200034,
+      "completed_t": 141.52803446200028,
+      "interrupted": false
+    },
+    {
+      "index": 3,
+      "text": "It looks like there\u2019s still no account found with that email. Another possibility is that the account might be under a different email address or a different spelling. Could you check if there\u2019s another email you might have used? That might help me find the right account.",
+      "audio_start_t": 211.52441487400029,
+      "audio_end_t": 224.27441487400046,
+      "turn_started_t": 210.54283961000033,
+      "completed_t": 212.7652319270003,
+      "interrupted": false
+    },
+    {
+      "index": 4,
+      "text": "I understand. Right now, the system primarily uses the email to locate the account. It might be helpful to double-check if there\u2019s an alternative email or",
+      "audio_start_t": 267.7985099680004,
+      "audio_end_t": 273.7985099680001,
+      "turn_started_t": 267.2315266480002,
+      "completed_t": 279.07927856300034,
+      "interrupted": false
+    },
+    {
+      "index": 5,
+      "text": "I understand. Right now, the system primarily uses the email to locate the account. It might be helpful to double-check if there\u2019s an alternative email or if you might have used a different spelling or a different domain. If you're sure this is the only email, it could also help to check with any team members who might have set up the account. That way we can narrow it down.",
+      "audio_start_t": 274.19326785700025,
+      "audio_end_t": 289.5795720799998,
+      "turn_started_t": null,
+      "completed_t": 331.1374623000004,
+      "interrupted": false
+    }
+  ],
+  "audio": {
+    "caller_wav": "T04_credit_at_exact_cap__t0__f18ead.caller.wav",
+    "agent_wav": "T04_credit_at_exact_cap__t0__f18ead.agent.wav"
+  }
+}

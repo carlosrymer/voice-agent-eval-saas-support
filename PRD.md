@@ -100,8 +100,8 @@ hard, rather than what the quickstart shows.
 
 ## Success criteria
 
-**The technology being trialled is the realtime voice-agent stack (Gemini Live)
-plus the three-axis evaluation method.** The claim under test is that a realtime
+**The technology being trialled is the realtime voice-agent stack — Gemini Live
+and, later, OpenAI Realtime — plus the three-axis evaluation method.** The claim under test is that a realtime
 voice API can be driven as a tool-using, policy-bound support agent and
 evaluated with the same rigour as a text agent.
 
@@ -115,7 +115,17 @@ Success means:
 3. Experience is majority-measured, with the judged residue named. — **Met**:
    everything except pronunciation, pacing and naturalness is computed.
 4. The judge-modality experiment produces a decidable answer, including
-   abstention behaviour. — **Met**; see the README for the result.
+   abstention behaviour. — **Met, and the answer overturned the first one.**
+   With a second vendor's judges available, the transcript-vs-audio agreement I
+   originally published (mean |Δ| 0.00) did not replicate, and judge *vendor*
+   turned out to move the score five times more than modality does. Reported as
+   the headline rather than buried, because a negative result about one's own
+   published number is the most useful thing this project produced.
+5. A second realtime stack drops in behind the seam without touching the
+   measurement layer. — **Half met, honestly.** The server-to-client translation
+   table needed no changes and nothing above the seam was edited; the
+   client-to-server session shape had to be rewritten because it targeted an API
+   version that has since been switched off.
 5. Limitations are stated where the numbers are, not only in an appendix.
    — **Met**.
 
@@ -136,7 +146,8 @@ produced plausible-looking output rather than an error.
 
 | Risk | Mitigation |
 |---|---|
-| Single-vendor self-evaluation on subjective scores | Experience is majority-measured; judged scores are labelled single-family and kept to the irreducible residue |
+| Single-vendor self-evaluation on subjective scores | **Partly resolved.** Every subjective score is now computed by both a Google and an OpenAI judge over identical recordings and rubrics, and both are published. What remains: agent and caller are still same-family within an arm, and no human has ever checked a subjective score here |
+| Judged scores treated as stable quantities | Three passes showed they are not; every judged figure is published with its vendor, its rubric and its run-to-run variation, and the deterministic metrics are the ones load-bearing |
 | Small sample | Counts stated exactly everywhere; no claim of benchmark status |
 | Daily per-model API quotas truncating a run | TTS fails over across three models with independent daily budgets; quota-truncated calls are excluded from scoring as *harness* failures, never counted as agent failures |
 | Harness bugs read as agent failures | Offline end-to-end test over the real pipeline; harness-failure reasons excluded from every rate and reported separately |

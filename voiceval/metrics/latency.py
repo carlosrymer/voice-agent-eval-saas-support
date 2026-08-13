@@ -203,10 +203,23 @@ def turn_latencies(record: CallRecord, vad_cfg: VadConfig = VadConfig()) -> list
                 "cannot be separated from inference"
             )
 
+        # A marker is only usable if it actually falls inside the interval being
+        # decomposed. A provider frame that arrives after the first audio byte
+        # -- or before the caller stopped -- describes something other than this
+        # turn's response onset, and folding it in made the named stages sum to
+        # MORE than the measured total, i.e. a negative residual. The invariant
+        # this module advertises is that the parts add up, so an out-of-range
+        # marker is dropped and recorded rather than trusted.
+        upper = first_audio if first_audio is not None else anchor
         if caps.get("emits_turn_start") and turn.turn_started_t is not None:
-            if turn.turn_started_t > cursor:
+            if cursor < turn.turn_started_t <= upper:
                 tl.to_turn_start_ms = (turn.turn_started_t - cursor) * 1000.0
                 cursor = turn.turn_started_t
+            else:
+                tl.missing_reasons["to_turn_start_ms"] = (
+                    "provider turn-start frame fell outside the caller-stop to "
+                    "first-audio window; not attributable to this turn"
+                )
         else:
             tl.missing_reasons["to_turn_start_ms"] = (
                 "provider emits no turn-start frame; response onset is only "
@@ -214,15 +227,19 @@ def turn_latencies(record: CallRecord, vad_cfg: VadConfig = VadConfig()) -> list
             )
 
         if tools:
-            first_req = min(t.requested_t for t in tools)
-            last_fin = max(t.finished_t for t in tools)
+            # Clamp into the window for the same reason: a tool whose result
+            # lands after the agent already started speaking cannot have been on
+            # the critical path to that first audio byte.
+            first_req = min(max(t.requested_t, cursor) for t in tools)
+            last_fin = min(max(t.finished_t for t in tools), upper)
+            first_req = min(first_req, last_fin)
             tl.inference_pre_tool_ms = max(0.0, (first_req - cursor) * 1000.0)
             # `tool_ms` is what the tools themselves cost; the wall-clock span
             # from first request to last result is usually longer because the
             # model thinks between calls. Splitting them keeps the budget
             # additive without charging model time to the tools.
-            tl.tool_ms = sum(t.duration_ms for t in tools)
             tool_wall_ms = max(0.0, (last_fin - first_req) * 1000.0)
+            tl.tool_ms = min(sum(t.duration_ms for t in tools), tool_wall_ms)
             tl.inter_tool_inference_ms = max(0.0, tool_wall_ms - tl.tool_ms)
             cursor = max(cursor, last_fin)
             if first_audio is not None:
@@ -231,7 +248,15 @@ def turn_latencies(record: CallRecord, vad_cfg: VadConfig = VadConfig()) -> list
             tl.to_first_audio_ms = max(0.0, (first_audio - cursor) * 1000.0)
 
         if tl.end_of_turn_ms is not None:
-            tl.unattributed_ms = round(tl.end_of_turn_ms - tl.attributed_ms(), 6)
+            residual = round(tl.end_of_turn_ms - tl.attributed_ms(), 6)
+            if residual < -1e-6:
+                # Should be unreachable now that markers are clamped. If it ever
+                # fires, the breakdown is wrong and saying so is better than
+                # publishing a negative slice of a stacked bar.
+                tl.missing_reasons["unattributed_ms"] = (
+                    f"stages over-attributed by {-residual:.1f} ms; breakdown unreliable"
+                )
+            tl.unattributed_ms = max(0.0, residual)
         out.append(tl)
     return out
 
@@ -277,6 +302,13 @@ class LatencyReport:
 
 
 def aggregate(turns: list[TurnLatency]) -> LatencyReport:
+    # Only turns with a measured total can contribute to the breakdown. A turn
+    # with stage markers but no first audio has no total for its stages to sum
+    # to, and including it made the stacked bar overshoot the headline mean by
+    # a fraction of a percent -- small, but the breakdown either adds up or it
+    # does not.
+    turns = [t for t in turns if t.end_of_turn_ms is not None]
+
     def col(attr: str) -> list[float]:
         return [getattr(t, attr) for t in turns if getattr(t, attr) is not None]
 

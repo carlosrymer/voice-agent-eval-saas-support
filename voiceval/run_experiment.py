@@ -222,7 +222,14 @@ def score_all(records: list[CallRecord]) -> list[dict[str, Any]]:
 #: Calls that ended because the *harness* ran out of road, not because the agent
 #: did anything. They are reported, but never counted in a pass rate: doing so
 #: would manufacture the very voice-channel degradation this study measures.
-HARNESS_FAILURES = {"tts_quota_exhausted", "error", "max_call_seconds"}
+#:
+#: `max_call_seconds` is deliberately NOT in this set. The call budget is
+#: measured against conversation time with the test rig's own thinking time
+#: excluded, so exhausting it means the agent genuinely talked for five minutes
+#: without resolving the request. Excluding those would hand a slow or looping
+#: stack a free pass and bias a two-stack comparison toward whichever one stalls
+#: more, which is the opposite of what this measures.
+HARNESS_FAILURES = {"tts_quota_exhausted", "error"}
 
 
 def aggregate(rows: list[dict[str, Any]]) -> dict[str, Any]:
@@ -392,6 +399,7 @@ def main() -> int:
 
     carried_judging: dict[str, Any] = {}
     carried_spend: dict[str, Any] = {}
+    n_crashed = 0
     if args.score_only:
         records = [CallRecord.load(p) for p in sorted(calls_dir.glob("*.json"))]
         print(f"Loaded {len(records)} existing calls")
@@ -442,7 +450,15 @@ def main() -> int:
             ]
             return await asyncio.gather(*jobs)
 
-        records = [r for r in asyncio.run(go()) if r is not None]
+        _raw = asyncio.run(go())
+        records = [r for r in _raw if r is not None]
+        # A call that raised before producing a record leaves no artifact, so
+        # without this counter it disappears from the sample accounting
+        # entirely -- the run would report a clean N/N and quietly omit the
+        # attempts that never got off the ground.
+        n_crashed = len(_raw) - len(records)
+        if n_crashed:
+            print(f"  {n_crashed} call(s) crashed before producing a record")
 
     if not records:
         print("No calls completed; nothing to score.", file=sys.stderr)
@@ -483,7 +499,8 @@ def main() -> int:
             "max_turns": args.max_turns,
             "capabilities": get_provider(args.provider).describe(),
         },
-        "summary": summary,
+        "summary": {**summary, "n_calls_crashed": n_crashed,
+                    "n_calls_launched": summary.get("n_calls_attempted", 0) + n_crashed},
         "calls": rows,
         "judging": judging,
         "spend": {
