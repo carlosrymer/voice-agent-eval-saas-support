@@ -8,3 +8,4 @@ artifacts/tts_cache/
 
 artifacts/smoke_oai/
 artifacts/calls_openai_wip/
+.last_build_stamp

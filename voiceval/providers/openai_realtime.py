@@ -114,6 +114,14 @@ from voiceval.providers.base import (
 WS_URL = "wss://api.openai.com/v1/realtime"
 DEFAULT_MODEL = "gpt-realtime-mini"
 DEFAULT_VOICE = "alloy"
+#: OpenAI rejects any voice outside this set -- and rejects the *entire*
+#: session.update frame when one appears. See `_map_voice`.
+OPENAI_VOICES = {
+    "alloy", "ash", "ballad", "coral", "echo", "sage", "shimmer", "verse",
+    "marin", "cedar",
+}
+#: Cross-vendor aliases, so one CallConfig drives either stack unchanged.
+VOICE_ALIASES = {"puck": "alloy", "kore": "shimmer", "charon": "ash", "fenrir": "verse"}
 #: OpenAI Realtime speaks 24 kHz PCM16 in both directions.
 INPUT_RATE = 24000
 OUTPUT_RATE = 24000
@@ -347,6 +355,23 @@ class OpenAIRealtimeProvider(VoiceProvider):
             ),
         )
 
+    def _map_voice(self, voice: str) -> str:
+        """Coerce a voice name into one OpenAI accepts.
+
+        Not cosmetic. Passing Gemini's default voice name straight through made
+        OpenAI reject the whole `session.update` frame, and a rejected frame
+        does not close the socket -- the session silently keeps its defaults.
+        That left server voice-activity detection on and input transcription
+        off, so the harness spent an entire run fighting auto-created responses
+        and recording empty caller transcripts. One bad enum value degraded
+        every downstream metric and nothing in the transcript said so.
+        """
+        v = (voice or "").strip()
+        if v in OPENAI_VOICES:
+            return v
+        return VOICE_ALIASES.get(v.lower(), DEFAULT_VOICE)
+
+
     def session_update_frame(self, config: SessionConfig) -> dict[str, Any]:
         """The GA `session.update` frame, exposed so tests can assert its shape.
 
@@ -372,7 +397,7 @@ class OpenAIRealtimeProvider(VoiceProvider):
                 "input": input_audio,
                 "output": {
                     "format": {"type": "audio/pcm", "rate": OUTPUT_RATE},
-                    "voice": config.voice or self.voice,
+                    "voice": self._map_voice(config.voice or self.voice),
                 },
             },
         }
@@ -421,4 +446,18 @@ class OpenAIRealtimeProvider(VoiceProvider):
             raise ProviderUnavailable(f"Realtime rejected the session: {json.dumps(first)[:300]}")
 
         await ws.send(json.dumps(self.session_update_frame(config)))
+        # Confirm the configuration was accepted. A rejected session.update
+        # leaves the socket open on default settings, so failing loudly here is
+        # the difference between a wrong measurement and no measurement.
+        try:
+            raw = await asyncio.wait_for(ws.recv(), timeout=30)
+        except asyncio.TimeoutError as exc:
+            await ws.close()
+            raise ProviderUnavailable("no reply to session.update") from exc
+        ack = json.loads(raw if isinstance(raw, str) else raw.decode())
+        if ack.get("type") == "error":
+            await ws.close()
+            raise ProviderUnavailable(
+                f"session.update rejected: {json.dumps(ack.get('error') or ack)[:300]}"
+            )
         return OpenAIRealtimeSession(self, ws, config, clock)

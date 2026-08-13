@@ -17,6 +17,20 @@ if [[ ! -f site/data/summary.json ]]; then
   exit 1
 fi
 
+# A uniquely-named build stamp. Verifying a deploy by fetching the site root
+# cannot detect a stale publish -- the root returns 200 either way. Fetching a
+# path that did not exist before this deploy can. Two sibling projects were
+# serving hours-stale content behind a healthy 200 because nobody checked a new
+# path.
+STAMP="build-$(date -u +%Y%m%dT%H%M%SZ).txt"
+date -u +%Y-%m-%dT%H:%M:%SZ > "site/$STAMP"
+echo "$STAMP" > .last_build_stamp
+
+# Publish into docs/ on main as well as gh-pages. GitHub Pages can be sourced
+# from either, the REST endpoint that would tell us which is proxy-blocked, and
+# a repo that works under both configurations cannot be silently mis-served.
+rm -rf docs && cp -r site docs && touch docs/.nojekyll
+
 REMOTE="$(git remote get-url origin)"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT

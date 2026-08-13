@@ -11,77 +11,72 @@ model, same rubric — to find out whether judge *modality* actually buys anythi
 
 It does. Just not the thing I expected.
 
-## The headline: where the evidence is not in the transcript, the transcript judge is either silent or confidently wrong
+## The headline: the agreement I published did not survive a change of judge vendor
 
-Six calls, scored four ways: {transcript, audio} × {narrow, broad rubric}, by the
-**same model** (`gemini-3.6-flash`), with the same task context and the same tool
-ledger on both sides. The only difference is whether the conversation arrived as
-text or as a recording. Both judges were told, in identical words, to return
-`null` for anything they could not assess from what they were given.
+My first version of this project reported that a transcript-only judge and an
+audio-native judge, given the same rubric and the same calls, agreed **exactly**
+(mean |Δ| 0.00) on every property both could observe. That result was measured
+with a Google judge on Google calls — same-family self-evaluation, which I
+flagged at the time as the project's weakest point.
 
-| Criterion | in the recording only? | transcript abstained | audio abstained | both scored | mean \|Δ\| | max \|Δ\| |
+An OpenAI key later became available, so I re-ran the identical rubric, prompt
+and recordings through a second vendor's judges. **The agreement did not
+replicate, and the variable I had treated as a control turned out to dominate.**
+
+Six calls, narrow rubric, identical prompts. Abstention is the judge declining to
+score, which both were explicitly instructed to do when the evidence was absent:
+
+| Judge vendor | audio-only properties |  |  | shared properties |  |  |
 |---|---|---|---|---|---|---|
-| pronunciation | yes | 5/6 | 0/6 | 1 | 0.0 | 0.0 |
-| pacing | yes | 4/6 | 0/6 | 2 | **2.0** | **4.0** |
-| naturalness | yes | 4/6 | 0/6 | 2 | **1.0** | 2.0 |
-| interruption_handling | no | 5/6 | 1/6 | 1 | 0.0 | 0.0 |
-| turn_taking | no | 3/6 | 0/6 | 3 | 0.0 | 0.0 |
-| overall_experience | no | 4/6 | 0/6 | 2 | 0.0 | 0.0 |
+| | transcript abstained | audio abstained | mean \|Δ\| | transcript abstained | audio abstained | mean \|Δ\| |
+| **Google** (same family as the agent) | **88.9%** | 0.0% | 1.00 | 66.7% | 5.6% | **0.50** |
+| **OpenAI** (cross-vendor) | **27.8%** | 0.0% | 0.45 | 33.3% | 11.1% | **0.50** |
 
-Two clean results, in opposite directions.
+And the variables side by side, all on the same six calls:
 
-**Where both judges could see the evidence, they agreed exactly.** Across the
-three properties a transcript can legitimately carry, every pair where both
-returned a number matched to the decimal: mean absolute difference **0.00**, max
-0.00. Paying for audio bought nothing there.
-
-**Where the evidence exists only in the recording, the transcript judge mostly
-knew it — and was badly wrong when it didn't.** It abstained on **13 of 18**
-audio-only judgements (72%) against the audio judge's **0 of 18**. On the five
-occasions it answered anyway, it disagreed with the audio judge by a mean of
-**1.0** and a maximum of **4.0 points on a 5-point scale** — rating the agent's
-pacing 1/5 where the audio judge, listening to it, gave 3.8/5.
-
-So the failure mode of a transcript-only judge on an audio property is not noise.
-It is a *confident* wrong answer on a minority of cases, hiding behind
-well-calibrated silence on the rest. That is worse than a judge that is uniformly
-noisy, because the abstentions make it look trustworthy.
-
-Against the two controls, on the same calls:
-
-| Variable changed | What was held fixed | mean \|Δ\| score |
+| Variable changed | What was held fixed | mean \|Δ\| on a 5-point scale |
 |---|---|---|
-| **Modality** (transcript → audio), shared properties | model, rubric, context | **0.00** |
-| **Rubric** (narrow → broad), audio judge | model, modality | 0.35 |
-| **Judge identity** (`gemini-3.6-flash` → `gemini-3.1-pro-preview`), audio | rubric, modality | 0.46 |
-| **Modality**, audio-only properties | model, rubric, context | **1.00**, and coverage 28% → 100% |
+| **Judge vendor**, transcript modality | rubric, modality, calls | **2.50** |
+| **Judge vendor**, audio modality | rubric, modality, calls | **1.25** |
+| Rubric (narrow → broad), transcript | vendor, modality | 0.67 |
+| Rubric (narrow → broad), audio | vendor, modality | 0.56 |
+| Judge identity within Google (`3.6-flash` → `3.1-pro`) | rubric, modality | 0.48 |
+| **Modality** (transcript → audio), shared properties | vendor, rubric | **0.50** |
 
-Modality is the only one of the three that changes what can be answered at all.
-For everything else, the rubric and the judge move the score more than the
-modality does — which extends a finding from a sibling text project of mine,
-where swapping the judge three ways moved a headline by 0% while the rubric moved
-it from 0% to 100%.
+Three things follow, and none of them is what I originally published.
 
-The practical read on "should I pay for an audio judge": **only for properties a
-transcript cannot contain** — and there, pay for it, because the cheap
-alternative's errors are large and confident. It cost 66,663 audio input tokens
-across 30 judging calls to establish that.
+**1. Judge vendor dominates.** Swapping the judge's vendor moved the score
+**2.50** points on transcript judging and **1.25** on audio — five times and two
+and a half times the effect of changing modality, and far beyond the rubric
+effect that a sibling text project of mine found to dominate there. On this
+evidence, an audio-judge score without a named vendor is close to
+uninterpretable.
 
-### The caveat that undercuts all of this, which I am reporting because it is the point
+**2. Abstention discipline is a vendor property, not a modality property.** Asked
+to rate pronunciation, pacing and naturalness *from a transcript* — properties
+that are physically absent from one — Google's judge declined **88.9%** of the
+time and OpenAI's declined only **27.8%**. Both were given the same sentence
+telling them to return `null` rather than guess. So OpenAI's judge answers
+questions it cannot possibly have evidence for roughly three times as often.
+That is a safety-relevant difference between two judges that a single aggregate
+score would completely hide.
 
-I ran the identical judging pass twice, at `temperature = 0.0`, over the same six
-recordings. The abstention counts were **not the same**: the first pass abstained
-on 18 of 18 audio-only judgements, the second on 13 of 18. The scores where both
-passes answered were stable; *whether the judge answered at all* was not.
+**3. My original 0.00 was not robust.** Re-running the Google judge on the same
+recordings now gives 0.50 on shared properties rather than 0.00. Combined with
+the abstention instability I reported before (18/18 vs 13/18 across two identical
+temperature-0 passes), the picture is consistent: **this measurement moves
+between runs, and I published a single-pass value as though it were a
+constant.** The direction that survives all three passes is only the weak claim —
+audio judges abstain far less than transcript judges on audio-only properties.
+The precise agreement figure does not survive at all.
 
-Everything above is from the second pass, which is the one committed to
-`artifacts/results_main.json`. The direction of the result is robust — the
-transcript judge abstains far more than the audio judge, and disagrees sharply
-when it doesn't — but the exact abstention rate is not a stable quantity at this
-sample size, and anybody publishing one as if it were (including me, if I stopped
-at one pass) would be publishing a coin flip. This is the strongest argument in
-the project for keeping Experience mostly on the deterministic side: the measured
-numbers re-derive bit-identically, and this one does not.
+The practical read, revised: **an audio judge does buy you coverage a transcript
+judge cannot provide** — that part replicated cleanly across both vendors, with
+audio abstention at 0.0% against 27.8–88.9%. But **do not treat any judged
+Experience score as a stable quantity.** Pin the vendor, pin the rubric, run it
+more than once, and prefer a deterministic metric wherever one exists. That is
+the whole argument for how the Experience axis in this project is built, and the
+cross-vendor run is the strongest evidence for it that I have.
 
 ## The channel comparison, with the caveat that dominates it
 
@@ -136,10 +131,11 @@ descriptors exist for.
 
 ## What this showcases
 
-**Technology:** the realtime voice-agent stack — Gemini Live
-(`bidiGenerateContent` over WebSocket, server-driven barge-in, native tool
-calling) — evaluated with LangChain's three-axis voice framework, implemented
-with the emphasis deliberately inverted.
+**Technology:** two realtime voice-agent stacks — Gemini Live
+(`bidiGenerateContent` over WebSocket) and OpenAI Realtime (GA `/v1/realtime`) —
+behind one vendor-neutral seam, evaluated with LangChain's three-axis voice
+framework, implemented with the emphasis deliberately inverted from judged to
+measured.
 
 ### Experience is measured, not judged
 
@@ -200,21 +196,66 @@ an exception, and all of them produced transcripts that read fine. If you are
 evaluating one of these stacks, budget for that and instrument it — which is
 what this repo is.
 
-### The provider seam
+### The provider seam — what a second vendor actually cost
 
-A second voice stack is expected on this project, so the measurement layer is
-written against a vendor-neutral contract, not against Gemini. Timestamps are
-stamped on receipt before parsing (vendors report their own timings
-inconsistently; all of them put bytes on a socket). Capabilities are declared
-data, so a metric that cannot be computed for a provider reports `None` with a
-reason instead of a number meaning something different from the one beside it.
+The project claimed a second voice stack would be "a translation table, not a
+rewrite". A key for OpenAI Realtime later arrived, so that claim got tested
+rather than asserted. **Half of it held, and the half that failed is the more
+useful half to know about.**
 
-Three adapters exist: `gemini_live` (wire-verified), `mock` (a deterministic
-realtime simulator on a virtual clock, which is what lets the whole pipeline run
-offline with no key), and `openai_realtime` — whose pure `translate()` function
-is unit-tested against hand-written OpenAI-shaped frames but has **never touched
-the wire**, because there is no key. `wire_verified = False`, `connect()` refuses
-without credentials, and the flag propagates into any report including it. See
+**The server-to-client translation table was exactly right.** Every event name
+in `translate()` — written from published docs months before any key existed and
+unit-tested only against fixture frames I authored — is confirmed by the live GA
+service: `response.created`, `response.output_audio.delta`,
+`response.output_audio_transcript.delta`/`.done`,
+`response.function_call_arguments.done`, `response.done` with a status,
+`conversation.item.input_audio_transcription.completed`, `error`. Not one needed
+changing, and **nothing above the seam was edited at all** — the orchestrator,
+the ledger, every Experience metric and both judges ran unmodified against a
+vendor they had never seen.
+
+**The client-to-server session shape was wrong, structurally.** The adapter was
+written against the Realtime *Beta* API, which is switched off: sending
+`OpenAI-Beta: realtime=v1` closes the socket immediately with
+`beta_api_shape_disabled`. GA moved `modalities` → `output_modalities`, replaced
+flat `input_audio_format: "pcm16"` strings with nested
+`audio.input.format: {"type":"audio/pcm","rate":24000}` objects, and relocated
+`voice`, `turn_detection` and `input_audio_transcription` under `audio.*`.
+
+So the honest verdict on how comparable these two realtime protocols are: **their
+event streams genuinely are interchangeable behind one normalization layer — that
+is now evidence, not assertion — while their session-configuration surfaces are
+not interchangeable and are not even stable across one vendor's own versions.**
+That is an argument *for* the seam: all the churn stayed inside one method,
+`session_update_frame`, and none of it reached the measurement layer.
+
+**The bug that cost the most was neither.** OpenAI rejects any voice name outside
+its own set, and rejects the *entire* `session.update` frame when one appears —
+without closing the socket. Passing Gemini's default voice `Puck` through meant
+the session silently kept its defaults: server voice-activity detection stayed
+on and input transcription stayed off. A whole 16-task arm ran with empty caller
+transcripts, auto-created responses fighting my explicit ones, and zero tool
+calls. One invalid enum value degraded every downstream metric and nothing in the
+transcript said so. The adapter now maps voices across vendors and treats a
+rejected `session.update` as fatal.
+
+Where OpenAI Realtime is *better* than Gemini Live, not merely different: it
+emits `response.created` before any audio (so `emits_turn_start` is True and its
+turns decompose one stage further — Gemini gives one opaque block); explicit turn
+boundaries via `input_audio_buffer.commit` + `response.create` are a first-class
+control path rather than a workaround for a VAD that cancels the agent's own tool
+calls; and its function-call round trips were stable, needing no de-duplication
+guard. Where Gemini is better: it accepts 16 kHz caller audio, and
+`serverContent.interrupted` is a clearer barge-in signal than inferring one from
+a `response.done` carrying status `cancelled`.
+
+Both stacks share the failure mode that matters most for a support line:
+**spelled-out identifiers**. Gemini heard `acct one zero four two` as
+"ACTT1042"; OpenAI heard `p, r, i, y, a at northwindlabs dot io` as
+"priyaa@northwindlabs.io" and never found the account. That is invisible to any
+evaluation that does not check the *arguments* the agent passed to its tools.
+
+Full mapping, wire notes and the procedure for adding a third stack:
 [PROVIDERS.md](PROVIDERS.md).
 
 ## The use case
@@ -314,9 +355,17 @@ Measured, not estimated, for the 6-call run:
   mid-experiment, which is why the harness now fails over across models and
   excludes quota-truncated calls from scoring as *harness* failures rather than
   agent failures.
-- **Judging:** 30 calls (5 passes × 6 calls), 135,899 tokens, of which **66,663
-  are audio input**. Audio judging is the single most expensive line item here.
-- **Caller brain:** 51 model calls, one per caller utterance.
+- **Judging, Google:** 30 calls (5 passes × 6 calls), 136,835 tokens, of which
+  **66,663 are audio input** — `gemini-3.6-flash` 100,526 and
+  `gemini-3.1-pro-preview` 36,309.
+- **Judging, OpenAI (cross-vendor control):** 12 calls (2 passes × 6 calls),
+  22,549 tokens, of which 8,884 are audio input — `gpt-audio` 14,101 and
+  `gpt-4.1-mini` 8,448.
+- Audio judging is the most expensive line item on either vendor: 66,663 of
+  Google's 90,543 prompt tokens were audio.
+- **Caller brain:** 51 model calls, one per caller utterance (`gemini-3.6-flash`).
+- **OpenAI speech synthesis:** billed per character rather than per token; the
+  caller-voice path for the OpenAI arm is `gpt-4o-mini-tts`.
 - **Dollars:** Gemini exposes no balance endpoint, so spend is reported in
   tokens by modality rather than in dollars I cannot verify.
 
@@ -325,9 +374,17 @@ Measured, not estimated, for the 6-call run:
 - **No telephony.** Clean datacenter WebSocket — no jitter, packet loss, codec,
   handset or background noise. These latencies are a floor for a real PSTN call,
   not an estimate of one.
-- **Single-vendor self-evaluation.** The agent, the caller's voice, the caller's
-  brain and both judges are all Google models. Every subjective score inherits
-  that, which is the whole reason Experience is mostly measured here.
+- **Single-vendor self-evaluation — now partly resolved, and worse than I
+  thought.** Originally the agent, the caller's voice, the caller's brain and
+  both judges were all Google models. The judging half of that confound is now
+  broken: every subjective score is also computed by OpenAI judges
+  (`gpt-4.1-mini` on transcript, `gpt-audio` on audio) over the identical
+  recordings and rubric, and both vendors' figures are published side by side.
+  Doing so did not vindicate the original numbers — it showed that judge vendor
+  moves the score more than anything else I varied. What remains unresolved: the
+  *agent* and the *caller* are still same-family within each arm, and there is
+  still no human annotator anywhere in this project, so no subjective score here
+  has ever been checked against a person.
 - **Small sample, stated exactly:** 6 tasks × 1 trial = 6 calls, 19 agent turns
   with a latency observation, 18 criterion-judgements per modality arm. This is a
   method demonstration with real numbers, not a benchmark.
