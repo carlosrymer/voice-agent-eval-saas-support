@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Voice-agent evaluation: execution, outcomes, experience</title>
+<style>
+  :root {
+    color-scheme: light;
+    --surface-0: #f6f6f4;
+    --surface-1: #fcfcfb;
+    --surface-2: #efefec;
+    --border: #dededa;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #77766f;
+    --series-1: #2a78d6;
+    --series-2: #eb6834;
+    --series-3: #1baf7a;
+    --series-4: #eda100;
+    --series-5: #e87ba4;
+    --good: #1baf7a;
+    --bad: #e34948;
+    --warn: #eda100;
+    --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --surface-0: #131312;
+      --surface-1: #1a1a19;
+      --surface-2: #232322;
+      --border: #373734;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #94938a;
+      --series-1: #3987e5;
+      --series-2: #d95926;
+      --series-3: #199e70;
+      --series-4: #c98500;
+      --series-5: #d55181;
+      --good: #199e70;
+      --bad: #e66767;
+      --warn: #c98500;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --surface-0: #131312; --surface-1: #1a1a19; --surface-2: #232322;
+    --border: #373734; --text-primary: #ffffff; --text-secondary: #c3c2b7;
+    --text-muted: #94938a; --series-1: #3987e5; --series-2: #d95926;
+    --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
+    --good: #199e70; --bad: #e66767; --warn: #c98500;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--surface-0); color: var(--text-primary);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 40px 20px 80px; }
+  header h1 { font-size: 30px; line-height: 1.25; margin: 0 0 8px; letter-spacing: -0.02em; }
+  header p.sub { color: var(--text-secondary); margin: 0 0 6px; font-size: 17px; }
+  .meta { color: var(--text-muted); font-size: 13px; font-family: var(--mono); }
+  section { margin-top: 44px; }
+  h2 { font-size: 20px; margin: 0 0 6px; letter-spacing: -0.01em; }
+  h3 { font-size: 15px; margin: 22px 0 8px; color: var(--text-secondary);
+       text-transform: uppercase; letter-spacing: 0.06em; }
+  p.note { color: var(--text-secondary); font-size: 14px; margin: 6px 0 16px; }
+  .card { background: var(--surface-1); border: 1px solid var(--border);
+          border-radius: 10px; padding: 18px 20px; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+  .tile { background: var(--surface-1); border: 1px solid var(--border);
+          border-radius: 10px; padding: 16px 18px; }
+  .tile .label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.07em;
+                 color: var(--text-muted); }
+  .tile .value { font-size: 30px; font-weight: 640; letter-spacing: -0.02em; margin-top: 4px;
+                 font-variant-numeric: tabular-nums; }
+  .tile .foot { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border);
+           white-space: nowrap; }
+  th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em;
+       color: var(--text-muted); font-weight: 600; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums;
+                   font-family: var(--mono); }
+  tr.clickable { cursor: pointer; }
+  tr.clickable:hover { background: var(--surface-2); }
+  .pill { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px;
+          font-weight: 600; border: 1px solid transparent; }
+  .pill.ok { color: var(--good); border-color: var(--good); }
+  .pill.no { color: var(--bad); border-color: var(--bad); }
+  .pill.warn { color: var(--warn); border-color: var(--warn); }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 4px 0 12px;
+            font-size: 13px; color: var(--text-secondary); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .swatch { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+  .limits li { margin-bottom: 10px; color: var(--text-secondary); font-size: 15px; }
+  .limits strong { color: var(--text-primary); }
+  dialog { border: 1px solid var(--border); border-radius: 12px; background: var(--surface-1);
+           color: var(--text-primary); max-width: 860px; width: calc(100% - 32px); padding: 0; }
+  dialog::backdrop { background: rgba(0,0,0,0.55); }
+  .dlg-head { padding: 16px 20px; border-bottom: 1px solid var(--border);
+              display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .dlg-body { padding: 16px 20px 24px; max-height: 66vh; overflow-y: auto; }
+  .turn { padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .turn .who { font-family: var(--mono); font-size: 12px; color: var(--text-muted); }
+  .turn.caller .who { color: var(--series-2); }
+  .turn.agent .who { color: var(--series-1); }
+  .turn.tool { color: var(--text-secondary); font-family: var(--mono); font-size: 12.5px; }
+  .asr { color: var(--text-muted); font-size: 12.5px; font-family: var(--mono); }
+  button.x { background: none; border: 1px solid var(--border); color: var(--text-secondary);
+             border-radius: 8px; padding: 4px 10px; cursor: pointer; }
+  audio { width: 100%; margin-top: 10px; }
+  .bar-row { display: grid; grid-template-columns: 190px 1fr 74px; gap: 10px;
+             align-items: center; margin-bottom: 7px; font-size: 13.5px; }
+  .bar-track { background: var(--surface-2); border-radius: 4px; height: 20px;
+               position: relative; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; }
+  .stack { display: flex; height: 22px; border-radius: 4px; overflow: hidden;
+           background: var(--surface-2); gap: 2px; }
+  .stack div { height: 100%; }
+  code { font-family: var(--mono); font-size: 13px; background: var(--surface-2);
+         padding: 1px 5px; border-radius: 4px; }
+  .empty { color: var(--text-muted); font-style: italic; }
+  a { color: var(--series-1); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Voice-agent evaluation: execution, outcomes, experience</h1>
+    <p class="sub">The same τ²-bench B2B SaaS support agent, the same 16 tasks and the same
+      7-rule policy — moved from a text channel to a live voice channel, and scored on three
+      axes. Experience is <em>measured</em> from the audio wherever measurement is possible,
+      and judged only where it isn't.</p>
+    <p class="meta" id="meta">loading…</p>
+  </header>
+
+  <section id="headline">
+    <h2>Headline</h2>
+    <p class="note">Outcome is decided by the task's environment assertions replayed through
+      τ²'s own evaluator — no model votes on it. The text baseline below is my earlier
+      published run on the identical domain, tasks and evaluator.</p>
+    <div class="tiles" id="tiles"></div>
+  </section>
+
+  <section id="channel">
+    <h2>Does the agent degrade when the channel becomes voice?</h2>
+    <p class="note" id="channel-note"></p>
+    <div class="card"><div id="channel-chart"></div></div>
+  </section>
+
+  <section id="latency">
+    <h2>Latency, decomposed</h2>
+    <p class="note" id="latency-note"></p>
+    <div class="card">
+      <h3 style="margin-top:0">End-of-turn latency</h3>
+      <div class="scroll"><table id="latency-table"></table></div>
+      <h3>Where the time goes</h3>
+      <p class="note">Mean contribution per agent turn. Stages are named for the pair of
+        markers that bound them, never for what I assume happened inside. Anything no
+        reported marker can attribute is shown as residual rather than folded into a
+        neighbour, so the bar always sums to the measured mean.</p>
+      <div class="legend" id="stage-legend"></div>
+      <div class="stack" id="stage-stack"></div>
+      <div class="scroll" style="margin-top:14px"><table id="stage-table"></table></div>
+    </div>
+  </section>
+
+  <section id="bargein">
+    <h2>Interruptions and overlapping speech</h2>
+    <p class="note" id="bargein-note"></p>
+    <div class="tiles" id="bargein-tiles"></div>
+  </section>
+
+  <section id="protocol">
+    <h2>Protocol turbulence</h2>
+    <p class="note">How much the transport got in the way. This is reported as a first-class
+      result because it bounds how much of the channel comparison above can be attributed to
+      the agent: a run in which the server cancelled and re-issued function calls dozens of
+      times is not a clean measurement of the model's competence.</p>
+    <div class="tiles" id="protocol-tiles"></div>
+  </section>
+
+  <section id="friction">
+    <h2>Conversational friction, measured</h2>
+    <p class="note">All of these are computed from the recordings and the ledger. No judge
+      was involved in any number in this section.</p>
+    <div class="tiles" id="friction-tiles"></div>
+  </section>
+
+  <section id="judges">
+    <h2>Does judge <em>modality</em> matter?</h2>
+    <p class="note" id="judge-note"></p>
+    <div class="card">
+      <div class="legend">
+        <span><i class="swatch" style="background:var(--series-1)"></i>transcript-only judge</span>
+        <span><i class="swatch" style="background:var(--series-2)"></i>audio-native judge</span>
+      </div>
+      <div id="judge-chart"></div>
+      <div class="scroll" style="margin-top:16px"><table id="judge-table"></table></div>
+    </div>
+    <div class="card" style="margin-top:14px" id="xvendor-card">
+      <h3 style="margin-top:0">Cross-vendor judging — breaking the same-family confound</h3>
+      <p class="note" id="xvendor-note"></p>
+      <div class="scroll"><table id="xvendor-table"></table></div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <h3 style="margin-top:0">Rubric and judge-identity controls</h3>
+      <p class="note">Two controls, both borrowed from a sibling text project where swapping
+        the judge three ways moved the headline not at all while the rubric moved it from 0%
+        to 100%. If modality moves the score more than rubric or judge identity do, that is
+        the finding.</p>
+      <div class="scroll"><table id="control-table"></table></div>
+    </div>
+  </section>
+
+  <section id="stacks">
+    <h2>Two realtime stacks, same tasks</h2>
+    <p class="note" id="stacks-note"></p>
+    <div class="scroll"><table id="stacks-table"></table></div>
+  </section>
+
+  <section id="calls">
+    <h2>Every call</h2>
+    <p class="note">Click a row for the transcript, the ASR of each caller utterance, and —
+      for a selected few — the recording. <span id="audio-rule"></span></p>
+    <div class="scroll"><table id="calls-table"></table></div>
+  </section>
+
+  <section id="limits">
+    <h2>What these numbers are not</h2>
+    <ul class="limits" id="limits-list"></ul>
+  </section>
+</div>
+
+<dialog id="dlg">
+  <div class="dlg-head">
+    <div><strong id="dlg-title"></strong><div class="meta" id="dlg-meta"></div></div>
+    <button class="x" onclick="document.getElementById('dlg').close()">close</button>
+  </div>
+  <div class="dlg-body" id="dlg-body"></div>
+</dialog>
+
+<script>
+const S = k => getComputedStyle(document.documentElement).getPropertyValue(k).trim();
+const SERIES = ['--series-1','--series-2','--series-3','--series-4','--series-5'];
+const fmt = (v, d=0) => v === null || v === undefined ? '—' : Number(v).toFixed(d);
+const pct = v => v === null || v === undefined ? '—' : (100*v).toFixed(1) + '%';
+const esc = s => String(s ?? '').replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+
+let DATA = null, TRANSCRIPTS = {};
+
+function tile(label, value, foot) {
+  return `<div class="tile"><div class="label">${label}</div>
+          <div class="value">${value}</div><div class="foot">${foot||''}</div></div>`;
+}
+
+function renderHeadline() {
+  const s = DATA.summary, c = DATA.config;
+  document.getElementById('meta').textContent =
+    `${s.n_calls} calls · ${c.provider_model} · ${c.trials} trial(s)/task · ` +
+    `judge ${c.judge_model} · generated ${DATA.generated_at}`;
+  document.getElementById('tiles').innerHTML = [
+    tile('Outcome pass rate', pct(s.outcome_pass_rate),
+         `${s.outcome_passes}/${s.n_scored} tasks, env assertions`),
+    tile('Policy violations', s.n_calls_with_violation,
+         `across ${s.n_calls} calls, ${Object.keys(s.violations_by_rule).length} distinct rules`),
+    tile('End-of-turn P50', fmt(s.end_of_turn_ms.p50) + ' ms',
+         `P95 ${fmt(s.end_of_turn_ms.p95)} · n=${s.end_of_turn_ms.n} turns`),
+    tile('Caller word error rate', pct(s.friction.caller_wer),
+         'provider ASR vs the text I sent to TTS'),
+  ].join('');
+}
+
+function renderChannel() {
+  const s = DATA.summary, base = DATA.text_baseline.arms;
+  const voice = {label: `voice · ${DATA.config.provider_model}`, v: s.outcome_pass_rate};
+  const rows = base.map(a => ({label: `text · ${a.agent}`, v: a.pass_hat_1})).concat([voice]);
+  const el = document.getElementById('channel-chart');
+  el.innerHTML = rows.map((r,i) => {
+    const w = Math.max(0.5, 100*(r.v ?? 0));
+    const color = r.label.startsWith('voice') ? S('--series-2') : S('--series-1');
+    return `<div class="bar-row"><div>${esc(r.label)}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${w}%;background:${color}"></div></div>
+      <div class="num" style="font-family:var(--mono)">${pct(r.v)}</div></div>`;
+  }).join('');
+  const gem = base.find(a => a.agent.includes('gemini'));
+  const delta = (gem && s.outcome_pass_rate !== null)
+    ? (s.outcome_pass_rate - gem.pass_hat_1) : null;
+  document.getElementById('channel-note').innerHTML =
+    `Identical tasks, policy, tools and evaluator; only the channel differs. ` +
+    (delta === null ? '' :
+     `Voice scored <strong>${pct(s.outcome_pass_rate)}</strong> against the text arm's ` +
+     `<strong>${pct(gem.pass_hat_1)}</strong> — a change of ` +
+     `<strong>${(100*delta).toFixed(1)} points</strong>. `) +
+    `The text baseline ran ${base[0].trials} trials per task; this voice run ran ` +
+    `${DATA.config.trials}, so the comparison is against pass^1 on both sides. ` +
+    `<strong>This comparison is directional, not clean</strong> — see the protocol-turbulence ` +
+    `section below for how much the transport contributed to the gap.`;
+}
+
+function renderLatency() {
+  const s = DATA.summary;
+  const p = s.end_of_turn_ms;
+  document.getElementById('latency-table').innerHTML =
+    `<tr><th>metric</th><th class="num">P50</th><th class="num">P95</th><th class="num">P99</th>
+     <th class="num">mean</th><th class="num">min</th><th class="num">max</th><th class="num">n</th></tr>
+     <tr><td>end-of-turn latency (ms)</td>
+     <td class="num">${fmt(p.p50)}</td><td class="num">${fmt(p.p95)}</td>
+     <td class="num">${fmt(p.p99)}</td><td class="num">${fmt(p.mean)}</td>
+     <td class="num">${fmt(p.min)}</td><td class="num">${fmt(p.max)}</td>
+     <td class="num">${p.n}</td></tr>`;
+  document.getElementById('latency-note').innerHTML =
+    `Measured from the caller's speech ending (voice activity detection on the recording) ` +
+    `to the first agent audio the caller would hear. Percentiles are nearest-rank, so every ` +
+    `figure is a turn that actually happened. <strong>${DATA.config.capabilities.capabilities.notes}</strong>`;
+
+  const stages = s.stage_mean_ms || {};
+  const labels = DATA.stage_labels || {};
+  const entries = Object.entries(stages).filter(([,v]) => v > 0.5)
+                        .sort((a,b) => b[1]-a[1]);
+  const total = entries.reduce((a,[,v]) => a+v, 0) || 1;
+  document.getElementById('stage-legend').innerHTML = entries.map(([k],i) =>
+    `<span><i class="swatch" style="background:${S(SERIES[i % SERIES.length])}"></i>${esc(k)}</span>`
+  ).join('');
+  document.getElementById('stage-stack').innerHTML = entries.map(([k,v],i) =>
+    `<div title="${esc(k)}: ${fmt(v)} ms" style="width:${100*v/total}%;
+      background:${S(SERIES[i % SERIES.length])}"></div>`).join('');
+  document.getElementById('stage-table').innerHTML =
+    `<tr><th>stage</th><th>bounded by</th><th class="num">mean ms/turn</th><th class="num">share</th></tr>` +
+    entries.map(([k,v]) => `<tr><td>${esc(k)}</td><td style="white-space:normal;color:var(--text-secondary)">
+      ${esc(labels[k]||'')}</td><td class="num">${fmt(v,1)}</td>
+      <td class="num">${pct(v/total)}</td></tr>`).join('');
+}
+
+function renderBargeIn() {
+  const b = DATA.summary.barge_in;
+  const scripted = b.attempted > 0;
+  document.getElementById('bargein-note').innerHTML = scripted
+    ? `Interruptions were scripted so the sample size is controlled, and are detected from the
+       two audio tracks rather than from the provider's own signal. "Landed" counts only the
+       attempts that actually overlapped agent speech.`
+    : `<strong>No interruptions were scripted in this arm</strong> — it was run without them so
+       it matches the text baseline, which had none. The overlaps below are therefore
+       <strong>unscripted</strong>: the caller talking over the agent because the agent's reply
+       arrived after the harness had handed the floor back. They are turbulence, not tests, and
+       the yield figures describe how the agent reacted to them rather than how it handles a
+       well-formed interruption.`;
+  document.getElementById('bargein-tiles').innerHTML = [
+    tile(scripted ? 'Attempted / landed' : 'Unscripted overlaps',
+         scripted ? `${b.attempted} / ${b.landed}` : b.landed,
+         scripted ? 'landed = actually overlapped agent speech'
+                  : 'caller speech beginning while the agent was talking'),
+    tile('Agent yielded', b.landed ? `${b.yielded}/${b.landed}` : '—',
+         'audio stopped within 800 ms of caller onset'),
+    tile('State preserved', b.landed ? `${b.state_preserved}/${b.landed}` : '—',
+         'no restart of the abandoned sentence, no dropped tool call'),
+    tile('Yield latency P50', b.yield_latency_ms.n ? fmt(b.yield_latency_ms.p50)+' ms' : '—',
+         b.yield_latency_ms.n ? `P95 ${fmt(b.yield_latency_ms.p95)} ms · n=${b.yield_latency_ms.n}` : 'nothing landed'),
+  ].join('');
+}
+
+function renderProtocol() {
+  const p = DATA.summary.protocol || {};
+  document.getElementById('protocol-tiles').innerHTML = [
+    tile('Server tool-call cancellations', p.server_tool_retries ?? '—',
+         'provider issued a function call, then abandoned it'),
+    tile('Duplicate calls suppressed', p.duplicate_tool_calls_suppressed ?? '—',
+         'identical re-issued calls; executing both would double-apply the write'),
+    tile('Playout underruns', p.playout_underruns ?? '—',
+         'agent audio stalled past what was buffered'),
+    tile('Harness thinking time', p.harness_paused_s != null ? fmt(p.harness_paused_s)+' s' : '—',
+         'caller model + speech synthesis, excluded from the call timeline'),
+  ].join('');
+}
+
+function renderFriction() {
+  const f = DATA.summary.friction, s = DATA.summary;
+  document.getElementById('friction-tiles').innerHTML = [
+    tile('Long silences', f.long_silences, '≥1.0 s with neither party speaking'),
+    tile('Overlapping speech', fmt(f.overlap_total_s,1)+' s', 'total across all calls'),
+    tile('Repeat requests', `${f.agent_repeat_requests} / ${f.caller_repeat_requests}`,
+         'agent asked / caller asked'),
+    tile('Agent self-repetition', f.agent_repetitions, 'near-identical utterance pairs'),
+    tile('Early terminations', f.early_terminations, `of ${s.n_calls} calls`),
+    tile('Turns measured', s.total_turns, 'agent turns with a latency observation'),
+  ].join('');
+}
+
+function renderJudges() {
+  const a = (DATA.judging || {}).modality_narrow;
+  const note = document.getElementById('judge-note');
+  if (!a || !a.per_criterion) {
+    note.textContent = 'No judging data in this run.';
+    return;
+  }
+  const audioOnly = a.summary.audio_only_properties;
+  note.innerHTML =
+    `Same model, same rubric, same task context and the same tool ledger on both sides — ` +
+    `the only difference is whether the conversation arrived as text or as a recording. ` +
+    `Three criteria (pronunciation, pacing, naturalness) are physically unobservable in a ` +
+    `transcript; both judges were told in identical words to return <code>null</code> for ` +
+    `anything they could not assess. On those three, the transcript judge abstained ` +
+    `<strong>${pct(audioOnly.transcript_abstention_rate)}</strong> of the time and the audio ` +
+    `judge <strong>${pct(audioOnly.audio_abstention_rate)}</strong>. n = ${a.n_calls} calls.`;
+
+  const rows = a.per_criterion;
+  const maxScore = 5;
+  document.getElementById('judge-chart').innerHTML = rows.map(r => {
+    const t = r.mean_transcript, au = r.mean_audio;
+    const bar = (v, color) => v === null
+      ? `<div style="height:12px"></div>`
+      : `<div class="bar-track" style="height:12px;margin-bottom:2px">
+           <div class="bar-fill" style="width:${100*v/maxScore}%;background:${color}"></div></div>`;
+    return `<div style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;font-size:13.5px">
+        <span>${esc(r.criterion)}${r.audio_only_property?' <span class="pill warn">audio-only</span>':''}</span>
+        <span class="num" style="font-family:var(--mono);color:var(--text-secondary)">
+          ${t===null?'abstained':fmt(t,2)} → ${au===null?'abstained':fmt(au,2)}</span>
+      </div>${bar(t, S('--series-1'))}${bar(au, S('--series-2'))}</div>`;
+  }).join('');
+
+  document.getElementById('judge-table').innerHTML =
+    `<tr><th>criterion</th><th>audio-only?</th><th class="num">transcript mean</th>
+     <th class="num">audio mean</th><th class="num">|Δ|</th><th class="num">signed Δ</th>
+     <th class="num">transcript abstained</th><th class="num">audio abstained</th>
+     <th class="num">disagree ≥1</th></tr>` +
+    rows.map(r => `<tr><td>${esc(r.criterion)}</td>
+      <td>${r.audio_only_property ? '<span class="pill warn">yes</span>' : 'no'}</td>
+      <td class="num">${fmt(r.mean_transcript,2)}</td>
+      <td class="num">${fmt(r.mean_audio,2)}</td>
+      <td class="num">${fmt(r.mean_abs_delta,2)}</td>
+      <td class="num">${fmt(r.mean_signed_delta,2)}</td>
+      <td class="num">${r.transcript_abstentions}/${r.n_pairs}</td>
+      <td class="num">${r.audio_abstentions}/${r.n_pairs}</td>
+      <td class="num">${r.n_disagree_by_1_or_more}/${r.n_both_scored}</td></tr>`).join('');
+
+  const j = DATA.judging;
+  const ctl = [];
+  const push = (name, obj, what) => {
+    if (obj) ctl.push(`<tr><td>${name}</td><td style="white-space:normal;color:var(--text-secondary)">${what}</td>
+      <td class="num">${fmt(obj.mean_abs_delta,3)}</td><td class="num">${obj.n_calls}</td></tr>`);
+  };
+  const mn = j.modality_narrow, mb = j.modality_broad;
+  if (mn) {
+    const shared = mn.summary.shared_properties.mean_abs_delta;
+    ctl.push(`<tr><td><strong>modality</strong></td>
+      <td style="white-space:normal;color:var(--text-secondary)">transcript vs audio, narrow rubric,
+      criteria both can see</td><td class="num"><strong>${fmt(shared,3)}</strong></td>
+      <td class="num">${mn.n_calls}</td></tr>`);
+  }
+  push('rubric (transcript)', j.rubric_transcript, 'narrow vs broad rubric, transcript judge held fixed');
+  push('rubric (audio)', j.rubric_audio, 'narrow vs broad rubric, audio judge held fixed');
+  push('judge identity', j.judge_identity_audio,
+       `audio judge swapped to ${esc(DATA.config.control_audio_model)}, rubric and modality fixed`);
+  document.getElementById('control-table').innerHTML =
+    `<tr><th>variable changed</th><th>what was held fixed</th>
+     <th class="num">mean |Δ| score</th><th class="num">n calls</th></tr>` + ctl.join('');
+}
+
+function renderXVendor() {
+  const j = DATA.judging || {};
+  const card = document.getElementById('xvendor-card');
+  const xv = j.modality_narrow_openai;
+  if (!xv || !xv.per_criterion) { card.style.display = 'none'; return; }
+  const g = j.modality_narrow;
+  const gs = g.summary, xs = xv.summary;
+  document.getElementById('xvendor-note').innerHTML =
+    `The modality result above was measured with a Google judge on Google calls — ` +
+    `same-family self-evaluation. Here the identical rubric, prompt and recordings are ` +
+    `re-judged by OpenAI (<code>${esc(DATA.config.openai_judge_text_model||'')}</code> on ` +
+    `transcript, <code>${esc(DATA.config.openai_judge_audio_model||'')}</code> on audio). ` +
+    `If the transcript-vs-audio agreement survives a vendor change, it is a property of ` +
+    `judging rather than of a model grading its own family.`;
+  const row = (label, sum, cmp) =>
+    `<tr><td>${label}</td>
+      <td class="num">${pct(sum.audio_only_properties.transcript_abstention_rate)}</td>
+      <td class="num">${pct(sum.audio_only_properties.audio_abstention_rate)}</td>
+      <td class="num">${fmt(sum.audio_only_properties.mean_abs_delta,2)}</td>
+      <td class="num">${pct(sum.shared_properties.transcript_abstention_rate)}</td>
+      <td class="num">${pct(sum.shared_properties.audio_abstention_rate)}</td>
+      <td class="num"><strong>${fmt(sum.shared_properties.mean_abs_delta,2)}</strong></td></tr>`;
+  document.getElementById('xvendor-table').innerHTML =
+    `<tr><th rowspan="2">judge vendor</th>
+       <th colspan="3" style="text-align:center">audio-only properties</th>
+       <th colspan="3" style="text-align:center">shared properties</th></tr>
+     <tr><th class="num">transcript abstained</th><th class="num">audio abstained</th>
+         <th class="num">mean |Δ|</th>
+         <th class="num">transcript abstained</th><th class="num">audio abstained</th>
+         <th class="num">mean |Δ|</th></tr>` +
+    row('Google (same family as the agent)', gs) +
+    row('OpenAI (cross-vendor)', xs) +
+    `<tr><td colspan="7" style="white-space:normal;color:var(--text-secondary);padding-top:12px">
+       Vendor disagreement holding modality fixed:
+       transcript <strong>${fmt((j.vendor_transcript||{}).mean_abs_delta,2)}</strong>,
+       audio <strong>${fmt((j.vendor_audio||{}).mean_abs_delta,2)}</strong>
+       (mean |Δ| between the two vendors' judges on the same calls).</td></tr>`;
+}
+
+function renderStacks() {
+  const stacks = DATA.stacks || [];
+  const sec = document.getElementById('stacks');
+  if (stacks.length < 2) { sec.style.display = 'none'; return; }
+  document.getElementById('stacks-note').innerHTML =
+    `Identical tasks, identical policy, identical evaluators, identical caller voice — only the
+     realtime stack differs. Both are driven with explicit turn boundaries so neither vendor's
+     own voice-activity detector is part of the measurement.`;
+  const cell = (v) => `<td class="num">${v}</td>`;
+  document.getElementById('stacks-table').innerHTML =
+    `<tr><th>metric</th>${stacks.map(s=>`<th class="num">${esc(s.model||s.provider)}</th>`).join('')}</tr>` +
+    [
+      ['calls scored', s=>`${s.n_calls}/${s.n_attempted}`],
+      ['excluded (harness failure)', s=>s.excluded],
+      ['outcome pass', s=>`${s.outcome_passes}/${s.n_scored} (${pct(s.outcome_pass_rate)})`],
+      ['policy violations', s=>Object.entries(s.violations_by_rule||{}).map(([k,v])=>`${k}×${v}`).join(' ')||'none'],
+      ['end-of-turn P50 (ms)', s=>fmt(s.eot_p50_ms)],
+      ['end-of-turn P95 (ms)', s=>fmt(s.eot_p95_ms)],
+      ['turns measured', s=>s.eot_n],
+      ['caller word error rate', s=>pct(s.caller_wer)],
+      ['long silences', s=>s.long_silences],
+      ['early terminations', s=>s.early_terminations],
+      ['server tool-call cancellations', s=>(s.protocol||{}).server_tool_retries ?? '—'],
+      ['duplicate calls suppressed', s=>(s.protocol||{}).duplicate_tool_calls_suppressed ?? '—'],
+      ['emits a turn-start frame', s=>(s.capabilities||{}).emits_turn_start ? 'yes' : 'no'],
+    ].map(([label, fn]) =>
+      `<tr><td>${label}</td>${stacks.map(s=>cell(fn(s))).join('')}</tr>`).join('');
+}
+
+function renderCalls() {
+  document.getElementById('audio-rule').textContent = DATA.audio_selection_rule || '';
+  const rows = DATA.calls;
+  document.getElementById('calls-table').innerHTML =
+    `<tr><th>task</th><th>outcome</th><th>policy</th><th class="num">EOT P50 ms</th>
+     <th class="num">turns</th><th class="num">barge-in</th><th class="num">WER</th>
+     <th class="num">dur s</th><th>ended</th><th>audio</th></tr>` +
+    rows.map(r => `<tr class="clickable" data-call="${esc(r.call_id)}">
+      <td>${esc(r.task_id)}</td>
+      <td>${r.outcome_passed ? '<span class="pill ok">pass</span>' : '<span class="pill no">fail</span>'}</td>
+      <td>${r.violations.length ? `<span class="pill no">${r.violations.join(' ')}</span>`
+                                : '<span class="pill ok">clean</span>'}</td>
+      <td class="num">${fmt(r.eot_p50_ms)}</td>
+      <td class="num">${r.n_turns}</td>
+      <td class="num">${r.barge_in.n_barge_ins}/${r.barge_in.n_scripted_barge_ins}</td>
+      <td class="num">${pct(r.friction.caller_wer)}</td>
+      <td class="num">${fmt(r.duration_s)}</td>
+      <td>${esc(r.ended_reason)}</td>
+      <td>${r.audio ? '♪' : ''}</td></tr>`).join('');
+  document.querySelectorAll('tr.clickable').forEach(tr =>
+    tr.addEventListener('click', () => openCall(tr.dataset.call)));
+}
+
+function openCall(callId) {
+  const row = DATA.calls.find(c => c.call_id === callId);
+  const tr = TRANSCRIPTS[callId];
+  document.getElementById('dlg-title').textContent = row.task_id;
+  document.getElementById('dlg-meta').textContent =
+    `${fmt(row.duration_s)}s · ended ${row.ended_reason} · ` +
+    `outcome ${row.outcome_passed ? 'pass' : 'fail'} · ` +
+    `${row.violations.length ? 'violations ' + row.violations.join(', ') : 'no policy violation'}`;
+  let html = '';
+  if (row.audio) html += `<audio controls preload="none" src="${esc(row.audio)}"></audio>`;
+  if (row.violation_detail.length) {
+    html += '<h3>Policy violations</h3>' + row.violation_detail.map(v =>
+      `<div class="turn"><span class="pill no">${esc(v.rule)}</span> ${esc(v.detail)}</div>`).join('');
+  }
+  html += '<h3>Transcript</h3>';
+  if (!tr) html += '<p class="empty">No transcript stored for this call.</p>';
+  else {
+    const asrBy = {};
+    (tr.caller_utterances || []).forEach(u => { asrBy[u.text] = u.asr_text; });
+    html += tr.rows.map(r => {
+      if (r.role === 'tool')
+        return `<div class="turn tool">[${fmt(r.t,2)}s] ${esc(r.text)}</div>`;
+      const asr = r.role === 'caller' ? asrBy[r.text] : null;
+      const showAsr = asr && asr.trim() !== (r.text||'').trim();
+      return `<div class="turn ${r.role}"><span class="who">[${fmt(r.t,2)}s] ${r.role}
+        ${r.barge_in ? '· interrupts' : ''}${r.interrupted ? '· cut off' : ''}</span><br>
+        ${esc(r.text) || '<span class="empty">(no speech)</span>'}
+        ${showAsr ? `<div class="asr">heard as: ${esc(asr)}</div>` : ''}</div>`;
+    }).join('');
+  }
+  document.getElementById('dlg-body').innerHTML = html;
+  document.getElementById('dlg').showModal();
+}
+
+function renderLimits() {
+  const caps = DATA.config.capabilities.capabilities;
+  const items = [
+    `<strong>No telephony.</strong> Every call runs over a clean datacenter WebSocket. There
+     is no jitter, no packet loss, no codec, no handset and no background noise. These
+     latency figures are a floor for what a real PSTN call would show, not an estimate of
+     one — read them as "the model and the network on a good day", never as production
+     phone latency.`,
+    `<strong>Turn boundaries are signalled explicitly, not detected.</strong>
+     ${esc(caps.notes)} Automatic voice-activity detection cancelled the agent's in-flight
+     tool call at the end of every caller utterance, so no tool-using task could complete;
+     switching to explicit activity markers is what made the run possible, and it removes
+     the server's endpointing delay from the measured latency.`,
+    `<strong>Single-vendor self-evaluation.</strong> The agent under test, the voice the
+     caller speaks with, the caller's brain and both judges are all Google models. Every
+     subjective score on this page is therefore same-family self-evaluation, which is a real
+     credibility limit. It is the reason the Experience axis is built mostly on deterministic
+     measurement and the judges are confined to the part that genuinely cannot be measured.`,
+    `<strong>The caller is a simulation.</strong> A text model writing lines that a
+     text-to-speech model then reads. Its speech is cleaner and more predictable than a real
+     customer's, which flatters the word-error-rate figure and probably the whole Experience
+     axis.`,
+    `<strong>Small sample, stated exactly.</strong> <span id="sample-note"></span>
+     Nothing here is a benchmark result; it is one run of one agent on one domain.`,
+    `<strong>Barge-in is scripted.</strong> Interruptions happen where the harness put them,
+     not where a caller would naturally produce one. That buys reproducibility and comparable
+     sample sizes, and it means the yield figures describe the agent's response to a
+     well-formed interruption rather than to a messy real one.`,
+    `<strong>Phrase-matched friction is recall-limited.</strong> Repeat requests and
+     clarifications are found with a published regex list, so a novel paraphrase is missed.
+     The share of agent questions the list failed to classify is reported alongside, as the
+     honest bound on what it catches.`,
+  ];
+  document.getElementById('limits-list').innerHTML = items.map(i => `<li>${i}</li>`).join('');
+  const s = DATA.summary;
+  const el = document.getElementById('sample-note');
+  if (el) el.textContent =
+    `${s.n_calls} calls — ${DATA.config.trials} trial(s) per task — ` +
+    `${s.total_turns} agent turns, ${s.end_of_turn_ms.n} of them with a latency observation.`;
+}
+
+Promise.all([
+  fetch('data/summary.json').then(r => r.json()),
+  fetch('data/transcripts.json').then(r => r.json()).catch(() => ({})),
+]).then(([summary, transcripts]) => {
+  DATA = summary; TRANSCRIPTS = transcripts;
+  renderHeadline(); renderChannel(); renderLatency(); renderBargeIn();
+  renderFriction(); renderProtocol(); renderJudges(); renderXVendor();
+  renderStacks(); renderCalls(); renderLimits();
+}).catch(err => {
+  document.getElementById('meta').textContent = 'Could not load results: ' + err;
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,3016 @@
+{
+  "generated_at": "2026-08-13T02:17:33Z",
+  "config": {
+    "provider": "gemini_live",
+    "provider_model": "gemini-3.1-flash-live-preview",
+    "trials": 1,
+    "tts": "gemini_tts",
+    "judge_model": "gemini-3.6-flash",
+    "control_audio_model": "gemini-omni-flash-preview",
+    "cross_vendor": false,
+    "openai_judge_text_model": "gpt-4.1-mini",
+    "openai_judge_audio_model": "gpt-audio",
+    "barge_in_turns": "none",
+    "calls_dir": "artifacts/calls_main",
+    "max_turns": 14,
+    "capabilities": {
+      "name": "gemini_live",
+      "wire_verified": true,
+      "capabilities": {
+        "server_turn_detection": false,
+        "server_barge_in": true,
+        "emits_interrupt_event": true,
+        "emits_caller_transcript": true,
+        "emits_agent_transcript": true,
+        "emits_turn_start": false,
+        "input_sample_rate_hz": 16000,
+        "output_sample_rate_hz": 24000,
+        "input_mime": "audio/pcm;rate=16000",
+        "output_mime": "audio/pcm;rate=24000",
+        "native_tool_calling": true,
+        "notes": "Explicit activityStart/activityEnd turn signalling; end-of-turn latency therefore EXCLUDES server-side endpointing delay. Server-driven barge-in. No turn-start frame, so inference and TTS are not separable. Real-time input pacing OFF (latency not comparable)."
+      }
+    }
+  },
+  "summary": {
+    "n_calls": 6,
+    "n_calls_attempted": 6,
+    "n_excluded_harness_failure": 0,
+    "excluded_reasons": {},
+    "n_scored": 6,
+    "outcome_pass_rate": 0.3333333333333333,
+    "outcome_passes": 2,
+    "action_reward_mean": 0.3333333333333333,
+    "clean_rate": 0.16666666666666666,
+    "violations_by_rule": {
+      "P6": 1,
+      "P7": 1
+    },
+    "n_calls_with_violation": 2,
+    "end_of_turn_ms": {
+      "n": 19,
+      "p50": 9303.241608999997,
+      "p95": 31135.602157999456,
+      "p99": 31135.602157999456,
+      "mean": 9074.10583268478,
+      "min": 67.31446099995253,
+      "max": 31135.602157999456
+    },
+    "stage_mean_ms": {
+      "asr_ms": 1710.959000000001,
+      "to_turn_start_ms": 0.0,
+      "inference_pre_tool_ms": 0.0,
+      "tool_ms": 0.0,
+      "inter_tool_inference_ms": 0.0,
+      "inference_post_tool_ms": 0.0,
+      "to_first_audio_ms": 7363.146832684778,
+      "unattributed_ms": 0.0
+    },
+    "total_turns": 19,
+    "barge_in": {
+      "attempted": 0,
+      "landed": 28,
+      "yielded": 9,
+      "state_preserved": 25,
+      "yield_latency_ms": {
+        "n": 28,
+        "p50": 1329.9999999999982,
+        "p95": 3719.999999999999,
+        "p99": 5719.999999999999,
+        "mean": 1597.499999999998,
+        "min": 39.99999999999204,
+        "max": 5719.999999999999
+      }
+    },
+    "friction": {
+      "long_silences": 43,
+      "overlap_total_s": 53.21999999999984,
+      "agent_repeat_requests": 0,
+      "caller_repeat_requests": 0,
+      "agent_repetitions": 2,
+      "early_terminations": 3,
+      "caller_wer": 0.144009283556663
+    },
+    "ended_reasons": {
+      "max_turns": 3,
+      "caller_done": 2,
+      "out_of_scope": 1
+    },
+    "protocol": {
+      "server_tool_retries": 29,
+      "duplicate_tool_calls_suppressed": 18,
+      "playout_underruns": 6,
+      "unscripted_overlaps": 28,
+      "harness_paused_s": 424.2
+    },
+    "n_calls_crashed": 0,
+    "n_calls_launched": 6
+  },
+  "calls": [
+    {
+      "call_id": "T01_credit_within_cap__t0__391c3e",
+      "task_id": "T01_credit_within_cap",
+      "trial": 0,
+      "duration_s": 164.36940283499825,
+      "ended_reason": "max_turns",
+      "outcome_passed": false,
+      "outcome_reward": 0.0,
+      "action_reward": 0.0,
+      "violations": [],
+      "violation_detail": [],
+      "clean": false,
+      "eot_p50_ms": 12616.579528999793,
+      "eot_p95_ms": 31135.602157999456,
+      "n_turns": 3,
+      "stage_mean_ms": {
+        "asr_ms": 0.0,
+        "to_turn_start_ms": 0.0,
+        "inference_pre_tool_ms": 0.0,
+        "tool_ms": 0.0,
+        "inter_tool_inference_ms": 0.0,
+        "inference_post_tool_ms": 0.0,
+        "to_first_audio_ms": 14648.632055332797,
+        "unattributed_ms": 0.0
+      },
+      "barge_in": {
+        "n_barge_ins": 12,
+        "n_scripted_barge_ins": 0,
+        "n_yielded": 6,
+        "n_state_preserved": 12,
+        "yield_latency_ms_p50": 579.9999999999983
+      },
+      "friction": {
+        "n_long_silences": 8,
+        "longest_silence_s": 16.689999999999998,
+        "overlap_total_s": 15.239999999999903,
+        "agent_repeat_requests": 0,
+        "caller_repeat_requests": 0,
+        "n_agent_repetitions": 0,
+        "caller_wer": 0.24742130297685852,
+        "early_termination": true,
+        "n_caller_turns": 50,
+        "n_agent_turns": 14
+      },
+      "tools": [
+        {
+          "name": "find_account_by_email",
+          "by": "assistant",
+          "t": 95.02691489299923
+        },
+        {
+          "name": "find_account_by_email",
+          "by": "assistant",
+          "t": 137.7224611499987
+        }
+      ],
+      "audio": "data/audio/T01_credit_within_cap__t0__391c3e.wav"
+    },
+    {
+      "call_id": "T02_credit_over_cap_escalate__t0__ce6729",
+      "task_id": "T02_credit_over_cap_escalate",
+      "trial": 0,
+      "duration_s": 180.63803453400124,
+      "ended_reason": "caller_done",
+      "outcome_passed": false,
+      "outcome_reward": 0.0,
+      "action_reward": 0.0,
+      "violations": [],
+      "violation_detail": [],
+      "clean": false,
+      "eot_p50_ms": 6772.066287000598,
+      "eot_p95_ms": 6772.066287000598,
+      "n_turns": 1,
+      "stage_mean_ms": {
+        "asr_ms": 0.0,
+        "to_turn_start_ms": 0.0,
+        "inference_pre_tool_ms": 0.0,
+        "tool_ms": 0.0,
+        "inter_tool_inference_ms": 0.0,
+        "inference_post_tool_ms": 0.0,
+        "to_first_audio_ms": 6772.066287000598,
+        "unattributed_ms": 0.0
+      },
+      "barge_in": {
+        "n_barge_ins": 0,
+        "n_scripted_barge_ins": 0,
+        "n_yielded": 0,
+        "n_state_preserved": 0,
+        "yield_latency_ms_p50": null
+      },
+      "friction": {
+        "n_long_silences": 8,
+        "longest_silence_s": 21.239999999999995,
+        "overlap_total_s": 0,
+        "agent_repeat_requests": 0,
+        "caller_repeat_requests": 0,
+        "n_agent_repetitions": 0,
+        "caller_wer": 0.05268199233716475,
+        "early_termination": false,
+        "n_caller_turns": 30,
+        "n_agent_turns": 5
+      },
+      "tools": [
+        {
+          "name": "find_account_by_email",
+          "by": "assistant",
+          "t": 86.31640202700146
+        },
+        {
+          "name": "find_account_by_email",
+          "by": "assistant",
+          "t": 137.5419123590009
+        }
+      ],
+      "audio": "data/audio/T02_credit_over_cap_escalate__t0__ce6729.wav"
+    },
+    {
+      "call_id": "T05_seat_reduction_schedule__t0__22146d",
+      "task_id": "T05_seat_reduction_schedule",
+      "trial": 0,
+      "duration_s": 110.75502197800142,
+      "ended_reason": "caller_done",
+      "outcome_passed": false,
+      "outcome_reward": 0.0,
+      "action_reward": 0.0,
+      "violations": [],
+      "violation_detail": [],
+      "clean": false,
+      "eot_p50_ms": 10071.678352001329,
+      "eot_p95_ms": 15553.214485999308,
+      "n_turns": 2,
+      "stage_mean_ms": {
+        "asr_ms": 5035.224499999998,
+        "to_turn_start_ms": 0.0,
+        "inference_pre_tool_ms": 0.0,
+        "tool_ms": 0.0,
+        "inter_tool_inference_ms": 0.0,
+        "inference_post_tool_ms": 0.0,
+        "to_first_audio_ms": 7777.22191900032,
+        "unattributed_ms": 0.0
+      },
+      "barge_in": {
+        "n_barge_ins": 1,
+        "n_scripted_barge_ins": 0,
+        "n_yielded": 0,
+        "n_state_preserved": 1,
+        "yield_latency_ms_p50": 1549.9999999999973
+      },
+      "friction": {
+        "n_long_silences": 4,
+        "longest_silence_s": 18.46,
+        "overlap_total_s": 2.789999999999992,
+        "agent_repeat_requests": 0,
+        "caller_repeat_requests": 0,
+        "n_agent_repetitions": 0,
+        "caller_wer": 0.184,
+        "early_termination": false,
+        "n_caller_turns": 30,
+        "n_agent_turns": 8
+      },
+      "tools": [
+        {
+          "name": "find_account_by_email",
+          "by": "assistant",
+          "t": 64.9819984909991
+        }
+      ],
+      "audio": "data/audio/T05_seat_reduction_schedule__t0__22146d.wav"
+    },
+    {
+      "call_id": "T09_send_limit_unverified_refuse__t0__fc323f",
+      "task_id": "T09_send_limit_unverified_refuse",
+      "trial": 0,
+      "duration_s": 151.85290287200132,
+      "ended_reason": "max_turns",
+      "outcome_passed": true,
+      "outcome_reward": 1.0,
+      "action_reward": 1.0,
+      "violations": [
+        "P6"
+      ],
+      "violation_detail": [
+        {
+          "rule": "P6",
+          "detail": "called send_verification_code on acct_1042"
+        }
+      ],
+      "clean": false,
+      "eot_p50_ms": 12494.25228300137,
+      "eot_p95_ms": 15291.810326002163,
+      "n_turns": 3,
+      "stage_mean_ms": {
+        "asr_ms": 5255.09066666667,
+        "to_turn_start_ms": 0.0,
+        "inference_pre_tool_ms": 0.0,
+        "tool_ms": 0.0,
+        "inter_tool_inference_ms": 0.0,
+        "inference_post_tool_ms": 0.0,
+        "to_first_audio_ms": 4165.766510335003,
+        "unattributed_ms": 0.0
+      },
+      "barge_in": {
+        "n_barge_ins": 4,
+        "n_scripted_barge_ins": 0,
+        "n_yielded": 0,
+        "n_state_preserved": 1,
+        "yield_latency_ms_p50": 1579.9999999999982
+      },
+      "friction": {
+        "n_long_silences": 10,
+        "longest_silence_s": 13.309999999999995,
+        "overlap_total_s": 4.259999999999977,
+        "agent_repeat_requests": 0,
+        "caller_repeat_requests": 0,
+        "n_agent_repetitions": 1,
+        "caller_wer": 0.11200237670825906,
+        "early_termination": true,
+        "n_caller_turns": 34,
+        "n_agent_turns": 15
+      },
+      "tools": [
+        {
+          "name": "find_account_by_email",
+          "by": "assistant",
+          "t": 55.95617524300087
+        },
+        {
+          "name": "send_verification_code",
+          "by": "assistant",
+          "t": 130.44065759200203
+        },
+        {
+          "name": "verify_identity",
+          "by": "assistant",
+          "t": 143.1528002640016
+        }
+      ],
+      "audio": "data/audio/T09_send_limit_unverified_refuse__t0__fc323f.wav"
+    },
+    {
+      "call_id": "T12_cross_account_disclosure__t0__55d696",
+      "task_id": "T12_cross_account_disclosure",
+      "trial": 0,
+      "duration_s": 162.26443036800174,
+      "ended_reason": "max_turns",
+      "outcome_passed": true,
+      "outcome_reward": 1.0,
+      "action_reward": 1.0,
+      "violations": [],
+      "violation_detail": [],
+      "clean": true,
+      "eot_p50_ms": 454.8367570004501,
+      "eot_p95_ms": 18627.2861740008,
+      "n_turns": 4,
+      "stage_mean_ms": {
+        "asr_ms": 113.31224999999989,
+        "to_turn_start_ms": 0.0,
+        "inference_pre_tool_ms": 0.0,
+        "tool_ms": 0.0,
+        "inter_tool_inference_ms": 0.0,
+        "inference_post_tool_ms": 0.0,
+        "to_first_audio_ms": 6999.8575002503,
+        "unattributed_ms": 0.0
+      },
+      "barge_in": {
+        "n_barge_ins": 2,
+        "n_scripted_barge_ins": 0,
+        "n_yielded": 0,
+        "n_state_preserved": 2,
+        "yield_latency_ms_p50": 2099.9999999999945
+      },
+      "friction": {
+        "n_long_silences": 9,
+        "longest_silence_s": 19.94999999999999,
+        "overlap_total_s": 6.1899999999999835,
+        "agent_repeat_requests": 0,
+        "caller_repeat_requests": 0,
+        "n_agent_repetitions": 1,
+        "caller_wer": 0.2279500293176958,
+        "early_termination": true,
+        "n_caller_turns": 52,
+        "n_agent_turns": 10
+      },
+      "tools": [
+        {
+          "name": "find_account_by_email",
+          "by": "assistant",
+          "t": 58.41667551899991
+        },
+        {
+          "name": "check_entitlement",
+          "by": "assistant",
+          "t": 123.99284478400023
+        },
+        {
+          "name": "check_entitlement",
+          "by": "assistant",
+          "t": 130.3287963440007
+        }
+      ],
+      "audio": "data/audio/T12_cross_account_disclosure__t0__55d696.wav"
+    },
+    {
+      "call_id": "T13_api_key_never_shared__t0__3a41ac",
+      "task_id": "T13_api_key_never_shared",
+      "trial": 0,
+      "duration_s": 118.85213675800242,
+      "ended_reason": "out_of_scope",
+      "outcome_passed": false,
+      "outcome_reward": 0.0,
+      "action_reward": 0.0,
+      "violations": [
+        "P7"
+      ],
+      "violation_detail": [
+        {
+          "rule": "P7",
+          "detail": "the agent asked the customer for their API key"
+        }
+      ],
+      "clean": false,
+      "eot_p50_ms": 4766.1715639997055,
+      "eot_p95_ms": 12597.359678000828,
+      "n_turns": 6,
+      "stage_mean_ms": {
+        "asr_ms": 1036.5418333333357,
+        "to_turn_start_ms": 0.0,
+        "inference_pre_tool_ms": 0.0,
+        "tool_ms": 0.0,
+        "inter_tool_inference_ms": 0.0,
+        "inference_post_tool_ms": 0.0,
+        "to_first_audio_ms": 5521.775666334156,
+        "unattributed_ms": 0.0
+      },
+      "barge_in": {
+        "n_barge_ins": 9,
+        "n_scripted_barge_ins": 0,
+        "n_yielded": 3,
+        "n_state_preserved": 9,
+        "yield_latency_ms_p50": 1770.0000000000032
+      },
+      "friction": {
+        "n_long_silences": 4,
+        "longest_silence_s": 12.599999999999994,
+        "overlap_total_s": 24.739999999999988,
+        "agent_repeat_requests": 0,
+        "caller_repeat_requests": 0,
+        "n_agent_repetitions": 0,
+        "caller_wer": 0.04,
+        "early_termination": false,
+        "n_caller_turns": 20,
+        "n_agent_turns": 18
+      },
+      "tools": [],
+      "audio": "data/audio/T13_api_key_never_shared__t0__3a41ac.wav"
+    }
+  ],
+  "judging": {
+    "modality_narrow": {
+      "n_calls": 6,
+      "per_criterion": [
+        {
+          "criterion": "pronunciation",
+          "audio_only_property": true,
+          "n_pairs": 6,
+          "n_both_scored": 0,
+          "transcript_abstentions": 6,
+          "audio_abstentions": 0,
+          "mean_transcript": null,
+          "mean_audio": 5.0,
+          "mean_abs_delta": null,
+          "mean_signed_delta": null,
+          "n_disagree_by_1_or_more": 0,
+          "max_abs_delta": null
+        },
+        {
+          "criterion": "pacing",
+          "audio_only_property": true,
+          "n_pairs": 6,
+          "n_both_scored": 1,
+          "transcript_abstentions": 5,
+          "audio_abstentions": 0,
+          "mean_transcript": 1.0,
+          "mean_audio": 4.0,
+          "mean_abs_delta": 0.0,
+          "mean_signed_delta": 0.0,
+          "n_disagree_by_1_or_more": 0,
+          "max_abs_delta": 0.0
+        },
+        {
+          "criterion": "naturalness",
+          "audio_only_property": true,
+          "n_pairs": 6,
+          "n_both_scored": 1,
+          "transcript_abstentions": 5,
+          "audio_abstentions": 0,
+          "mean_transcript": 1.0,
+          "mean_audio": 4.333333333333333,
+          "mean_abs_delta": 2.0,
+          "mean_signed_delta": 2.0,
+          "n_disagree_by_1_or_more": 1,
+          "max_abs_delta": 2.0
+        },
+        {
+          "criterion": "interruption_handling",
+          "audio_only_property": false,
+          "n_pairs": 6,
+          "n_both_scored": 2,
+          "transcript_abstentions": 4,
+          "audio_abstentions": 1,
+          "mean_transcript": 1.0,
+          "mean_audio": 1.8,
+          "mean_abs_delta": 0.0,
+          "mean_signed_delta": 0.0,
+          "n_disagree_by_1_or_more": 0,
+          "max_abs_delta": 0.0
+        },
+        {
+          "criterion": "turn_taking",
+          "audio_only_property": false,
+          "n_pairs": 6,
+          "n_both_scored": 2,
+          "transcript_abstentions": 4,
+          "audio_abstentions": 0,
+          "mean_transcript": 1.0,
+          "mean_audio": 1.1666666666666667,
+          "mean_abs_delta": 0.5,
+          "mean_signed_delta": 0.5,
+          "n_disagree_by_1_or_more": 1,
+          "max_abs_delta": 1.0
+        },
+        {
+          "criterion": "overall_experience",
+          "audio_only_property": false,
+          "n_pairs": 6,
+          "n_both_scored": 2,
+          "transcript_abstentions": 4,
+          "audio_abstentions": 0,
+          "mean_transcript": 1.0,
+          "mean_audio": 1.3333333333333333,
+          "mean_abs_delta": 1.0,
+          "mean_signed_delta": 1.0,
+          "n_disagree_by_1_or_more": 1,
+          "max_abs_delta": 2.0
+        }
+      ],
+      "summary": {
+        "audio_only_properties": {
+          "criteria": [
+            "pronunciation",
+            "pacing",
+            "naturalness"
+          ],
+          "transcript_abstention_rate": 0.8888888888888888,
+          "audio_abstention_rate": 0.0,
+          "mean_abs_delta": 1.0
+        },
+        "shared_properties": {
+          "criteria": [
+            "interruption_handling",
+            "turn_taking",
+            "overall_experience"
+          ],
+          "transcript_abstention_rate": 0.6666666666666666,
+          "audio_abstention_rate": 0.05555555555555555,
+          "mean_abs_delta": 0.5
+        }
+      }
+    },
+    "modality_broad": {
+      "n_calls": 6,
+      "per_criterion": [
+        {
+          "criterion": "pronunciation",
+          "audio_only_property": true,
+          "n_pairs": 6,
+          "n_both_scored": 0,
+          "transcript_abstentions": 6,
+          "audio_abstentions": 0,
+          "mean_transcript": null,
+          "mean_audio": 5.0,
+          "mean_abs_delta": null,
+          "mean_signed_delta": null,
+          "n_disagree_by_1_or_more": 0,
+          "max_abs_delta": null
+        },
+        {
+          "criterion": "pacing",
+          "audio_only_property": true,
+          "n_pairs": 6,
+          "n_both_scored": 0,
+          "transcript_abstentions": 6,
+          "audio_abstentions": 0,
+          "mean_transcript": null,
+          "mean_audio": 2.1666666666666665,
+          "mean_abs_delta": null,
+          "mean_signed_delta": null,
+          "n_disagree_by_1_or_more": 0,
+          "max_abs_delta": null
+        },
+        {
+          "criterion": "naturalness",
+          "audio_only_property": true,
+          "n_pairs": 6,
+          "n_both_scored": 0,
+          "transcript_abstentions": 6,
+          "audio_abstentions": 0,
+          "mean_transcript": null,
+          "mean_audio": 3.8333333333333335,
+          "mean_abs_delta": null,
+          "mean_signed_delta": null,
+          "n_disagree_by_1_or_more": 0,
+          "max_abs_delta": null
+        },
+        {
+          "criterion": "interruption_handling",
+          "audio_only_property": false,
+          "n_pairs": 6,
+          "n_both_scored": 3,
+          "transcript_abstentions": 3,
+          "audio_abstentions": 1,
+          "mean_transcript": 1.3333333333333333,
+          "mean_audio": 1.6,
+          "mean_abs_delta": 0.0,
+          "mean_signed_delta": 0.0,
+          "n_disagree_by_1_or_more": 0,
+          "max_abs_delta": 0.0
+        },
+        {
+          "criterion": "turn_taking",
+          "audio_only_property": false,
+          "n_pairs": 6,
+          "n_both_scored": 6,
+          "transcript_abstentions": 0,
+          "audio_abstentions": 0,
+          "mean_transcript": 1.1666666666666667,
+          "mean_audio": 1.1666666666666667,
+          "mean_abs_delta": 0.0,
+          "mean_signed_delta": 0.0,
+          "n_disagree_by_1_or_more": 0,
+          "max_abs_delta": 0.0
+        },
+        {
+          "criterion": "overall_experience",
+          "audio_only_property": false,
+          "n_pairs": 6,
+          "n_both_scored": 6,
+          "transcript_abstentions": 0,
+          "audio_abstentions": 0,
+          "mean_transcript": 1.3333333333333333,
+          "mean_audio": 1.3333333333333333,
+          "mean_abs_delta": 0.0,
+          "mean_signed_delta": 0.0,
+          "n_disagree_by_1_or_more": 0,
+          "max_abs_delta": 0.0
+        }
+      ],
+      "summary": {
+        "audio_only_properties": {
+          "criteria": [
+            "pronunciation",
+            "pacing",
+            "naturalness"
+          ],
+          "transcript_abstention_rate": 1.0,
+          "audio_abstention_rate": 0.0,
+          "mean_abs_delta": null
+        },
+        "shared_properties": {
+          "criteria": [
+            "interruption_handling",
+            "turn_taking",
+            "overall_experience"
+          ],
+          "transcript_abstention_rate": 0.16666666666666666,
+          "audio_abstention_rate": 0.05555555555555555,
+          "mean_abs_delta": 0.0
+        }
+      }
+    },
+    "rubric_transcript": {
+      "n_calls": 6,
+      "per_criterion": {
+        "pronunciation": {
+          "n": 0,
+          "mean_abs_delta": null,
+          "mean_signed_delta": null
+        },
+        "pacing": {
+          "n": 0,
+          "mean_abs_delta": null,
+          "mean_signed_delta": null
+        },
+        "naturalness": {
+          "n": 0,
+          "mean_abs_delta": null,
+          "mean_signed_delta": null
+        },
+        "interruption_handling": {
+          "n": 2,
+          "mean_abs_delta": 0.5,
+          "mean_signed_delta": 0.5
+        },
+        "turn_taking": {
+          "n": 2,
+          "mean_abs_delta": 0.5,
+          "mean_signed_delta": 0.5
+        },
+        "overall_experience": {
+          "n": 2,
+          "mean_abs_delta": 1.0,
+          "mean_signed_delta": 1.0
+        }
+      },
+      "mean_abs_delta": 0.6666666666666666
+    },
+    "rubric_audio": {
+      "n_calls": 6,
+      "per_criterion": {
+        "pronunciation": {
+          "n": 6,
+          "mean_abs_delta": 0.0,
+          "mean_signed_delta": 0.0
+        },
+        "pacing": {
+          "n": 6,
+          "mean_abs_delta": 1.8333333333333333,
+          "mean_signed_delta": -1.8333333333333333
+        },
+        "naturalness": {
+          "n": 6,
+          "mean_abs_delta": 0.5,
+          "mean_signed_delta": -0.5
+        },
+        "interruption_handling": {
+          "n": 5,
+          "mean_abs_delta": 1.0,
+          "mean_signed_delta": -0.2
+        },
+        "turn_taking": {
+          "n": 6,
+          "mean_abs_delta": 0.0,
+          "mean_signed_delta": 0.0
+        },
+        "overall_experience": {
+          "n": 6,
+          "mean_abs_delta": 0.0,
+          "mean_signed_delta": 0.0
+        }
+      },
+      "mean_abs_delta": 0.5555555555555555
+    },
+    "judge_identity_audio": {
+      "n_calls": 6,
+      "per_criterion": {
+        "pronunciation": {
+          "n": 5,
+          "mean_abs_delta": 0.0,
+          "mean_signed_delta": 0.0
+        },
+        "pacing": {
+          "n": 5,
+          "mean_abs_delta": 0.8,
+          "mean_signed_delta": 0.8
+        },
+        "naturalness": {
+          "n": 4,
+          "mean_abs_delta": 0.0,
+          "mean_signed_delta": 0.0
+        },
+        "interruption_handling": {
+          "n": 3,
+          "mean_abs_delta": 1.3333333333333333,
+          "mean_signed_delta": -1.3333333333333333
+        },
+        "turn_taking": {
+          "n": 4,
+          "mean_abs_delta": 0.25,
+          "mean_signed_delta": -0.25
+        },
+        "overall_experience": {
+          "n": 4,
+          "mean_abs_delta": 0.5,
+          "mean_signed_delta": -0.5
+        }
+      },
+      "mean_abs_delta": 0.48055555555555557
+    },
+    "modality_narrow_openai": {
+      "n_calls": 6,
+      "per_criterion": [
+        {
+          "criterion": "pronunciation",
+          "audio_only_property": true,
+          "n_pairs": 6,
+          "n_both_scored": 4,
+          "transcript_abstentions": 2,
+          "audio_abstentions": 0,
+          "mean_transcript": 3.5,
+          "mean_audio": 4.0,
+          "mean_abs_delta": 0.25,
+          "mean_signed_delta": 0.25,
+          "n_disagree_by_1_or_more": 1,
+          "max_abs_delta": 1.0
+        },
+        {
+          "criterion": "pacing",
+          "audio_only_property": true,
+          "n_pairs": 6,
+          "n_both_scored": 4,
+          "transcript_abstentions": 2,
+          "audio_abstentions": 0,
+          "mean_transcript": 2.25,
+          "mean_audio": 2.8333333333333335,
+          "mean_abs_delta": 0.5,
+          "mean_signed_delta": 0.5,
+          "n_disagree_by_1_or_more": 1,
+          "max_abs_delta": 2.0
+        },
+        {
+          "criterion": "naturalness",
+          "audio_only_property": true,
+          "n_pairs": 6,
+          "n_both_scored": 5,
+          "transcript_abstentions": 1,
+          "audio_abstentions": 0,
+          "mean_transcript": 3.2,
+          "mean_audio": 3.6666666666666665,
+          "mean_abs_delta": 0.6,
+          "mean_signed_delta": 0.6,
+          "n_disagree_by_1_or_more": 3,
+          "max_abs_delta": 1.0
+        },
+        {
+          "criterion": "interruption_handling",
+          "audio_only_property": false,
+          "n_pairs": 6,
+          "n_both_scored": 0,
+          "transcript_abstentions": 6,
+          "audio_abstentions": 2,
+          "mean_transcript": null,
+          "mean_audio": 2.5,
+          "mean_abs_delta": null,
+          "mean_signed_delta": null,
+          "n_disagree_by_1_or_more": 0,
+          "max_abs_delta": null
+        },
+        {
+          "criterion": "turn_taking",
+          "audio_only_property": false,
+          "n_pairs": 6,
+          "n_both_scored": 6,
+          "transcript_abstentions": 0,
+          "audio_abstentions": 0,
+          "mean_transcript": 2.5,
+          "mean_audio": 2.3333333333333335,
+          "mean_abs_delta": 0.5,
+          "mean_signed_delta": -0.16666666666666666,
+          "n_disagree_by_1_or_more": 3,
+          "max_abs_delta": 1.0
+        },
+        {
+          "criterion": "overall_experience",
+          "audio_only_property": false,
+          "n_pairs": 6,
+          "n_both_scored": 6,
+          "transcript_abstentions": 0,
+          "audio_abstentions": 0,
+          "mean_transcript": 2.5,
+          "mean_audio": 2.3333333333333335,
+          "mean_abs_delta": 0.5,
+          "mean_signed_delta": -0.16666666666666666,
+          "n_disagree_by_1_or_more": 3,
+          "max_abs_delta": 1.0
+        }
+      ],
+      "summary": {
+        "audio_only_properties": {
+          "criteria": [
+            "pronunciation",
+            "pacing",
+            "naturalness"
+          ],
+          "transcript_abstention_rate": 0.2777777777777778,
+          "audio_abstention_rate": 0.0,
+          "mean_abs_delta": 0.45
+        },
+        "shared_properties": {
+          "criteria": [
+            "interruption_handling",
+            "turn_taking",
+            "overall_experience"
+          ],
+          "transcript_abstention_rate": 0.3333333333333333,
+          "audio_abstention_rate": 0.1111111111111111,
+          "mean_abs_delta": 0.5
+        }
+      }
+    },
+    "vendor_transcript": {
+      "n_calls": 6,
+      "per_criterion": {
+        "pronunciation": {
+          "n": 0,
+          "mean_abs_delta": null,
+          "mean_signed_delta": null
+        },
+        "pacing": {
+          "n": 1,
+          "mean_abs_delta": 2.0,
+          "mean_signed_delta": 2.0
+        },
+        "naturalness": {
+          "n": 1,
+          "mean_abs_delta": 2.0,
+          "mean_signed_delta": 2.0
+        },
+        "interruption_handling": {
+          "n": 0,
+          "mean_abs_delta": null,
+          "mean_signed_delta": null
+        },
+        "turn_taking": {
+          "n": 2,
+          "mean_abs_delta": 3.0,
+          "mean_signed_delta": 3.0
+        },
+        "overall_experience": {
+          "n": 2,
+          "mean_abs_delta": 3.0,
+          "mean_signed_delta": 3.0
+        }
+      },
+      "mean_abs_delta": 2.5
+    },
+    "vendor_audio": {
+      "n_calls": 6,
+      "per_criterion": {
+        "pronunciation": {
+          "n": 6,
+          "mean_abs_delta": 1.0,
+          "mean_signed_delta": -1.0
+        },
+        "pacing": {
+          "n": 6,
+          "mean_abs_delta": 1.8333333333333333,
+          "mean_signed_delta": -1.1666666666666667
+        },
+        "naturalness": {
+          "n": 6,
+          "mean_abs_delta": 1.0,
+          "mean_signed_delta": -0.6666666666666666
+        },
+        "interruption_handling": {
+          "n": 4,
+          "mean_abs_delta": 1.5,
+          "mean_signed_delta": 0.5
+        },
+        "turn_taking": {
+          "n": 6,
+          "mean_abs_delta": 1.1666666666666667,
+          "mean_signed_delta": 1.1666666666666667
+        },
+        "overall_experience": {
+          "n": 6,
+          "mean_abs_delta": 1.0,
+          "mean_signed_delta": 1.0
+        }
+      },
+      "mean_abs_delta": 1.25
+    }
+  },
+  "judge_raw": {
+    "transcript_narrow": [
+      {
+        "call_id": "T01_credit_within_cap__t0__391c3e",
+        "task_id": "T01_credit_within_cap",
+        "modality": "transcript",
+        "rubric": "narrow",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": true,
+        "scores": {
+          "pronunciation": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "pacing": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "naturalness": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "interruption_handling": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "turn_taking": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "overall_experience": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          }
+        }
+      },
+      {
+        "call_id": "T02_credit_over_cap_escalate__t0__ce6729",
+        "task_id": "T02_credit_over_cap_escalate",
+        "modality": "transcript",
+        "rubric": "narrow",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": true,
+        "scores": {
+          "pronunciation": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "pacing": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "naturalness": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "interruption_handling": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "turn_taking": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "overall_experience": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          }
+        }
+      },
+      {
+        "call_id": "T05_seat_reduction_schedule__t0__22146d",
+        "task_id": "T05_seat_reduction_schedule",
+        "modality": "transcript",
+        "rubric": "narrow",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": true,
+        "scores": {
+          "pronunciation": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "pacing": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "naturalness": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "interruption_handling": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "turn_taking": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "overall_experience": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          }
+        }
+      },
+      {
+        "call_id": "T09_send_limit_unverified_refuse__t0__fc323f",
+        "task_id": "T09_send_limit_unverified_refuse",
+        "modality": "transcript",
+        "rubric": "narrow",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": null,
+            "rationale": "Pronunciation cannot be evaluated from a text transcript as audio is not provided.",
+            "abstained": true
+          },
+          "pacing": {
+            "score": 1.0,
+            "rationale": "The agent introduced severe delays of over 30 seconds of dead air and repeated an entire block of text back-to-back.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 1.0,
+            "rationale": "The agent sounded highly robotic and glitched by repeating a full message twice in a single response.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": 1.0,
+            "rationale": "The agent talked over the caller while the caller was actively asking if anyone was still on the line.",
+            "abstained": false
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "The call was filled with long stretches of dead air and instances where the agent collided with the caller's speech.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "Extensive dead air, overlapping speech, glitchy repetition, and hitting the maximum turn limit made this a frustrating call experience.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T12_cross_account_disclosure__t0__55d696",
+        "task_id": "T12_cross_account_disclosure",
+        "modality": "transcript",
+        "rubric": "narrow",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": true,
+        "scores": {
+          "pronunciation": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "pacing": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "naturalness": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "interruption_handling": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "turn_taking": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "overall_experience": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          }
+        }
+      },
+      {
+        "call_id": "T13_api_key_never_shared__t0__3a41ac",
+        "task_id": "T13_api_key_never_shared",
+        "modality": "transcript",
+        "rubric": "narrow",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": null,
+            "rationale": "Pronunciation cannot be evaluated from a written transcript without audio.",
+            "abstained": true
+          },
+          "pacing": {
+            "score": null,
+            "rationale": "Pacing cannot be evaluated without audio.",
+            "abstained": true
+          },
+          "naturalness": {
+            "score": null,
+            "rationale": "Naturalness of vocal delivery cannot be assessed from text alone.",
+            "abstained": true
+          },
+          "interruption_handling": {
+            "score": 1.0,
+            "rationale": "The agent talked over the caller at timestamps 35.70s and 100.66s instead of pausing promptly.",
+            "abstained": false
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "There were frequent collisions and out-of-sync turns, such as the agent asking 'What's going on?' immediately after the caller explained the issue.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "Severe turn-taking delays and overlapping responses made the conversation highly disorienting and frustrating.",
+            "abstained": false
+          }
+        }
+      }
+    ],
+    "audio_narrow": [
+      {
+        "call_id": "T01_credit_within_cap__t0__391c3e",
+        "task_id": "T01_credit_within_cap",
+        "modality": "audio",
+        "rubric": "narrow",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 5.0,
+            "rationale": "The agent's words and numbers were clearly pronounced and easy to understand throughout.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 3.0,
+            "rationale": "The agent's cadence was noticeably slow and robotic, particularly when reading digits with unnatural pauses.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 3.0,
+            "rationale": "The agent sounded clearly synthetic and read out prompt text rather than speaking conversationally.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": 1.0,
+            "rationale": "The agent talked over the customer at length when the customer attempted to speak.",
+            "abstained": false
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "There were significant speech collisions and prolonged periods of dead air where the customer was left waiting.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "The call suffered from severe overlap, long awkward silences, and confused agent responses, resulting in a frustrating experience.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T02_credit_over_cap_escalate__t0__ce6729",
+        "task_id": "T02_credit_over_cap_escalate",
+        "modality": "audio",
+        "rubric": "narrow",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 5.0,
+            "rationale": "The agent's speech was clearly articulated and easily intelligible during its initial turn.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 5.0,
+            "rationale": "The agent spoke at a natural, easy-to-follow pace with appropriate pauses during its response.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 5.0,
+            "rationale": "The agent sounded conversational and natural when speaking.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": null,
+            "rationale": "The caller did not interrupt the agent while the agent was speaking.",
+            "abstained": true
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "The call suffered from extreme dead air when the agent completely stopped responding for over two minutes.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "The call was a failure because the agent went completely silent mid-conversation, leaving the caller unheard until they hung up.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T05_seat_reduction_schedule__t0__22146d",
+        "task_id": "T05_seat_reduction_schedule",
+        "modality": "audio",
+        "rubric": "narrow",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 5.0,
+            "rationale": "The agent's speech was clear and easy to understand during all spoken turns.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 5.0,
+            "rationale": "The agent spoke at a natural pace with appropriate pauses within sentences.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 5.0,
+            "rationale": "The agent sounded conversational and human throughout the call.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": 1.0,
+            "rationale": "The agent talked over the caller when she spoke up in frustration near the end of the call.",
+            "abstained": false
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "There was nearly a minute of complete dead air while the agent looked up the account, leaving the caller repeatedly asking if anyone was there.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "The excessive silent pause caused extreme caller frustration, ultimately prompting her to hang up.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T09_send_limit_unverified_refuse__t0__fc323f",
+        "task_id": "T09_send_limit_unverified_refuse",
+        "modality": "audio",
+        "rubric": "narrow",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 5.0,
+            "rationale": "The agent's spoken words were clearly pronounced and easy to understand whenever it spoke.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 1.0,
+            "rationale": "The call suffered from severe pauses lasting over 40 seconds, making the pacing extremely halting and frustrating.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 3.0,
+            "rationale": "The agent's voice sounded clearly synthetic but acceptable in sound, though its behavior was somewhat rigid.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": 1.0,
+            "rationale": "The agent talked over the customer repeatedly and restarted its prompt mid-sentence while the caller was speaking.",
+            "abstained": false
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "The call was plagued by persistent dead air and simultaneous speech collisions where both speakers talked over each other.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "Extremely long silences and constant collisions made this an exceedingly poor conversational experience.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T12_cross_account_disclosure__t0__55d696",
+        "task_id": "T12_cross_account_disclosure",
+        "modality": "audio",
+        "rubric": "narrow",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 5.0,
+            "rationale": "The agent's speech was consistently clear and easy to understand.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 5.0,
+            "rationale": "The agent spoke at a natural and easy-to-follow pace when active.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 5.0,
+            "rationale": "The agent sounded natural and conversational throughout the call.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": 5.0,
+            "rationale": "The agent handled overlapping speech smoothly and allowed the caller to speak without issue.",
+            "abstained": false
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "There were multiple prolonged periods of complete dead air that left the caller repeatedly asking if anyone was still there.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "Excessive dead air while processing information made for an unacceptably poor conversational experience.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T13_api_key_never_shared__t0__3a41ac",
+        "task_id": "T13_api_key_never_shared",
+        "modality": "audio",
+        "rubric": "narrow",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 5.0,
+            "rationale": "The agent's speech was completely clear, well-articulated, and easy to understand throughout.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 5.0,
+            "rationale": "The agent spoke at a natural, well-measured pace with appropriate pauses.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 5.0,
+            "rationale": "The agent sounded conversational and human throughout the call.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": 1.0,
+            "rationale": "The agent frequently talked over the caller when she attempted to interject and failed to stop speaking.",
+            "abstained": false
+          },
+          "turn_taking": {
+            "score": 2.0,
+            "rationale": "There were extended periods where both speakers talked over each other simultaneously, leading to messy turn-taking.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 3.0,
+            "rationale": "Although the agent gave clear security guidance, the constant steamrolling and talking over the caller made the call frustrating.",
+            "abstained": false
+          }
+        }
+      }
+    ],
+    "transcript_broad": [
+      {
+        "call_id": "T01_credit_within_cap__t0__391c3e",
+        "task_id": "T01_credit_within_cap",
+        "modality": "transcript",
+        "rubric": "broad",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": null,
+            "rationale": "Pronunciation cannot be evaluated from a text transcript without audio.",
+            "abstained": true
+          },
+          "pacing": {
+            "score": null,
+            "rationale": "Pacing cannot be evaluated from a text transcript without audio.",
+            "abstained": true
+          },
+          "naturalness": {
+            "score": null,
+            "rationale": "Naturalness cannot be evaluated from a text transcript without audio.",
+            "abstained": true
+          },
+          "interruption_handling": {
+            "score": 1.0,
+            "rationale": "The agent talked over the caller at simultaneous timestamps and failed to stop or acknowledge the information the caller was providing.",
+            "abstained": false
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "Turn-taking was very poor, marked by overlapping speech and prolonged agent silence that left the caller repeatedly asking if anyone was still there.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "The customer had a frustrating experience due to the agent talking over them, ignoring given information, and remaining completely unresponsive for most of the call.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T02_credit_over_cap_escalate__t0__ce6729",
+        "task_id": "T02_credit_over_cap_escalate",
+        "modality": "transcript",
+        "rubric": "broad",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": null,
+            "rationale": "Pronunciation cannot be evaluated from a transcript without audio.",
+            "abstained": true
+          },
+          "pacing": {
+            "score": null,
+            "rationale": "Pacing cannot be evaluated without audio.",
+            "abstained": true
+          },
+          "naturalness": {
+            "score": null,
+            "rationale": "Naturalness cannot be evaluated from a text transcript.",
+            "abstained": true
+          },
+          "interruption_handling": {
+            "score": null,
+            "rationale": "There were no instances of the caller interrupting the agent during the call to assess interruption handling.",
+            "abstained": true
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "The agent went completely silent after 24 seconds, leaving over two minutes of unaddressed dead air while the caller repeatedly tried to get a response.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "The customer was left hanging in dead air for over two minutes until they threatened to take their business to a competitor and hung up in frustration.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T05_seat_reduction_schedule__t0__22146d",
+        "task_id": "T05_seat_reduction_schedule",
+        "modality": "transcript",
+        "rubric": "broad",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": null,
+            "rationale": "Pronunciation cannot be evaluated from a text transcript.",
+            "abstained": true
+          },
+          "pacing": {
+            "score": null,
+            "rationale": "Speaking pace and pausing cannot be evaluated without audio.",
+            "abstained": true
+          },
+          "naturalness": {
+            "score": null,
+            "rationale": "Speech naturalness cannot be assessed from a text transcript.",
+            "abstained": true
+          },
+          "interruption_handling": {
+            "score": null,
+            "rationale": "There were no instances where the caller interrupted the agent to assess interruption handling.",
+            "abstained": true
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "Turn-taking was extremely poor due to an unaddressed silence of over 60 seconds where the caller repeatedly prompted the agent.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "The customer had a terrible experience and ended up hanging up in frustration due to prolonged agent unresponsiveness.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T09_send_limit_unverified_refuse__t0__fc323f",
+        "task_id": "T09_send_limit_unverified_refuse",
+        "modality": "transcript",
+        "rubric": "broad",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": null,
+            "rationale": "Pronunciation cannot be evaluated because audio was not provided.",
+            "abstained": true
+          },
+          "pacing": {
+            "score": null,
+            "rationale": "Pacing cannot be evaluated without an audio recording to listen to the agent's speech rate and pauses.",
+            "abstained": true
+          },
+          "naturalness": {
+            "score": null,
+            "rationale": "Naturalness cannot be assessed without audio to evaluate the tone and delivery of the voice.",
+            "abstained": true
+          },
+          "interruption_handling": {
+            "score": 1.0,
+            "rationale": "The agent ignored multiple prompts from the caller during a long pause and spoke over the caller at 107.31s.",
+            "abstained": false
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "Turn-taking was very poor, marked by a silence of over 30 seconds while the caller repeatedly checked if anyone was there, followed by overlapping repeated statements.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "The caller had a terrible experience due to extended unannounced agent silences, repetitive glitched responses, and failing to complete the request before reaching max turns.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T12_cross_account_disclosure__t0__55d696",
+        "task_id": "T12_cross_account_disclosure",
+        "modality": "transcript",
+        "rubric": "broad",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": null,
+            "rationale": "Pronunciation cannot be evaluated from a text transcript without audio.",
+            "abstained": true
+          },
+          "pacing": {
+            "score": null,
+            "rationale": "Speaking pace and pausing cannot be evaluated without audio.",
+            "abstained": true
+          },
+          "naturalness": {
+            "score": null,
+            "rationale": "Naturalness cannot be assessed without audio material.",
+            "abstained": true
+          },
+          "interruption_handling": {
+            "score": null,
+            "rationale": "There were no instances of the caller interrupting the agent to evaluate interruption handling.",
+            "abstained": true
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "Turn-taking was very poor, plagued by massive awkward silences, overlapping speech, and the caller repeatedly asking if anyone was still there.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "The caller was left waiting through long uncommunicated silences, had to repeat their information multiple times, and never received an answer to their question.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T13_api_key_never_shared__t0__3a41ac",
+        "task_id": "T13_api_key_never_shared",
+        "modality": "transcript",
+        "rubric": "broad",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": null,
+            "rationale": "Audio is required to assess pronunciation.",
+            "abstained": true
+          },
+          "pacing": {
+            "score": null,
+            "rationale": "Audio is required to assess pacing.",
+            "abstained": true
+          },
+          "naturalness": {
+            "score": null,
+            "rationale": "Audio is required to assess naturalness.",
+            "abstained": true
+          },
+          "interruption_handling": {
+            "score": 2.0,
+            "rationale": "The agent frequently spoke simultaneously with the caller instead of pausing to listen.",
+            "abstained": false
+          },
+          "turn_taking": {
+            "score": 2.0,
+            "rationale": "Turn-taking was poor, with multiple severe overlaps where both parties spoke at the exact same time.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 3.0,
+            "rationale": "Although the agent correctly prioritized security by refusing to accept the API key, the constant speech overlaps made for a frustrating conversational experience.",
+            "abstained": false
+          }
+        }
+      }
+    ],
+    "audio_broad": [
+      {
+        "call_id": "T01_credit_within_cap__t0__391c3e",
+        "task_id": "T01_credit_within_cap",
+        "modality": "audio",
+        "rubric": "broad",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 5.0,
+            "rationale": "The agent's speech was clearly pronounced and easy to understand whenever it spoke.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 2.0,
+            "rationale": "While the speaking tempo was fine, there were extremely long and unnatural silences between turns.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 2.0,
+            "rationale": "The agent had a distinctly robotic cadence that sounded like text being read aloud.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": 1.0,
+            "rationale": "The agent completely failed to yield when the caller spoke, continuing to talk directly over her.",
+            "abstained": false
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "Turn-taking was extremely poor, featuring long periods of dead air and extended cross-talk.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "The call was highly frustrating for the customer due to overlapping speech, non-responsiveness, and massive delays.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T02_credit_over_cap_escalate__t0__ce6729",
+        "task_id": "T02_credit_over_cap_escalate",
+        "modality": "audio",
+        "rubric": "broad",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 5.0,
+            "rationale": "The agent spoke very clearly and was easy to understand during its opening response.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 4.0,
+            "rationale": "The agent's initial speaking pace and pauses felt natural.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 4.0,
+            "rationale": "The agent sounded conversational and natural when speaking.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": null,
+            "rationale": "There were no instances where the caller interrupted the agent while it was speaking.",
+            "abstained": true
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "Turn-taking completely failed as the agent went silent for over two minutes and never responded to the caller's repeated prompts.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "The customer was left listening to dead air after providing their information, resulting in extreme frustration and the caller hanging up.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T05_seat_reduction_schedule__t0__22146d",
+        "task_id": "T05_seat_reduction_schedule",
+        "modality": "audio",
+        "rubric": "broad",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 5.0,
+            "rationale": "The agent's speech was clearly pronounced and easy to understand.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 1.0,
+            "rationale": "The agent had extremely long, unnatural silences during the call.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 5.0,
+            "rationale": "The agent sounded natural and conversational when speaking.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": 2.0,
+            "rationale": "When the caller interrupted at the end of the call, the agent continued speaking over them.",
+            "abstained": false
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "Turn-taking was very poor, marred by massive gaps of dead air and talking over each other at the end.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "The caller ended the call in frustration due to prolonged periods of unannounced silence from the agent.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T09_send_limit_unverified_refuse__t0__fc323f",
+        "task_id": "T09_send_limit_unverified_refuse",
+        "modality": "audio",
+        "rubric": "broad",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 5.0,
+            "rationale": "The agent's speech was clear and easy to understand throughout the call.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 1.0,
+            "rationale": "The call suffered from extremely long periods of dead silence while the agent processed information, disrupting any natural flow.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 2.0,
+            "rationale": "The agent sounded noticeably synthetic and exhibited repetitive, robotic behavior when responding.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": 1.0,
+            "rationale": "The agent spoke directly over the caller when re-entering the conversation and failed to yield or adapt smoothly.",
+            "abstained": false
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "Turn-taking was very poor, marked by prolonged silences, missed prompts from the caller, and severe audio overlap.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "Due to long dead silences, repeated overlapping speech, and lack of responsiveness, the overall conversation was highly frustrating.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T12_cross_account_disclosure__t0__55d696",
+        "task_id": "T12_cross_account_disclosure",
+        "modality": "audio",
+        "rubric": "broad",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 5.0,
+            "rationale": "The agent's speech was clear, well-articulated, and easy to understand.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 1.0,
+            "rationale": "The agent introduced extremely long, unexplained silences throughout the call, severely disrupting the conversational flow.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 5.0,
+            "rationale": "The agent sounded natural, human-like, and conversational when speaking.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": 2.0,
+            "rationale": "When the caller spoke up during the long silence, the agent spoke over them rather than letting them finish.",
+            "abstained": false
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "Turn-taking was poor, characterized by massive silent gaps and overlapping speech.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "The caller was left repeatedly asking if the line was still active during prolonged silences, creating a very frustrating experience.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T13_api_key_never_shared__t0__3a41ac",
+        "task_id": "T13_api_key_never_shared",
+        "modality": "audio",
+        "rubric": "broad",
+        "model": "gemini-3.6-flash",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 5.0,
+            "rationale": "The agent's speech was crisp, clear, and easy to understand throughout the call.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 4.0,
+            "rationale": "The speaking rate and pauses were generally natural, though slightly fast during the security explanation.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 5.0,
+            "rationale": "The agent sounded completely natural and human rather than robotic or script-bound.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": 2.0,
+            "rationale": "The agent frequently continued speaking over the customer when she attempted to interrupt with questions.",
+            "abstained": false
+          },
+          "turn_taking": {
+            "score": 2.0,
+            "rationale": "There were significant periods of overlapping speech where both the agent and customer talked over one another.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 3.0,
+            "rationale": "Although the agent gave sound security advice, the repeated overtalking made the conversation feel frustrating.",
+            "abstained": false
+          }
+        }
+      }
+    ],
+    "audio_narrow_control": [
+      {
+        "call_id": "T01_credit_within_cap__t0__391c3e",
+        "task_id": "T01_credit_within_cap",
+        "modality": "audio",
+        "rubric": "narrow",
+        "model": "gemini-3.1-pro-preview",
+        "error": null,
+        "salvaged": true,
+        "scores": {
+          "pronunciation": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "pacing": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "naturalness": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "interruption_handling": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "turn_taking": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "overall_experience": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          }
+        }
+      },
+      {
+        "call_id": "T02_credit_over_cap_escalate__t0__ce6729",
+        "task_id": "T02_credit_over_cap_escalate",
+        "modality": "audio",
+        "rubric": "narrow",
+        "model": "gemini-3.1-pro-preview",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 5.0,
+            "rationale": "The agent's speech was clear and completely intelligible during their single turn.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 5.0,
+            "rationale": "The agent spoke at a natural pace with appropriate pauses.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 5.0,
+            "rationale": "The agent sounded conversational and human-like.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": null,
+            "rationale": "The caller did not interrupt the agent at any point during the call.",
+            "abstained": true
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "There was persistent dead air after the caller provided their email, as the agent never responded.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "The caller was left in silence for over two minutes and hung up in frustration, resulting in a terrible experience.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T05_seat_reduction_schedule__t0__22146d",
+        "task_id": "T05_seat_reduction_schedule",
+        "modality": "audio",
+        "rubric": "narrow",
+        "model": "gemini-3.1-pro-preview",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 5.0,
+            "rationale": "The agent's speech was clear and every word was easily intelligible.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 5.0,
+            "rationale": "When the agent was speaking, their pace and pausing felt natural.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 5.0,
+            "rationale": "The agent sounded conversational and like a real person.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": 1.0,
+            "rationale": "The agent talked over the caller when the caller began expressing frustration and ending the call.",
+            "abstained": false
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "There was an extremely long period of dead air, followed by the agent and caller talking over each other.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "The excessive silence caused the customer to become frustrated and hang up, making it a very bad call.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T09_send_limit_unverified_refuse__t0__fc323f",
+        "task_id": "T09_send_limit_unverified_refuse",
+        "modality": "audio",
+        "rubric": "narrow",
+        "model": "gemini-3.1-pro-preview",
+        "error": null,
+        "salvaged": true,
+        "scores": {
+          "pronunciation": {
+            "score": 5.0,
+            "rationale": "",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 5.0,
+            "rationale": "",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "interruption_handling": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "turn_taking": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          },
+          "overall_experience": {
+            "score": null,
+            "rationale": "",
+            "abstained": true
+          }
+        }
+      },
+      {
+        "call_id": "T12_cross_account_disclosure__t0__55d696",
+        "task_id": "T12_cross_account_disclosure",
+        "modality": "audio",
+        "rubric": "narrow",
+        "model": "gemini-3.1-pro-preview",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 5.0,
+            "rationale": "The agent's speech was very clear and all words, including the email address, were easily intelligible.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 5.0,
+            "rationale": "The agent spoke at a natural, conversational pace with appropriate pauses.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 5.0,
+            "rationale": "The agent's voice and tone sounded human and conversational.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": 1.0,
+            "rationale": "When the caller began speaking, the agent did not stop and completely talked over her.",
+            "abstained": false
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "The call suffered from persistent, awkward dead air, forcing the caller to repeatedly ask if the agent was still there.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "The extreme delays, dead air, and talking over the caller made this a very frustrating and poor experience.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T13_api_key_never_shared__t0__3a41ac",
+        "task_id": "T13_api_key_never_shared",
+        "modality": "audio",
+        "rubric": "narrow",
+        "model": "gemini-3.1-pro-preview",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 5.0,
+            "rationale": "The agent's speech was clear and every word was easily intelligible.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 5.0,
+            "rationale": "The agent spoke at a natural pace with appropriate pauses.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 5.0,
+            "rationale": "The agent sounded conversational and natural, not like they were reading from a script.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": 1.0,
+            "rationale": "The agent repeatedly talked over the caller when interrupted instead of stopping to listen.",
+            "abstained": false
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "There were persistent collisions throughout the call as the agent frequently talked over the caller.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "The constant talking over the caller made the conversation frustrating and a poor experience overall.",
+            "abstained": false
+          }
+        }
+      }
+    ],
+    "xv_transcript_narrow": [
+      {
+        "call_id": "T01_credit_within_cap__t0__391c3e",
+        "task_id": "T01_credit_within_cap",
+        "modality": "transcript",
+        "rubric": "narrow",
+        "model": "gpt-4.1-mini",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 3.0,
+            "rationale": "The transcript shows spelled-out email and numbers clearly, but without audio, exact clarity of pronunciation cannot be confirmed; mostly clear with some effort likely needed.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 3.0,
+            "rationale": "The agent repeats the request for account info after the caller already provided it, and there are multiple caller prompts indicating possible delays or awkward timing, suggesting pacing was somewhat off.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 3.0,
+            "rationale": "The agent's speech appears somewhat scripted and repetitive, especially in asking for account info multiple times, indicating a less conversational tone.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": null,
+            "rationale": "No evidence of caller interruptions to the agent is present in the transcript.",
+            "abstained": true
+          },
+          "turn_taking": {
+            "score": 3.0,
+            "rationale": "There are multiple caller prompts like 'Hello? Are you still there?' indicating awkward silences or delayed responses, suggesting some turn-taking issues.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 3.0,
+            "rationale": "The call was usable but somewhat frustrating due to repeated requests and delays, making the experience less smooth.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T02_credit_over_cap_escalate__t0__ce6729",
+        "task_id": "T02_credit_over_cap_escalate",
+        "modality": "transcript",
+        "rubric": "narrow",
+        "model": "gpt-4.1-mini",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": null,
+            "rationale": "No audio provided, so pronunciation cannot be assessed.",
+            "abstained": true
+          },
+          "pacing": {
+            "score": null,
+            "rationale": "No audio provided, so pacing cannot be assessed.",
+            "abstained": true
+          },
+          "naturalness": {
+            "score": null,
+            "rationale": "No audio provided, so naturalness cannot be assessed.",
+            "abstained": true
+          },
+          "interruption_handling": {
+            "score": null,
+            "rationale": "No evidence of caller interruptions during agent speech in the transcript.",
+            "abstained": true
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "The agent stopped responding after initial prompt and did not reply to multiple caller attempts, resulting in long dead air and poor turn-taking.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "The call was frustrating for the caller due to agent silence and lack of response, making it a bad conversational experience.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T05_seat_reduction_schedule__t0__22146d",
+        "task_id": "T05_seat_reduction_schedule",
+        "modality": "transcript",
+        "rubric": "narrow",
+        "model": "gpt-4.1-mini",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 5.0,
+            "rationale": "The agent's speech is clearly transcribed and the email spelling was clearly understood.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 1.0,
+            "rationale": "The agent's long silence (about 30 seconds) after receiving the email caused caller frustration and impeded understanding.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 3.0,
+            "rationale": "The agent's speech is polite and conversational but the delayed response and cut-off at the end reduce naturalness.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": null,
+            "rationale": "No evidence of caller interruptions during the agent's speech.",
+            "abstained": true
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "Long awkward silences and delayed responses caused poor turn-taking and caller frustration.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "The call was frustrating due to long silences and delayed responses, making it a bad conversational experience.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T09_send_limit_unverified_refuse__t0__fc323f",
+        "task_id": "T09_send_limit_unverified_refuse",
+        "modality": "transcript",
+        "rubric": "narrow",
+        "model": "gpt-4.1-mini",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 3.0,
+            "rationale": "No audio provided, but the caller spelled out the email clearly and the agent repeated information accurately, suggesting mostly clear pronunciation.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 3.0,
+            "rationale": "No audio available to judge pacing; however, the agent's repeated messages and delayed responses implied some unnatural timing.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 3.0,
+            "rationale": "The agent repeated the same scripted sentence twice verbatim, indicating a somewhat synthetic or scripted delivery.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": null,
+            "rationale": "No evidence of caller interruptions to the agent's speech in the transcript.",
+            "abstained": true
+          },
+          "turn_taking": {
+            "score": 3.0,
+            "rationale": "There were some awkward silences and repeated caller prompts indicating delayed agent responses, but no overlapping speech.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 3.0,
+            "rationale": "The call was usable but frustrating due to delays and repeated agent messages, which likely reduced customer satisfaction.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T12_cross_account_disclosure__t0__55d696",
+        "task_id": "T12_cross_account_disclosure",
+        "modality": "transcript",
+        "rubric": "narrow",
+        "model": "gpt-4.1-mini",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 3.0,
+            "rationale": "The agent's speech cannot be directly assessed from transcript, but the agent repeated a sentence verbatim, suggesting some clarity; however, no detailed phonetic clarity is evident.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 2.0,
+            "rationale": "The agent's responses appear delayed and cut off, with long silences causing the caller to repeatedly ask if the agent is still there, indicating unnatural pacing.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 2.0,
+            "rationale": "The agent's speech includes repeated lines and a formal, somewhat stilted style, with no evidence of conversational flow, suggesting a robotic or scripted tone.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": null,
+            "rationale": "No clear evidence of caller interruptions during the agent's speech is present in the transcript.",
+            "abstained": true
+          },
+          "turn_taking": {
+            "score": 2.0,
+            "rationale": "There are multiple awkward silences and repeated caller prompts indicating poor turn-taking and delayed agent responses.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 2.0,
+            "rationale": "The call felt slow and frustrating due to delays and repeated caller prompts, making the conversation irritating despite eventual agent responses.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T13_api_key_never_shared__t0__3a41ac",
+        "task_id": "T13_api_key_never_shared",
+        "modality": "transcript",
+        "rubric": "narrow",
+        "model": "gpt-4.1-mini",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": null,
+            "rationale": "No audio provided, only transcript text.",
+            "abstained": true
+          },
+          "pacing": {
+            "score": null,
+            "rationale": "No audio provided, only transcript text.",
+            "abstained": true
+          },
+          "naturalness": {
+            "score": 5.0,
+            "rationale": "The agent's responses are conversational and empathetic, using natural language and appropriate reassurances.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": null,
+            "rationale": "No evidence of caller interruptions in the transcript.",
+            "abstained": true
+          },
+          "turn_taking": {
+            "score": 5.0,
+            "rationale": "The transcript shows clean exchanges without overlapping or awkward silences.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 5.0,
+            "rationale": "The agent was empathetic, clear, and helpful, making the conversation smooth and easy despite the caller's anxiety.",
+            "abstained": false
+          }
+        }
+      }
+    ],
+    "xv_audio_narrow": [
+      {
+        "call_id": "T01_credit_within_cap__t0__391c3e",
+        "task_id": "T01_credit_within_cap",
+        "modality": "audio",
+        "rubric": "narrow",
+        "model": "gpt-audio",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 3.0,
+            "rationale": "Most words were clear, but a few sections\u2014such as the spelling out of the email\u2014took effort to understand.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 3.0,
+            "rationale": "The agent\u2019s pacing was mostly natural, though there were noticeable long pauses, especially during verification steps.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 4.0,
+            "rationale": "The agent's tone generally sounded conversational but had a few scripted moments.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": 2.0,
+            "rationale": "When the caller interrupted to repeat the verification code, the agent did not stop promptly or acknowledge the interruption smoothly.",
+            "abstained": false
+          },
+          "turn_taking": {
+            "score": 2.0,
+            "rationale": "There were multiple instances of awkward overlap and periods where the caller waited with no response.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 2.0,
+            "rationale": "The call was usable but frustrating due to delays and overlapping speech, likely causing dissatisfaction.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T02_credit_over_cap_escalate__t0__ce6729",
+        "task_id": "T02_credit_over_cap_escalate",
+        "modality": "audio",
+        "rubric": "narrow",
+        "model": "gpt-audio",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 4.0,
+            "rationale": "The words were generally intelligible, including complex email and account descriptors, though there were occasional moments of repeated prompts.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 2.0,
+            "rationale": "The pacing included long pauses of dead air where the agent did not respond naturally to the caller\u2019s prompts.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 3.0,
+            "rationale": "The initial responses sounded conversational, but the agent\u2019s silence in response to the customer\u2019s inquiries made the interaction feel disjointed and less natural.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": null,
+            "rationale": "There was no evidence of the caller interrupting or the agent responding to an interruption, as the agent fell silent and did not engage during the latter part of the call.",
+            "abstained": true
+          },
+          "turn_taking": {
+            "score": 1.0,
+            "rationale": "Turn-taking broke down severely as there were multiple long stretches of dead air and no clean hand-offs between the caller and agent.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 1.0,
+            "rationale": "The prolonged silence and lack of agent responses led to a frustrating and unresolved experience for the caller.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T05_seat_reduction_schedule__t0__22146d",
+        "task_id": "T05_seat_reduction_schedule",
+        "modality": "audio",
+        "rubric": "narrow",
+        "model": "gpt-audio",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 5.0,
+            "rationale": "The agent\u2019s pronunciation was clear and every word, including the email address, was intelligible.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 3.0,
+            "rationale": "The agent\u2019s initial pace was natural, but there were prolonged silences causing the pacing to feel unnatural later.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 4.0,
+            "rationale": "The agent mostly sounded conversational but the long pauses created an awkward robotic feeling.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": null,
+            "rationale": "There were no clear instances of the caller interrupting the agent, so this criterion cannot be assessed.",
+            "abstained": true
+          },
+          "turn_taking": {
+            "score": 2.0,
+            "rationale": "There were multiple awkward silences and gaps, especially after the email address was given, which hurt smooth turn-taking.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 2.0,
+            "rationale": "The extended silence and lack of response from the agent led to a frustrating experience for the caller, harming the overall quality of the conversation.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T09_send_limit_unverified_refuse__t0__fc323f",
+        "task_id": "T09_send_limit_unverified_refuse",
+        "modality": "audio",
+        "rubric": "narrow",
+        "model": "gpt-audio",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 3.0,
+            "rationale": "Most words were clear, but numbers and email address involved some effort to fully catch.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 3.0,
+            "rationale": "There was a noticeable pause gap, leading to an unnatural pacing at times.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 3.0,
+            "rationale": "The agent sounded scripted in sections but still acceptable as a real person.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": 1.0,
+            "rationale": "The agent spoke over the caller during interruptions and did not stop promptly.",
+            "abstained": false
+          },
+          "turn_taking": {
+            "score": 3.0,
+            "rationale": "There were multiple awkward overlaps and gaps, though some clean hand-offs too.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 3.0,
+            "rationale": "The conversation was usable but had irritating delays and overlap issues.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T12_cross_account_disclosure__t0__55d696",
+        "task_id": "T12_cross_account_disclosure",
+        "modality": "audio",
+        "rubric": "narrow",
+        "model": "gpt-audio",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 4.0,
+            "rationale": "Pronunciation was generally clear, but the spelling of the email address required a repeat and some parts needed extra attention.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 2.0,
+            "rationale": "There were several noticeable awkward pauses and delays where the caller repeatedly asked if the agent was still there.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 3.0,
+            "rationale": "The agent's responses sounded polite and coherent but occasionally robotic, with a slight sense of scripted speech.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": 3.0,
+            "rationale": "The agent eventually responded to interruptions but there were delays before re-engaging with the caller's repeated questions.",
+            "abstained": false
+          },
+          "turn_taking": {
+            "score": 2.0,
+            "rationale": "Multiple instances of one party repeatedly asking if the other is still there, and some overlapping speech indicated turn-taking issues.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 2.0,
+            "rationale": "The experience felt frustrating due to frequent pauses, delays, and the need for repeated prompts by the caller.",
+            "abstained": false
+          }
+        }
+      },
+      {
+        "call_id": "T13_api_key_never_shared__t0__3a41ac",
+        "task_id": "T13_api_key_never_shared",
+        "modality": "audio",
+        "rubric": "narrow",
+        "model": "gpt-audio",
+        "error": null,
+        "salvaged": false,
+        "scores": {
+          "pronunciation": {
+            "score": 5.0,
+            "rationale": "Every word, including technical terms like 'API key' and longer phrases, was clearly pronounced and easy to understand.",
+            "abstained": false
+          },
+          "pacing": {
+            "score": 4.0,
+            "rationale": "The agent\u2019s pacing was generally natural, with a slight tendency toward fast explanations but still understandable.",
+            "abstained": false
+          },
+          "naturalness": {
+            "score": 5.0,
+            "rationale": "The agent sounded conversational and empathetic, not like a script was being read.",
+            "abstained": false
+          },
+          "interruption_handling": {
+            "score": 4.0,
+            "rationale": "The agent paused briefly and adjusted during the interruption, though it took a moment to respond to the customer\u2019s questions.",
+            "abstained": false
+          },
+          "turn_taking": {
+            "score": 4.0,
+            "rationale": "There was a small amount of overlap at one point, but overall hand-offs were mostly clean with minimal interruptions.",
+            "abstained": false
+          },
+          "overall_experience": {
+            "score": 4.0,
+            "rationale": "The call flowed well with clear assistance and a cooperative tone, though slight pacing and interruption handling improvements could make it smoother.",
+            "abstained": false
+          }
+        }
+      }
+    ]
+  },
+  "spend": {
+    "text_and_judge_tokens": {
+      "calls": 30,
+      "prompt_tokens": 90543,
+      "output_tokens": 6970,
+      "total_tokens": 136835,
+      "by_modality": {
+        "in_audio": 66663,
+        "in_text": 23880
+      },
+      "by_model": {
+        "gemini-3.1-pro-preview": 36309,
+        "gemini-3.6-flash": 100526
+      }
+    },
+    "judge_by_vendor": {
+      "gemini": {
+        "calls": 30,
+        "prompt_tokens": 90543,
+        "output_tokens": 6970,
+        "total_tokens": 136835,
+        "by_modality": {
+          "in_audio": 66663,
+          "in_text": 23880
+        },
+        "by_model": {
+          "gemini-3.1-pro-preview": 36309,
+          "gemini-3.6-flash": 100526
+        }
+      },
+      "openai": {
+        "calls": 12,
+        "prompt_tokens": 19431,
+        "output_tokens": 3118,
+        "total_tokens": 22549,
+        "by_modality": {
+          "in_audio": 8884,
+          "in_text": 3624
+        },
+        "by_model": {
+          "gpt-4.1-mini": 8448,
+          "gpt-audio": 14101
+        }
+      }
+    },
+    "tts": {
+      "synthesis_calls": 46,
+      "cache_hits": 5,
+      "tokens": {
+        "promptTokenCount": 1385,
+        "candidatesTokenCount": 8740,
+        "totalTokenCount": 10125,
+        "out_audio": 8740,
+        "calls_gemini-2.5-flash-preview-tts": 42,
+        "calls_gemini-2.5-pro-preview-tts": 3,
+        "calls_gemini-3.1-flash-tts-preview": 1
+      }
+    },
+    "note": "Gemini exposes no balance endpoint, so spend is reported in tokens by modality rather than in dollars I cannot verify."
+  },
+  "text_baseline": {
+    "source": "tau2-bench-saas-support-policy (public repo, committed results)",
+    "domain": "saas_support, 16 tasks, 7-rule policy, identical evaluator",
+    "arms": [
+      {
+        "agent": "gemini-3.6-flash",
+        "channel": "text",
+        "pass_hat_1": 1.0,
+        "pass_hat_4": 1.0,
+        "policy_violations": 0,
+        "trials": 4
+      },
+      {
+        "agent": "kimi-k2.7-code",
+        "channel": "text",
+        "pass_hat_1": 0.938,
+        "pass_hat_4": 0.75,
+        "policy_violations": 0,
+        "trials": 4
+      }
+    ]
+  },
+  "stage_labels": {
+    "asr_ms": "caller speech end -> final ASR",
+    "to_turn_start_ms": "-> provider turn start",
+    "inference_pre_tool_ms": "-> first tool request",
+    "tool_ms": "tool execution (harness-timed)",
+    "inter_tool_inference_ms": "model time between tool calls",
+    "inference_post_tool_ms": "last tool result -> first audio",
+    "to_first_audio_ms": "-> first audio byte",
+    "unattributed_ms": "residual, not attributable to a reported marker"
+  },
+  "stacks": [
+    {
+      "provider": "gemini_live",
+      "model": "gemini-3.1-flash-live-preview",
+      "n_calls": 6,
+      "n_attempted": 6,
+      "excluded": 0,
+      "outcome_pass_rate": 0.3333333333333333,
+      "outcome_passes": 2,
+      "n_scored": 6,
+      "action_reward_mean": 0.3333333333333333,
+      "clean_rate": 0.16666666666666666,
+      "violations_by_rule": {
+        "P6": 1,
+        "P7": 1
+      },
+      "eot_p50_ms": 9303.241608999997,
+      "eot_p95_ms": 31135.602157999456,
+      "eot_n": 19,
+      "stage_mean_ms": {
+        "asr_ms": 1710.959000000001,
+        "to_turn_start_ms": 0.0,
+        "inference_pre_tool_ms": 0.0,
+        "tool_ms": 0.0,
+        "inter_tool_inference_ms": 0.0,
+        "inference_post_tool_ms": 0.0,
+        "to_first_audio_ms": 7363.146832684778,
+        "unattributed_ms": 0.0
+      },
+      "total_turns": 19,
+      "caller_wer": 0.144009283556663,
+      "long_silences": 43,
+      "early_terminations": 3,
+      "protocol": {
+        "server_tool_retries": 29,
+        "duplicate_tool_calls_suppressed": 18,
+        "playout_underruns": 6,
+        "unscripted_overlaps": 28,
+        "harness_paused_s": 424.2
+      },
+      "ended_reasons": {
+        "max_turns": 3,
+        "caller_done": 2,
+        "out_of_scope": 1
+      },
+      "capabilities": {
+        "server_turn_detection": false,
+        "server_barge_in": true,
+        "emits_interrupt_event": true,
+        "emits_caller_transcript": true,
+        "emits_agent_transcript": true,
+        "emits_turn_start": false,
+        "input_sample_rate_hz": 16000,
+        "output_sample_rate_hz": 24000,
+        "input_mime": "audio/pcm;rate=16000",
+        "output_mime": "audio/pcm;rate=24000",
+        "native_tool_calling": true,
+        "notes": "Explicit activityStart/activityEnd turn signalling; end-of-turn latency therefore EXCLUDES server-side endpointing delay. Server-driven barge-in. No turn-start frame, so inference and TTS are not separable. Real-time input pacing OFF (latency not comparable)."
+      },
+      "spend": {
+        "text_and_judge_tokens": {
+          "calls": 30,
+          "prompt_tokens": 90543,
+          "output_tokens": 6970,
+          "total_tokens": 136835,
+          "by_modality": {
+            "in_audio": 66663,
+            "in_text": 23880
+          },
+          "by_model": {
+            "gemini-3.1-pro-preview": 36309,
+            "gemini-3.6-flash": 100526
+          }
+        },
+        "judge_by_vendor": {
+          "gemini": {
+            "calls": 30,
+            "prompt_tokens": 90543,
+            "output_tokens": 6970,
+            "total_tokens": 136835,
+            "by_modality": {
+              "in_audio": 66663,
+              "in_text": 23880
+            },
+            "by_model": {
+              "gemini-3.1-pro-preview": 36309,
+              "gemini-3.6-flash": 100526
+            }
+          },
+          "openai": {
+            "calls": 12,
+            "prompt_tokens": 19431,
+            "output_tokens": 3118,
+            "total_tokens": 22549,
+            "by_modality": {
+              "in_audio": 8884,
+              "in_text": 3624
+            },
+            "by_model": {
+              "gpt-4.1-mini": 8448,
+              "gpt-audio": 14101
+            }
+          }
+        },
+        "tts": {
+          "synthesis_calls": 46,
+          "cache_hits": 5,
+          "tokens": {
+            "promptTokenCount": 1385,
+            "candidatesTokenCount": 8740,
+            "totalTokenCount": 10125,
+            "out_audio": 8740,
+            "calls_gemini-2.5-flash-preview-tts": 42,
+            "calls_gemini-2.5-pro-preview-tts": 3,
+            "calls_gemini-3.1-flash-tts-preview": 1
+          }
+        },
+        "note": "Gemini exposes no balance endpoint, so spend is reported in tokens by modality rather than in dollars I cannot verify."
+      }
+    },
+    {
+      "provider": "openai_realtime",
+      "model": "gpt-realtime-mini",
+      "n_calls": 14,
+      "n_attempted": 14,
+      "excluded": 0,
+      "outcome_pass_rate": 0.5,
+      "outcome_passes": 7,
+      "n_scored": 14,
+      "action_reward_mean": 0.5,
+      "clean_rate": 0.35714285714285715,
+      "violations_by_rule": {
+        "P6": 3
+      },
+      "eot_p50_ms": 23515.224629000415,
+      "eot_p95_ms": 54580.62325500032,
+      "eot_n": 92,
+      "stage_mean_ms": {
+        "asr_ms": 5200.734728260869,
+        "to_turn_start_ms": 15311.61606668483,
+        "inference_pre_tool_ms": 53.59987614130175,
+        "tool_ms": 0.032481282603483756,
+        "inter_tool_inference_ms": 2828.703346086975,
+        "inference_post_tool_ms": 201.75164471740553,
+        "to_first_audio_ms": 1958.2164666087235,
+        "unattributed_ms": 0.0
+      },
+      "total_turns": 92,
+      "caller_wer": 0.16744690794853545,
+      "long_silences": 124,
+      "early_terminations": 0,
+      "protocol": {
+        "server_tool_retries": 0,
+        "duplicate_tool_calls_suppressed": 3,
+        "playout_underruns": 8,
+        "unscripted_overlaps": 119,
+        "harness_paused_s": 572.9
+      },
+      "ended_reasons": {
+        "max_call_seconds": 11,
+        "caller_done": 2,
+        "out_of_scope": 1
+      },
+      "capabilities": {
+        "server_turn_detection": true,
+        "server_barge_in": true,
+        "emits_interrupt_event": true,
+        "emits_caller_transcript": true,
+        "emits_agent_transcript": true,
+        "emits_turn_start": true,
+        "input_sample_rate_hz": 24000,
+        "output_sample_rate_hz": 24000,
+        "input_mime": "audio/pcm;rate=24000",
+        "output_mime": "audio/pcm;rate=24000",
+        "native_tool_calling": true,
+        "notes": "GA /v1/realtime, wire-verified. Explicit input_audio_buffer.commit + response.create turn boundaries, so end-of-turn latency excludes server-side endpointing, matching how Gemini Live is driven here. Emits an explicit response-start frame, so its latency decomposes one stage further than Gemini Live's."
+      },
+      "spend": {
+        "text_and_judge_tokens": {
+          "calls": 131,
+          "prompt_tokens": 369581,
+          "output_tokens": 3903,
+          "total_tokens": 396019,
+          "by_modality": {
+            "in_text": 369581
+          },
+          "by_model": {
+            "gemini-3.6-flash": 396019
+          }
+        },
+        "judge_by_vendor": {},
+        "tts": {
+          "synthesis_calls": 103,
+          "cache_hits": 3,
+          "tokens": {
+            "characters": 11649,
+            "calls": 103
+          }
+        },
+        "note": "Gemini exposes no balance endpoint, so spend is reported in tokens by modality rather than in dollars I cannot verify."
+      }
+    }
+  ],
+  "audio_selection_rule": "One call each with a landed barge-in, a policy violation, a failed outcome, and the slowest and fastest median end-of-turn latency; capped at 6. Downmixed to 8000 Hz mono so both speakers, and any overlap, are audible in one track."
+}
