@@ -100,33 +100,55 @@ async def run_one(
         return record
 
 
-def judge_all(records: list[CallRecord], client: GeminiClient, args) -> dict[str, Any]:
-    """Both modalities x both rubrics, plus a second-model audio control."""
+def judge_all(records: list[CallRecord], client, args) -> dict[str, Any]:
+    """The judging matrix: vendor x modality x rubric.
+
+    The vendor axis is the important addition. The original modality result was
+    measured with a Gemini judge on Gemini calls -- same-family
+    self-evaluation. Running a second vendor's judge over the identical
+    recordings, with the identical rubric and prompt, is what tells us whether
+    the transcript-vs-audio agreement is a property of judging or an artefact
+    of a model grading its own family.
+    """
+    from voiceval.llm import get_client
+
     out: dict[str, list[dict[str, Any]]] = {}
     results: dict[str, list[J.JudgeResult]] = {}
 
+    clients = {"gemini": client}
     plan = [
-        ("transcript_narrow", "transcript", J.NARROW, args.judge_model),
-        ("audio_narrow", "audio", J.NARROW, args.judge_model),
+        ("transcript_narrow", "transcript", J.NARROW, args.judge_model, "gemini"),
+        ("audio_narrow", "audio", J.NARROW, args.judge_model, "gemini"),
     ]
     if not args.no_rubric_sweep:
         plan += [
-            ("transcript_broad", "transcript", J.BROAD, args.judge_model),
-            ("audio_broad", "audio", J.BROAD, args.judge_model),
+            ("transcript_broad", "transcript", J.BROAD, args.judge_model, "gemini"),
+            ("audio_broad", "audio", J.BROAD, args.judge_model, "gemini"),
         ]
     if args.control_audio_model:
-        plan.append(("audio_narrow_control", "audio", J.NARROW, args.control_audio_model))
+        plan.append(
+            ("audio_narrow_control", "audio", J.NARROW, args.control_audio_model, "gemini")
+        )
+    if args.cross_vendor:
+        clients["openai"] = get_client("openai")
+        plan += [
+            ("xv_transcript_narrow", "transcript", J.NARROW, args.openai_judge_text_model,
+             "openai"),
+            ("xv_audio_narrow", "audio", J.NARROW, args.openai_judge_audio_model, "openai"),
+        ]
 
-    for key, modality, rubric, model in plan:
+    for key, modality, rubric, model, vendor in plan:
         rs = []
         for rec in records:
             if modality == "audio" and (rec.agent_track is None or rec.caller_track is None):
                 continue
-            rs.append(J.judge_call(rec, modality, rubric, client, model))
+            rs.append(J.judge_call(rec, modality, rubric, clients[vendor], model))
         results[key] = rs
         out[key] = [r.to_dict() for r in rs]
         n_err = sum(1 for r in rs if r.error)
-        print(f"  judged {key}: {len(rs)} calls, {n_err} errors", flush=True)
+        n_salv = sum(1 for r in rs if r.salvaged)
+        print(f"  judged {key} [{vendor}/{model}]: {len(rs)} calls, "
+              f"{n_err} errors, {n_salv} salvaged", flush=True)
 
     analysis = {
         "modality_narrow": J.compare_modalities(
@@ -147,7 +169,23 @@ def judge_all(records: list[CallRecord], client: GeminiClient, args) -> dict[str
         analysis["judge_identity_audio"] = J.compare_rubrics(
             results["audio_narrow"], results["audio_narrow_control"]
         )
-    return {"raw": out, "analysis": analysis}
+    if "xv_transcript_narrow" in results:
+        # The same modality comparison, run entirely inside the other vendor.
+        analysis["modality_narrow_openai"] = J.compare_modalities(
+            results["xv_transcript_narrow"], results["xv_audio_narrow"]
+        )
+        # And the vendor axis itself, holding modality fixed.
+        analysis["vendor_transcript"] = J.compare_rubrics(
+            results["transcript_narrow"], results["xv_transcript_narrow"]
+        )
+        analysis["vendor_audio"] = J.compare_rubrics(
+            results["audio_narrow"], results["xv_audio_narrow"]
+        )
+    return {
+        "raw": out,
+        "analysis": analysis,
+        "judge_spend": {v: c.usage.to_dict() for v, c in clients.items()},
+    }
 
 
 def score_all(records: list[CallRecord]) -> list[dict[str, Any]]:
@@ -328,6 +366,10 @@ def main() -> int:
     p.add_argument("--barge-in-turns", default=",".join(str(t) for t in DEFAULT_BARGE_IN_TURNS))
     p.add_argument("--judge-model", default=J.DEFAULT_JUDGE_MODEL)
     p.add_argument("--control-audio-model", default=J.DEFAULT_CONTROL_AUDIO_MODEL)
+    p.add_argument("--cross-vendor", action="store_true",
+                   help="also judge with OpenAI, breaking the same-family confound")
+    p.add_argument("--openai-judge-text-model", default="gpt-4.1-mini")
+    p.add_argument("--openai-judge-audio-model", default="gpt-audio")
     p.add_argument("--no-judges", action="store_true")
     p.add_argument("--no-rubric-sweep", action="store_true")
     p.add_argument("--out", default=str(ARTIFACTS / "results.json"))
@@ -433,6 +475,9 @@ def main() -> int:
             "tts": args.tts,
             "judge_model": args.judge_model,
             "control_audio_model": args.control_audio_model,
+            "cross_vendor": bool(args.cross_vendor),
+            "openai_judge_text_model": args.openai_judge_text_model,
+            "openai_judge_audio_model": args.openai_judge_audio_model,
             "barge_in_turns": args.barge_in_turns,
             "calls_dir": str(calls_dir),
             "max_turns": args.max_turns,
@@ -449,6 +494,13 @@ def main() -> int:
                 carried_spend.get("text_and_judge_tokens")
                 if (client.usage.calls == 0 and carried_spend)
                 else client.usage.to_dict()
+            ),
+            # Per-vendor judge cost, so the price of the cross-vendor control is
+            # attributable rather than lumped in with the caller simulator.
+            "judge_by_vendor": (
+                judging.get("judge_spend")
+                or carried_spend.get("judge_by_vendor")
+                or {}
             ),
             "tts": _tts_spend(records),
             "note": (

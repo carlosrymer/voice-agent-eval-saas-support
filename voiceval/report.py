@@ -96,10 +96,43 @@ def pick_audio_calls(rows: list[dict[str, Any]], limit: int = MAX_AUDIO_CALLS) -
     return picked[:limit]
 
 
+def stack_row(results: dict[str, Any]) -> dict[str, Any]:
+    """One row of the two-stack comparison, from a run's own summary."""
+    s, c = results["summary"], results["config"]
+    lat = s.get("end_of_turn_ms", {})
+    stages = s.get("stage_mean_ms", {})
+    return {
+        "provider": c.get("provider"),
+        "model": c.get("provider_model"),
+        "n_calls": s.get("n_calls"),
+        "n_attempted": s.get("n_calls_attempted"),
+        "excluded": s.get("n_excluded_harness_failure"),
+        "outcome_pass_rate": s.get("outcome_pass_rate"),
+        "outcome_passes": s.get("outcome_passes"),
+        "n_scored": s.get("n_scored"),
+        "action_reward_mean": s.get("action_reward_mean"),
+        "clean_rate": s.get("clean_rate"),
+        "violations_by_rule": s.get("violations_by_rule", {}),
+        "eot_p50_ms": lat.get("p50"),
+        "eot_p95_ms": lat.get("p95"),
+        "eot_n": lat.get("n"),
+        "stage_mean_ms": stages,
+        "total_turns": s.get("total_turns"),
+        "caller_wer": (s.get("friction") or {}).get("caller_wer"),
+        "long_silences": (s.get("friction") or {}).get("long_silences"),
+        "early_terminations": (s.get("friction") or {}).get("early_terminations"),
+        "protocol": s.get("protocol", {}),
+        "ended_reasons": s.get("ended_reasons", {}),
+        "capabilities": (c.get("capabilities") or {}).get("capabilities", {}),
+        "spend": results.get("spend", {}),
+    }
+
+
 def build(
     results_path: str | Path = ARTIFACTS / "results.json",
     calls_dir: str | Path | None = None,
     site_data: str | Path | None = None,
+    compare_results: list[str | Path] | None = None,
 ) -> dict[str, Any]:
     results = json.loads(Path(results_path).read_text())
     calls_dir = Path(calls_dir) if calls_dir else Path(
@@ -200,6 +233,10 @@ def build(
         "spend": results.get("spend", {}),
         "text_baseline": TEXT_BASELINE,
         "stage_labels": (rows[0]["latency"].get("stage_labels") if rows else {}),
+        "stacks": (
+            [stack_row(results)]
+            + [stack_row(json.loads(Path(x).read_text())) for x in (compare_results or [])]
+        ),
         "audio_selection_rule": (
             "One call each with a landed barge-in, a policy violation, a failed "
             "outcome, and the slowest and fastest median end-of-turn latency; "
@@ -224,5 +261,7 @@ if __name__ == "__main__":
     ap.add_argument("--results", default=str(ARTIFACTS / "results.json"))
     ap.add_argument("--calls-dir", default=None)
     ap.add_argument("--site-data", default=None)
+    ap.add_argument("--compare", nargs="*", default=None,
+                    help="other results.json files to include in the stack comparison")
     a = ap.parse_args()
-    build(a.results, a.calls_dir, a.site_data)
+    build(a.results, a.calls_dir, a.site_data, a.compare)

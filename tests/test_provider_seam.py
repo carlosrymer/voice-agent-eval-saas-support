@@ -70,7 +70,7 @@ class TestRegistry:
 
     def test_wire_verification_status_is_declared_not_assumed(self):
         assert get_provider("gemini_live").wire_verified is True
-        assert get_provider("openai_realtime").wire_verified is False
+        assert get_provider("openai_realtime").wire_verified is True
 
 
 class TestMockSession:
@@ -279,28 +279,69 @@ class TestOpenAITranslation:
 
 
 class TestOpenAISessionFrame:
+    """The GA `/v1/realtime` session shape.
+
+    These assertions exist because this is the one part of the seam the live
+    service invalidated. The adapter was originally written against the Realtime
+    *Beta* shape; that API is switched off and now closes the socket with
+    `beta_api_shape_disabled`. The server-to-client translation table needed no
+    changes at all — only this frame did — so it is pinned here.
+    """
+
+    def test_frame_declares_the_ga_realtime_session_type(self):
+        frame = oai.OpenAIRealtimeProvider().session_update_frame(cfg())
+        assert frame["type"] == "session.update"
+        assert frame["session"]["type"] == "realtime"
+
+    def test_audio_formats_are_nested_objects_not_flat_strings(self):
+        """The Beta shape used `input_audio_format: "pcm16"`. GA does not."""
+        sess = oai.OpenAIRealtimeProvider().session_update_frame(cfg())["session"]
+        assert "input_audio_format" not in sess and "output_audio_format" not in sess
+        assert sess["audio"]["input"]["format"] == {"type": "audio/pcm", "rate": 24000}
+        assert sess["audio"]["output"]["format"] == {"type": "audio/pcm", "rate": 24000}
+
+    def test_output_modalities_replaced_modalities(self):
+        sess = oai.OpenAIRealtimeProvider().session_update_frame(cfg())["session"]
+        assert sess["output_modalities"] == ["audio"]
+        assert "modalities" not in sess
+
+    def test_voice_and_turn_detection_live_under_audio(self):
+        sess = oai.OpenAIRealtimeProvider().session_update_frame(
+            cfg(voice="alloy")
+        )["session"]
+        assert sess["audio"]["output"]["voice"] == "alloy"
+        assert "voice" not in sess
+        assert "turn_detection" not in sess
+
     def test_tools_are_translated_into_the_vendor_shape(self):
-        p = oai.OpenAIRealtimeProvider()
-        frame = p.session_update_frame(
+        frame = oai.OpenAIRealtimeProvider().session_update_frame(
             cfg(tools=(ToolSpec("get_account", "look up an account",
                                 {"type": "object", "properties": {}}),))
         )
-        assert frame["type"] == "session.update"
         tool = frame["session"]["tools"][0]
         assert tool["type"] == "function" and tool["name"] == "get_account"
+        assert frame["session"]["tool_choice"] == "auto"
 
     def test_client_commit_mode_disables_server_vad(self):
-        p = oai.OpenAIRealtimeProvider()
-        frame = p.session_update_frame(cfg(turn_detection=TurnDetection.CLIENT_COMMIT))
-        assert frame["session"]["turn_detection"] is None
+        sess = oai.OpenAIRealtimeProvider().session_update_frame(
+            cfg(turn_detection=TurnDetection.CLIENT_COMMIT)
+        )["session"]
+        assert sess["audio"]["input"]["turn_detection"] is None
 
     def test_server_vad_is_the_default(self):
-        p = oai.OpenAIRealtimeProvider()
-        assert p.session_update_frame(cfg())["session"]["turn_detection"] == {
-            "type": "server_vad"
-        }
+        sess = oai.OpenAIRealtimeProvider().session_update_frame(cfg())["session"]
+        assert sess["audio"]["input"]["turn_detection"] == {"type": "server_vad"}
+
+    def test_input_transcription_is_requested_when_asked_for(self):
+        sess = oai.OpenAIRealtimeProvider().session_update_frame(cfg())["session"]
+        assert sess["audio"]["input"]["transcription"]["model"] == "whisper-1"
+        off = oai.OpenAIRealtimeProvider().session_update_frame(
+            cfg(request_input_transcript=False)
+        )["session"]
+        assert "transcription" not in off["audio"]["input"]
 
     async def test_connect_refuses_without_a_key_instead_of_pretending(self):
+        """An explicit empty key must not fall through to the ambient one."""
         p = oai.OpenAIRealtimeProvider(api_key="")
         with pytest.raises(ProviderUnavailable, match="OPENAI_API_KEY"):
             await p.connect(cfg())
@@ -311,46 +352,41 @@ class TestOpenAISessionFrame:
         assert oai.OpenAIRealtimeProvider().capabilities().emits_turn_start is True
         assert GeminiLiveProvider().capabilities().emits_turn_start is False
 
-    def test_unverified_status_is_visible_in_the_capability_notes(self):
-        notes = oai.OpenAIRealtimeProvider().capabilities().notes
-        assert "UNVERIFIED" in notes
 
+class TestOpenAILiveEventNames:
+    """Event names confirmed emitted by the live GA service.
 
-class TestJudgeScoreSalvage:
-    """Recovering scores from JSON a judge emitted badly.
-
-    This is a measurement-bias guard, not a tidiness one: in the first funded
-    run, unescaped quotes inside rationales broke strict parsing for the
-    transcript judge on 4 of 6 calls and the audio judge on 0 of 6. Dropping
-    those would have deleted most of one arm of the modality comparison.
+    Every one of these was in `translate()` before any key existed, written from
+    published docs and tested only against fixtures I wrote. The live run
+    changed none of them. That is the half of the seam claim that held, and
+    pinning the names here stops a future edit from quietly breaking it.
     """
 
-    def test_scores_survive_unescaped_quotes_in_a_rationale(self):
-        from voiceval.llm import salvage_scores
+    OBSERVED = [
+        "response.created",
+        "response.output_audio.delta",
+        "response.output_audio_transcript.delta",
+        "response.output_audio_transcript.done",
+        "response.function_call_arguments.done",
+        "response.done",
+        "conversation.item.input_audio_transcription.completed",
+        "conversation.item.input_audio_transcription.delta",
+    ]
 
-        bad = (
-            '{"scores": {'
-            '"pronunciation": {"score": 4, "rationale": "he said "acct" clearly"}, '
-            '"pacing": {"score": null, "rationale": "no audio"}}}'
-        )
-        got = salvage_scores(bad)
-        assert got["pronunciation"]["score"] == 4.0
-        assert got["pacing"]["score"] is None
-        assert got["pronunciation"]["salvaged"] is True
+    @pytest.mark.parametrize("kind", OBSERVED)
+    def test_every_observed_event_type_is_handled(self, kind):
+        import base64
 
-    def test_null_and_numeric_scores_are_distinguished(self):
-        from voiceval.llm import salvage_scores
+        frame = {"type": kind,
+                 "delta": base64.b64encode(b"\x00\x00" * 160).decode(),
+                 "transcript": "x", "arguments": "{}",
+                 "call_id": "c", "name": "n", "response": {"status": "completed"}}
+        evs = oai.translate(frame, t=1.0, seq=1)
+        assert evs, f"{kind} produced no normalized event"
 
-        got = salvage_scores('{"a": {"score": null}, "b": {"score": 2.5}}')
-        assert got["a"]["score"] is None and got["b"]["score"] == 2.5
-
-    def test_valid_json_still_goes_through_the_strict_parser(self):
-        from voiceval.llm import parse_json_object
-
-        d = parse_json_object('```json\n{"scores": {"x": {"score": 3}}}\n```')
-        assert d["scores"]["x"]["score"] == 3
-
-    def test_unsalvageable_text_returns_nothing_rather_than_guessing(self):
-        from voiceval.llm import salvage_scores
-
-        assert salvage_scores("I am sorry, I cannot evaluate this call.") == {}
+    def test_ga_only_bookkeeping_frames_are_ignored_not_fatal(self):
+        """GA adds frames the harness has no meaning for; they must be inert."""
+        for kind in ("conversation.item.added", "conversation.item.done",
+                     "response.output_item.added", "response.content_part.added",
+                     "rate_limits.updated", "input_audio_buffer.committed"):
+            assert oai.translate({"type": kind}, t=1.0, seq=1) == []

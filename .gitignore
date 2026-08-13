@@ -5,3 +5,6 @@ __pycache__/
 artifacts/smoke/
 artifacts/_reportcheck/
 artifacts/tts_cache/
+
+artifacts/smoke_oai/
+artifacts/calls_openai_wip/

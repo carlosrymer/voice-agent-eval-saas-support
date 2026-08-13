@@ -67,7 +67,10 @@ class LLMResponse:
 
 class GeminiClient:
     def __init__(self, api_key: str | None = None, timeout_s: float = 180.0):
-        self.api_key = api_key or os.environ.get("GEMINI_API_KEY", "")
+        # `None` means "look it up"; an explicit "" means "there is no key",
+        # which is how tests assert the no-credentials path. `or` conflated the
+        # two and silently used the ambient key once one existed.
+        self.api_key = os.environ.get("GEMINI_API_KEY", "") if api_key is None else api_key
         self.timeout_s = timeout_s
         self.usage = Usage()
 
@@ -131,6 +134,131 @@ class GeminiClient:
                     fc = part["functionCall"]
                     calls.append({"name": fc.get("name", ""), "args": fc.get("args") or {}})
         return LLMResponse("".join(text_bits).strip(), calls, data)
+
+
+OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions"
+DEFAULT_OPENAI_TEXT_MODEL = "gpt-4.1-mini"
+DEFAULT_OPENAI_AUDIO_MODEL = "gpt-audio"
+
+
+class OpenAIClient:
+    """Same `generate` contract as :class:`GeminiClient`, different vendor.
+
+    It exists so the judge code is written once and the *vendor* becomes a
+    parameter. That is what makes the cross-vendor experiment possible: the
+    headline modality result was originally measured with a Gemini judge on
+    Gemini calls, which is same-family self-evaluation. Holding the rubric, the
+    prompt and the call fixed while swapping only the judge's vendor is the
+    control that breaks that confound.
+
+    Gemini-shaped `contents` are translated here rather than at the call site,
+    so `judge_call` does not branch on vendor.
+    """
+
+    name = "openai"
+
+    def __init__(self, api_key: str | None = None, timeout_s: float = 240.0):
+        self.api_key = os.environ.get("OPENAI_API_KEY", "") if api_key is None else api_key
+        self.timeout_s = timeout_s
+        self.usage = Usage()
+
+    @staticmethod
+    def _translate(contents: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        msgs: list[dict[str, Any]] = []
+        for c in contents:
+            role = "assistant" if c.get("role") == "model" else "user"
+            parts: list[dict[str, Any]] = []
+            for p in c.get("parts", []):
+                if "text" in p:
+                    parts.append({"type": "text", "text": p["text"]})
+                elif "inlineData" in p:
+                    parts.append(
+                        {
+                            "type": "input_audio",
+                            "input_audio": {"data": p["inlineData"]["data"], "format": "wav"},
+                        }
+                    )
+            msgs.append({"role": role, "content": parts})
+        return msgs
+
+    def generate(
+        self,
+        model: str,
+        contents: list[dict[str, Any]],
+        *,
+        system_instruction: str | None = None,
+        tools: list[dict[str, Any]] | None = None,
+        temperature: float | None = None,
+        max_output_tokens: int | None = None,
+        response_mime_type: str | None = None,
+        max_attempts: int = 4,
+    ) -> LLMResponse:
+        if not self.api_key:
+            raise RuntimeError("OPENAI_API_KEY is not set")
+        messages = self._translate(contents)
+        if system_instruction:
+            messages.insert(0, {"role": "system", "content": system_instruction})
+        payload: dict[str, Any] = {"model": model, "messages": messages}
+        if temperature is not None and not model.startswith("gpt-audio"):
+            # The audio models reject an explicit temperature.
+            payload["temperature"] = temperature
+        if max_output_tokens is not None:
+            payload["max_completion_tokens"] = max_output_tokens
+        if response_mime_type == "application/json" and not model.startswith("gpt-audio"):
+            # The audio models reject `response_format`, so the audio judge has
+            # only the prompt's "JSON only" instruction holding it to shape.
+            # That is exactly the condition `salvage_scores` was written for,
+            # and it is why the audio arm is not disadvantaged by it.
+            payload["response_format"] = {"type": "json_object"}
+
+        last: Exception | None = None
+        for attempt in range(max_attempts):
+            try:
+                r = httpx.post(
+                    OPENAI_CHAT_URL,
+                    headers={"Authorization": f"Bearer {self.api_key}"},
+                    json=payload,
+                    timeout=self.timeout_s,
+                )
+                if r.status_code == 429 or r.status_code >= 500:
+                    raise RuntimeError(f"HTTP {r.status_code}: {r.text[:200]}")
+                if r.status_code >= 400:
+                    raise ValueError(f"HTTP {r.status_code}: {r.text[:400]}")
+                data = r.json()
+                break
+            except ValueError:
+                raise
+            except Exception as exc:
+                last = exc
+                if attempt == max_attempts - 1:
+                    raise RuntimeError(f"chat.completions failed: {last}") from exc
+                time.sleep(2.0 * (attempt + 1))
+
+        u = data.get("usage") or {}
+        self.usage.add(
+            model,
+            {
+                "promptTokenCount": u.get("prompt_tokens"),
+                "candidatesTokenCount": u.get("completion_tokens"),
+                "totalTokenCount": u.get("total_tokens"),
+                "promptTokensDetails": [
+                    {"modality": "AUDIO",
+                     "tokenCount": (u.get("prompt_tokens_details") or {}).get("audio_tokens")},
+                    {"modality": "TEXT",
+                     "tokenCount": (u.get("prompt_tokens_details") or {}).get("text_tokens")},
+                ],
+            },
+        )
+        msg = (data.get("choices") or [{}])[0].get("message") or {}
+        return LLMResponse(str(msg.get("content") or "").strip(), [], data)
+
+
+def get_client(vendor: str):
+    if vendor in ("gemini", "google"):
+        return GeminiClient()
+    if vendor in ("openai", "oai"):
+        return OpenAIClient()
+    raise KeyError(f"unknown judge vendor {vendor!r}")
 
 
 def audio_part(wav_bytes: bytes, mime: str = "audio/wav") -> dict[str, Any]:

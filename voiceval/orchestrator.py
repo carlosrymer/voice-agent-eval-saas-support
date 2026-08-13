@@ -51,6 +51,7 @@ from voiceval.providers.base import (
     PausableWallClock,
     ServerEvent,
     SessionConfig,
+    TurnDetection,
     VoiceProvider,
 )
 from voiceval.tts import TTSBackend, TTSQuotaExhausted
@@ -162,6 +163,14 @@ async def run_call(
         tools=tuple(tools),
         voice=cfg.agent_voice,
         temperature=1.0,
+        # Explicit turn boundaries on every vendor. The harness authored the
+        # caller's utterance, so it knows exactly when the caller stopped, and
+        # both providers accept being told. Leaving each vendor's own
+        # voice-activity detector in charge would make the two arms
+        # incomparable -- they would be measuring two different endpointing
+        # implementations as much as two models -- and on Gemini it also
+        # cancelled the agent's in-flight tool calls.
+        turn_detection=TurnDetection.CLIENT_COMMIT,
     )
     clock = PausableWallClock()
     session = await provider.connect(session_cfg, clock)
@@ -274,7 +283,13 @@ async def run_call(
 
     try:
         for turn_index in range(cfg.max_turns):
-            if time.monotonic() - started > cfg.max_call_s:
+            # Budget the *conversation*, not the test rig. `clock.now()`
+            # excludes time spent synthesising the caller's speech and
+            # running its brain -- harness cost the agent should not be
+            # charged for. Charging it meant calls were cut off by my own
+            # latency and then excluded from scoring, silently shrinking
+            # the sample.
+            if clock.now() > cfg.max_call_s:
                 record.ended_reason = "max_call_seconds"
                 break
 
@@ -316,7 +331,7 @@ async def run_call(
                 else None
             )
             try:
-                agent_text, interrupted = await _consume_turn(
+                agent_text, interrupted, turn_started_t = await _consume_turn(
                     session, record, env, playout, clock, cfg, speaking, caller_speaking
                 )
             finally:
@@ -340,7 +355,7 @@ async def run_call(
                     text=agent_text,
                     audio_start_t=_turn_audio_start(playout, record),
                     audio_end_t=playout.last_end or None,
-                    turn_started_t=None,
+                    turn_started_t=turn_started_t,
                     completed_t=clock.now(),
                     interrupted=interrupted,
                 )
@@ -468,6 +483,8 @@ async def _consume_turn(
     # here are always audio (`responseModalities: ["AUDIO"]`), so requiring
     # audio or a tool call loses nothing.
     content_seen = False
+    #: When the provider announced it had begun responding, where it says so.
+    turn_started_t: float | None = None
     #: Audio is the only proof the agent actually said something this turn.
     audio_seen = False
     #: Tool calls issued in this turn that have not yet been followed by speech.
@@ -485,7 +502,13 @@ async def _consume_turn(
             record.events.append(_light(ev))
             idle_deadline = clock.now() + cfg.turn_idle_s
 
-            if ev.kind == EventKind.AGENT_AUDIO and ev.audio is not None:
+            if ev.kind == EventKind.AGENT_TURN_STARTED:
+                # Not proof of content -- a response can start and then produce
+                # only a tool call -- but it is the marker that lets inference
+                # be separated from speech synthesis on providers that send it.
+                if turn_started_t is None:
+                    turn_started_t = ev.t
+            elif ev.kind == EventKind.AGENT_AUDIO and ev.audio is not None:
                 if not content_seen:
                     content_seen, first_content_t = True, ev.t
                 audio_seen = True
@@ -559,7 +582,7 @@ async def _consume_turn(
     finals = [txt for (_, txt, fin) in mine if fin]
     fragments = [txt for (_, txt, fin) in mine if not fin]
     text = " ".join(finals).strip() if finals else "".join(fragments).strip()
-    return text, interrupted
+    return text, interrupted, turn_started_t
 
 
 #: How long a cancelled tool call stays eligible for replay de-duplication.

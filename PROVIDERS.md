@@ -95,54 +95,106 @@ worth knowing before you write against this API:
   every turn instantly, wearing the previous turn's words. Only audio or a tool
   call proves a frame belongs to the turn you are draining.
 
-### `openai_realtime` — translation layer only, wire unverified
+### `openai_realtime` — wire-verified (GA `/v1/realtime`)
 
-There is no OpenAI key in this environment, so `wire_verified = False`,
-`connect()` refuses without a key, and the capability notes say `UNVERIFIED` so
-it propagates into any report that includes the provider.
+Real frames round-trip: session configuration, caller audio in, speech
+transcription, a function call out, a tool result back in, agent audio out.
 
-What *is* tested is `translate(frame, t, seq)`, a pure function from a vendor
-frame to normalized events, driven in `tests/test_provider_seam.py` by
-hand-written OpenAI-shaped frames. That is the part of the claim — "a second
-vendor is a translation table" — that can be checked without credentials.
+**The seam claim held on one side and failed on the other, and the split is the
+useful part.**
 
-| OpenAI Realtime server event | Normalized |
+*The server-to-client translation table was exactly right.* Every event name in
+`translate()` — written from published documentation months before a key
+existed, and unit-tested only against fixture frames I authored — is confirmed
+by the live service. Not one needed changing, and nothing above the seam needed
+editing at all:
+
+| Confirmed live | Normalized |
 |---|---|
-| `session.created` | `SESSION_OPENED` |
-| `input_audio_buffer.speech_started` / `.speech_stopped` | `CALLER_SPEECH_STARTED` / `STOPPED` |
-| `conversation.item.input_audio_transcription.completed` | `CALLER_TRANSCRIPT` (final) |
 | `response.created` | `AGENT_TURN_STARTED` |
-| `response.output_audio.delta` *or* `response.audio.delta` | `AGENT_AUDIO` |
+| `response.output_audio.delta` | `AGENT_AUDIO` |
 | `response.output_audio_transcript.delta` / `.done` | `AGENT_TRANSCRIPT` |
 | `response.function_call_arguments.done` | `TOOL_CALL` |
-| `response.done` status `completed` | `AGENT_TURN_COMPLETE` |
-| `response.done` status `cancelled` | `INTERRUPTED` |
+| `response.done` (status `completed`) | `AGENT_TURN_COMPLETE` |
+| `response.done` (status `cancelled`) | `INTERRUPTED` |
+| `conversation.item.input_audio_transcription.completed` / `.delta` | `CALLER_TRANSCRIPT` |
 | `error` | `ERROR` |
 
-Two mappings there are load-bearing and are covered by their own tests. A
-cancelled response must normalize to `INTERRUPTED`, not to a completed turn, or
-barge-in silently reads zero for this provider while reading correctly for
-Gemini. And both the current and legacy audio-delta event names are accepted,
-because the event was renamed and examples in the wild disagree about which is
-live.
+GA also emits `conversation.item.added/done`, `response.output_item.added/done`,
+`response.content_part.added/done`, `rate_limits.updated` and
+`input_audio_buffer.committed`. The harness has no meaning for any of them and
+translates them to nothing, which is the correct behaviour for a chatty
+protocol — a vendor adding a frame should not crash a consumer.
 
-The one capability difference that changes a metric: OpenAI Realtime *does* emit
-`response.created` before any audio, so `emits_turn_start=True` and its turns
-decompose one stage further than Gemini's. That is the situation the capability
-descriptors exist for — the extra stage appears as a named stage for one
-provider and as residual for the other, rather than one vendor simply looking
-faster.
+*The client-to-server session shape was wrong, and structurally.* The adapter was
+written against the Realtime **Beta** API, which is switched off: sending
+`OpenAI-Beta: realtime=v1` closes the socket immediately with
+`beta_api_shape_disabled` and "The Realtime Beta API is no longer supported."
+The GA shape differs in kind, not detail:
 
-## To finish the OpenAI arm when a key exists
+| Beta (dead) | GA (live) |
+|---|---|
+| `OpenAI-Beta: realtime=v1` header | header must be **absent** |
+| `session.modalities` | `session.output_modalities` |
+| `session.input_audio_format: "pcm16"` | `session.audio.input.format: {"type":"audio/pcm","rate":24000}` |
+| `session.output_audio_format: "pcm16"` | `session.audio.output.format: {…}` |
+| `session.voice` | `session.audio.output.voice` |
+| `session.turn_detection` | `session.audio.input.turn_detection` |
+| `session.input_audio_transcription` | `session.audio.input.transcription` |
 
-1. `export OPENAI_API_KEY=…`
-2. `uv run python -m voiceval.run_experiment --provider openai_realtime --trials 1`
-3. Fix whatever the wire disagrees with — expect the disagreements to be in
-   `translate()` and `session_update_frame()`, which is where every
-   vendor-specific assumption lives.
-4. Flip `wire_verified = True` **only** after a real call completes, and add the
-   observed frame shapes to `tests/test_provider_seam.py` so the next change
-   cannot break them silently.
+**Honest verdict on protocol comparability:** the two vendors' *event streams*
+really are interchangeable behind one normalization layer — that half of the
+seam claim is now evidence rather than assertion. Their *session-configuration
+surfaces* are not interchangeable, and are not even stable across one vendor's
+own versions. That is an argument for the seam, not against it: all of the churn
+was confined to one method, `session_update_frame`, and none of it reached the
+measurement layer.
+
+### Where OpenAI Realtime is better than Gemini Live
+
+Not merely different — better, on three counts that mattered to this harness:
+
+1. **It emits `response.created` before any audio.** `emits_turn_start` is True,
+   so its turns decompose one stage further. Gemini Live sends no such frame, so
+   everything from caller-stop to first audio is one opaque block there.
+2. **Explicit turn boundaries are a first-class control path.**
+   `input_audio_buffer.commit` + `response.create` is the documented way to
+   drive it. On Gemini I had to *disable* automatic voice-activity detection
+   because it cancelled the agent's in-flight tool calls at the end of every
+   caller utterance.
+3. **Function-call round trips were stable.** No analogue of Gemini's
+   cancel-and-reissue behaviour appeared, so no de-duplication guard was needed
+   on this side.
+
+Where Gemini Live is better: it accepts 16 kHz caller audio (OpenAI GA wants
+24 kHz), and its `serverContent.interrupted` is a clearer barge-in signal than
+inferring an interruption from a `response.done` carrying status `cancelled`.
+
+### Shared failure mode: spelled-out identifiers
+
+Both stacks garble the thing a support line depends on most. Asked to read back
+an account, Gemini heard `acct one zero four two` as **"ACTT1042"**; OpenAI heard
+`p, r, i, y, a at northwindlabs dot io` as **"priyaa@northwindlabs.io"** and then
+could not find the account at all. This is not a vendor difference — it is the
+central difficulty of voice support, and it is invisible to any evaluation that
+does not check the *arguments* the agent passed to its tools.
+
+## Adding a third stack
+
+The procedure that worked here, in the order it worked:
+
+1. Probe the socket by hand before writing an adapter. Two of the three things
+   that broke — the dead Beta shape and Gemini's `mediaChunks` rejection —
+   present as connection failures, not as protocol errors, and cost far more to
+   diagnose from inside a harness than from a 30-line script.
+2. Write `translate()` from the docs and unit-test it against fixture frames.
+   This part transferred intact for OpenAI, and it is the part the measurement
+   layer depends on.
+3. Expect `session_update_frame()` to be wrong. Confine every vendor assumption
+   to it.
+4. Flip `wire_verified = True` **only** after a real call completes end to end,
+   and pin the observed event names in `tests/test_provider_seam.py` so a later
+   edit cannot break them silently.
 
 ## The third adapter: `mock`
 

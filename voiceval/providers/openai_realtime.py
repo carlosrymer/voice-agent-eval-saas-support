@@ -1,18 +1,57 @@
-"""OpenAI Realtime adapter -- the seam for the second voice stack.
+"""OpenAI Realtime adapter (GA `/v1/realtime` over WebSocket).
 
-**Status: translation layer implemented and unit-tested against fixture frames;
-the wire has never been exercised.** There is no OpenAI key in this environment.
-``wire_verified`` is ``False``, :meth:`connect` refuses without a key, and every
-report that includes this provider carries the flag. I would rather ship an
-honest seam than a plausible-looking integration nobody has run.
+**Status: wire-verified.** Real frames round-trip against the live service:
+session configuration, caller audio in, speech transcription, a function call
+out, a tool result back in, and agent audio out.
 
-What *is* verified today is the part that actually matters for the architecture:
-:func:`translate` is a pure function from a vendor frame to zero or more
-:class:`ServerEvent`, and ``tests/test_provider_seam.py`` drives it with
-hand-written OpenAI-shaped frames and asserts the harness sees the same
-normalized event stream it sees from Gemini. That is the claim the provider
-abstraction makes -- that a second vendor is a translation table, not a rewrite
--- and it is testable without a key.
+## What the seam actually cost, honestly
+
+The project claimed a second vendor would be "a translation table, not a
+rewrite". Half of that held and half did not, and the split is the interesting
+part.
+
+**The server-to-client translation table was exactly right.** Every event name
+in :func:`translate` — written from published docs months before a key existed,
+and unit-tested only against fixture frames I authored — is confirmed by the
+live service: ``response.created``, ``response.output_audio.delta``,
+``response.output_audio_transcript.delta``/``.done``,
+``response.function_call_arguments.done``, ``response.done`` with a status,
+``conversation.item.input_audio_transcription.completed``, ``error``. Not one
+needed changing. The measurement layer above the seam needed no edits at all.
+
+**The client-to-server session shape was wrong, and not slightly.** The adapter
+was written against the Realtime *Beta* API, which is now switched off: the
+socket closes immediately with ``beta_api_shape_disabled`` and the message
+"The Realtime Beta API is no longer supported." The GA API differs
+structurally, not cosmetically:
+
+* the ``OpenAI-Beta: realtime=v1`` header must be **absent**, not updated
+* ``modalities`` became ``output_modalities``
+* flat ``input_audio_format`` / ``output_audio_format`` strings became nested
+  ``audio.input.format`` / ``audio.output.format`` objects
+  (``{"type": "audio/pcm", "rate": 24000}``)
+* ``voice``, ``turn_detection`` and ``input_audio_transcription`` all moved
+  under ``audio.input`` / ``audio.output``
+
+So the honest verdict on protocol comparability: **the event streams of these
+two vendors really are interchangeable behind one normalization layer; their
+session-configuration surfaces are not, and are not stable over time either.**
+Everything vendor-specific in this file is confined to
+:meth:`session_update_frame`, which is where that instability belongs.
+
+## Where OpenAI Realtime is better than Gemini Live
+
+Not just different — better, on three counts that matter to this harness:
+
+* **It emits ``response.created`` before any audio**, so ``emits_turn_start`` is
+  True and its turns decompose one stage further than Gemini's. Gemini gives one
+  opaque block from caller-stop to first audio.
+* **Turn boundaries are explicit by design.** ``input_audio_buffer.commit`` plus
+  ``response.create`` is a first-class control path, not a workaround. On Gemini
+  I had to disable automatic voice-activity detection because it cancelled the
+  agent's own in-flight tool calls at the end of every caller utterance.
+* **Function-call round trips were stable.** No analogue of Gemini's
+  cancel-and-reissue behaviour appeared, so no de-duplication guard was needed.
 
 ## The mapping
 
@@ -73,12 +112,13 @@ from voiceval.providers.base import (
 )
 
 WS_URL = "wss://api.openai.com/v1/realtime"
-DEFAULT_MODEL = "gpt-realtime"
+DEFAULT_MODEL = "gpt-realtime-mini"
 DEFAULT_VOICE = "alloy"
 #: OpenAI Realtime speaks 24 kHz PCM16 in both directions.
 INPUT_RATE = 24000
 OUTPUT_RATE = 24000
 SEND_CHUNK_MS = 20.0
+TRANSCRIPTION_MODEL = "whisper-1"
 
 AUDIO_DELTA_TYPES = {"response.output_audio.delta", "response.audio.delta"}
 TRANSCRIPT_DELTA_TYPES = {
@@ -265,8 +305,8 @@ class OpenAIRealtimeSession(VoiceSession):
 @register_provider
 class OpenAIRealtimeProvider(VoiceProvider):
     name = "openai_realtime"
-    #: Nothing here has round-tripped against the live service.
-    wire_verified = False
+    #: Verified: session config, audio in, transcription, tool call, audio out.
+    wire_verified = True
 
     def __init__(
         self,
@@ -277,7 +317,10 @@ class OpenAIRealtimeProvider(VoiceProvider):
     ):
         self.model = model
         self.voice = voice
-        self.api_key = api_key or os.environ.get("OPENAI_API_KEY", "")
+        # `None` means "look it up"; an explicit "" means "there is no key",
+        # which is how tests assert the no-credentials path. `or` conflated the
+        # two and silently used the ambient key once one existed.
+        self.api_key = os.environ.get("OPENAI_API_KEY", "") if api_key is None else api_key
         self.realtime_pacing = realtime_pacing
 
     def capabilities(self) -> ProviderCapabilities:
@@ -295,28 +338,44 @@ class OpenAIRealtimeProvider(VoiceProvider):
             output_mime="audio/pcm;rate=24000",
             native_tool_calling=True,
             notes=(
-                "UNVERIFIED AGAINST THE LIVE SERVICE. Translation layer is "
-                "unit-tested against fixture frames only; no credentials were "
-                "available. Emits an explicit response-start frame, so its "
-                "latency decomposes one stage further than Gemini Live's."
+                "GA /v1/realtime, wire-verified. Explicit "
+                "input_audio_buffer.commit + response.create turn boundaries, so "
+                "end-of-turn latency excludes server-side endpointing, matching "
+                "how Gemini Live is driven here. Emits an explicit "
+                "response-start frame, so its latency decomposes one stage "
+                "further than Gemini Live's."
             ),
         )
 
     def session_update_frame(self, config: SessionConfig) -> dict[str, Any]:
-        """The configuration frame, exposed so tests can assert its shape."""
-        session: dict[str, Any] = {
-            "instructions": config.system_instruction,
-            "voice": config.voice or self.voice,
-            "modalities": ["audio", "text"],
-            "input_audio_format": "pcm16",
-            "output_audio_format": "pcm16",
-            "input_audio_transcription": {"model": "whisper-1"},
+        """The GA `session.update` frame, exposed so tests can assert its shape.
+
+        This is the only place the vendor's configuration surface leaks, and it
+        is the only part of the adapter the Beta-to-GA transition invalidated.
+        """
+        input_audio: dict[str, Any] = {
+            "format": {"type": "audio/pcm", "rate": INPUT_RATE},
+            "turn_detection": (
+                None
+                if config.turn_detection is TurnDetection.CLIENT_COMMIT
+                else {"type": "server_vad"}
+            ),
         }
-        session["turn_detection"] = (
-            None
-            if config.turn_detection is TurnDetection.CLIENT_COMMIT
-            else {"type": "server_vad"}
-        )
+        if config.request_input_transcript:
+            input_audio["transcription"] = {"model": TRANSCRIPTION_MODEL}
+
+        session: dict[str, Any] = {
+            "type": "realtime",
+            "instructions": config.system_instruction,
+            "output_modalities": ["audio"],
+            "audio": {
+                "input": input_audio,
+                "output": {
+                    "format": {"type": "audio/pcm", "rate": OUTPUT_RATE},
+                    "voice": config.voice or self.voice,
+                },
+            },
+        }
         if config.tools:
             session["tools"] = [
                 {
@@ -327,30 +386,39 @@ class OpenAIRealtimeProvider(VoiceProvider):
                 }
                 for t in config.tools
             ]
-        if config.temperature is not None:
-            session["temperature"] = config.temperature
+            session["tool_choice"] = "auto"
+        if config.max_output_tokens is not None:
+            session["max_output_tokens"] = config.max_output_tokens
         return {"type": "session.update", "session": session}
 
     async def connect(self, config: SessionConfig, clock: Clock | None = None) -> VoiceSession:
         if not self.api_key:
-            raise ProviderUnavailable(
-                "OPENAI_API_KEY is not set. This adapter has never been run "
-                "against the live service; see the module docstring."
-            )
-        import websockets  # imported lazily; this path is never taken in CI
+            raise ProviderUnavailable("OPENAI_API_KEY is not set")
+        import websockets
 
         clock = clock or WallClock()
         try:
             ws = await websockets.connect(
                 f"{WS_URL}?model={self.model}",
-                additional_headers={
-                    "Authorization": f"Bearer {self.api_key}",
-                    "OpenAI-Beta": "realtime=v1",
-                },
+                # No OpenAI-Beta header. Sending it selects the discontinued
+                # Beta shape and the server closes the socket immediately with
+                # `beta_api_shape_disabled`.
+                additional_headers={"Authorization": f"Bearer {self.api_key}"},
                 max_size=None,
                 open_timeout=30,
             )
         except Exception as exc:
             raise ProviderUnavailable(f"could not open Realtime WebSocket: {exc}") from exc
+
+        try:
+            raw = await asyncio.wait_for(ws.recv(), timeout=30)
+        except asyncio.TimeoutError as exc:
+            await ws.close()
+            raise ProviderUnavailable("no session.created from Realtime API") from exc
+        first = json.loads(raw if isinstance(raw, str) else raw.decode())
+        if first.get("type") == "error":
+            await ws.close()
+            raise ProviderUnavailable(f"Realtime rejected the session: {json.dumps(first)[:300]}")
+
         await ws.send(json.dumps(self.session_update_frame(config)))
         return OpenAIRealtimeSession(self, ws, config, clock)

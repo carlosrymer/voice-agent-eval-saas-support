@@ -348,7 +348,10 @@ class GeminiLiveProvider(VoiceProvider):
     ):
         self.model = model
         self.voice = voice
-        self.api_key = api_key or os.environ.get("GEMINI_API_KEY", "")
+        # `None` means "look it up"; an explicit "" means "there is no key",
+        # which is how tests assert the no-credentials path. `or` conflated the
+        # two and silently used the ambient key once one existed.
+        self.api_key = os.environ.get("GEMINI_API_KEY", "") if api_key is None else api_key
         self.realtime_pacing = realtime_pacing
         #: Signal turn boundaries explicitly instead of letting the server's
         #: VAD find them. See the module docstring for why this is the default.

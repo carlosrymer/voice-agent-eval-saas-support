@@ -108,7 +108,7 @@ class GeminiTTS(TTSBackend):
         self.models = (model,) if model else tuple(models)
         self.model = self.models[0]
         self.exhausted: set[str] = set()
-        self.api_key = api_key or os.environ.get("GEMINI_API_KEY", "")
+        self.api_key = os.environ.get("GEMINI_API_KEY", "") if api_key is None else api_key
         self.cache_dir = Path(cache_dir) if cache_dir else Path("artifacts/tts_cache")
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self.timeout_s = timeout_s
@@ -213,7 +213,110 @@ def _rate_from_mime(mime: str) -> int:
     return GEMINI_TTS_RATE
 
 
+OPENAI_TTS_MODEL = "gpt-4o-mini-tts"
+OPENAI_TTS_RATE = 24000
+OPENAI_SPEECH_URL = "https://api.openai.com/v1/audio/speech"
+
+
+class OpenAITTS(TTSBackend):
+    """OpenAI `/v1/audio/speech`, returning raw 24 kHz mono PCM16.
+
+    Added for a reason that is methodological, not convenience: Gemini meters
+    `generate_requests_per_model_per_day` per model at 100/day, and hitting that
+    ceiling is what capped the first funded run at 6 tasks. This is an
+    independent vendor on an independent quota, which is what lets the sample
+    grow to the full task set.
+
+    Using it does introduce a difference between the two arms -- the caller
+    speaks with a different voice on each stack -- so where the two providers
+    are compared, the caller voice is held fixed rather than varied with the
+    agent. See `--caller-tts` in `run_experiment`.
+    """
+
+    name = "openai_tts"
+    sample_rate_hz = OPENAI_TTS_RATE
+
+    def __init__(
+        self,
+        model: str = OPENAI_TTS_MODEL,
+        api_key: str | None = None,
+        cache_dir: str | Path | None = None,
+        timeout_s: float = 120.0,
+        voice_map: dict[str, str] | None = None,
+    ):
+        self.model = model
+        # `None` means "look it up"; an explicit "" means "there is no key",
+        # which is how tests assert the no-credentials path. `or` conflated the
+        # two and silently used the ambient key once one existed.
+        self.api_key = os.environ.get("OPENAI_API_KEY", "") if api_key is None else api_key
+        self.cache_dir = Path(cache_dir) if cache_dir else Path("artifacts/tts_cache")
+        self.cache_dir.mkdir(parents=True, exist_ok=True)
+        self.timeout_s = timeout_s
+        self.usage: dict[str, int] = {}
+        self.n_calls = 0
+        self.n_cache_hits = 0
+        #: Gemini voice names mean nothing here; map them onto OpenAI voices so
+        #: the same CallConfig drives either stack unchanged.
+        self.voice_map = voice_map or {"Kore": "shimmer", "Puck": "alloy"}
+
+    def _key(self, text: str, voice: str) -> str:
+        return hashlib.sha256(
+            f"openai|{self.model}|{voice}|{text}".encode()
+        ).hexdigest()[:24]
+
+    def synthesize(self, text: str, voice: str) -> PCM:
+        if not self.api_key:
+            raise RuntimeError("OPENAI_API_KEY is not set")
+        v = self.voice_map.get(voice, voice if voice.islower() else "shimmer")
+        cached = self.cache_dir / f"{self._key(text, v)}.wav"
+        if cached.exists():
+            self.n_cache_hits += 1
+            return read_wav(str(cached))
+
+        last: Exception | None = None
+        for attempt in range(4):
+            try:
+                r = httpx.post(
+                    OPENAI_SPEECH_URL,
+                    headers={"Authorization": f"Bearer {self.api_key}"},
+                    json={
+                        "model": self.model,
+                        "voice": v,
+                        "input": text,
+                        "response_format": "pcm",
+                    },
+                    timeout=self.timeout_s,
+                )
+                if r.status_code == 429:
+                    raise _QuotaError(r.text[:160])
+                if r.status_code >= 500:
+                    raise RuntimeError(f"HTTP {r.status_code}")
+                r.raise_for_status()
+                pcm = PCM(r.content, OPENAI_TTS_RATE)
+                break
+            except _QuotaError:
+                raise TTSQuotaExhausted(f"{self.model}: 429 from /v1/audio/speech")
+            except Exception as exc:
+                last = exc
+                if attempt == 3:
+                    raise TTSQuotaExhausted(f"{self.model} failed: {last}") from exc
+                import time
+
+                time.sleep(2.0 * (attempt + 1))
+
+        self.n_calls += 1
+        # /v1/audio/speech bills by characters, not tokens, and returns no usage
+        # block, so cost is tracked as characters synthesised.
+        self.usage["characters"] = self.usage.get("characters", 0) + len(text)
+        self.usage["calls"] = self.usage.get("calls", 0) + 1
+        write_wav(str(cached), pcm)
+        return pcm
+
+
 def get_tts(name: str, **kwargs) -> TTSBackend:
+    if name in ("openai", "openai_tts"):
+        return OpenAITTS(**{k: v for k, v in kwargs.items()
+                            if k in {"model", "api_key", "cache_dir", "timeout_s"}})
     if name in ("gemini", "gemini_tts"):
         return GeminiTTS(**kwargs)
     if name == "fixture":
