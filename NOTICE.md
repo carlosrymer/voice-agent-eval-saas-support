@@ -10,4 +10,5 @@ absent; the copy exists so `TAU2_DATA_DIR` can point at them and runs work from 
 install. The upstream license is reproduced at `tau2_data/TAU2_LICENSE`.
 
 The `saas_support` domain, its policy, task set, evaluation criteria, policy auditor,
-scripts and site are my own work.
+scripts and site are my own work, released under the MIT License in [`LICENSE`](LICENSE).
+The copied files above remain under their upstream license.
